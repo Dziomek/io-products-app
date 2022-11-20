@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from "react";
 import './Navbar.css'
+import {Link} from "react-router-dom";
 
 function Navbar() {
 
     return (
         <div className='navbar-container'>
             <div className='title-container'>
-                <a href="">
+                <Link to="/">
                   <h1>PRODUCTS APP</h1>
-                </a>
+                </Link>
             </div>
             <div className='search-container'>
                 <form action="" className='search-bar'>
@@ -24,9 +25,9 @@ function Navbar() {
                     <img src={require('../images/favorite-products-icon.png')} alt=""/>
                 </div>
                 <div className='button-container'>
-                    <a href="">
+                    <Link to="/login">
                       <button type="submit">Log in</button>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
