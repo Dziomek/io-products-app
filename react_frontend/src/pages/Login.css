@@ -1,3 +1,72 @@
 .login-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--page-height);
+    width: 100%;
+}
+
+.inner-container {
+    margin-top: calc(var(--page-height) / 15);
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inner-container.input {
+    margin-top: calc(var(--page-height) / 30)
+}
+
+
+.login-form {
+    background: rgba(255, 255, 255, 0.2);
+    padding: calc(var(--page-height) / 15) calc(var(--page-height) / 20);
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+}
+
+.login-form button, .login-form input {
+    background-color: #72889d;
+    color: var(--text-color);
+    border: none;
+    border-radius: 18px;
+    padding: calc(var(--page-height) / 60) calc(var(--page-height) / 20);
+    box-shadow: 0 8px 24px 0 rgba(0, 0, 0, 0.5);
+    outline: transparent;
+}
+
+.login-form input::placeholder {
+    color: var(--text-color);
+    opacity: 0.4;
+    font-size: calc(var(--page-height) / 40);
+}
+
+.login-form input:hover, .login-form input:focus {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.login-form button {
+    cursor: pointer;
+}
+
+.spacer {
+    background: var(--text-color);
+    height: 2px;
+    margin-top: calc(var(--page-height) / 15);
+    border-radius: 100%;
+}
+
+.form-icon {
+    margin: 0 auto calc(var(--page-height) / 10);
+    border-radius: 50%;
+    height: calc(var(--page-height) / 6);
+    width: calc(var(--page-height) / 6);
+}
+
+.form-icon img {
+    height: calc(var(--page-height) / 6);
+    width: calc(var(--page-height) / 6);
+
 }

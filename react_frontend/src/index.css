@@ -1,3 +1,7 @@
+:root {
+    --page-height: 100vh;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +10,7 @@
 
 body {
     position: relative;
-    height: 200vh;
+    height: var(--page-height);
     background-image: linear-gradient(rgba(0, 8, 51, 0.8), rgba(0, 8, 51, 0.8)), url("images/background-image.jpg");
     /*background-image: linear-gradient(rgba(0, 99, 134, 0.8), rgba(0, 99, 134, 0.8)), url("images/background-image.jpg"); */
 }

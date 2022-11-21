@@ -30,10 +30,10 @@ function Navbar() {
                 <div className='button-container'>
                     { !store.token ?
                         <Link to="/login">
-                            <button type="submit">Login</button>
+                            <button type="submit">Log in</button>
                         </Link>
                         :
-                        <button onClick={() => actions.logout()}>Logout</button>
+                        <button onClick={() => actions.logout()}>Log out</button>
                     }
                 </div>
             </div>

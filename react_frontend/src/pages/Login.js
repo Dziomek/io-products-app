@@ -22,12 +22,23 @@ function Login() {
     return(
         <>
             <div className='login-container'>
-                <h1>Test login page</h1>
-                <input type="text" name="email" placeholder="email" onChange={
-                    (e) => setEmail(e.target.value)}/>
-                <input type="password" name="password" placeholder="password" onChange={
-                    (e) => setPassword(e.target.value)}/>
-                <button type="submit" onClick={handleClick}>Login</button>
+                <div className="login-form" >
+                    <div className="form-icon">
+                        <img src={require('../images/user-icon.png')} alt=""/>
+                    </div>
+                    <div className="inner-container input">
+                        <input type="text" name="email" placeholder="email" onChange={
+                            (e) => setEmail(e.target.value)}/>
+                    </div>
+                    <div className="inner-container input">
+                        <input type="password" name="password" placeholder="password" onChange={
+                                (e) => setPassword(e.target.value)}/>
+                    </div>
+                    <div className="spacer"></div>
+                    <div className="inner-container">
+                        <button type="submit" onClick={handleClick}>Log in</button>
+                    </div>
+                </div>
             </div>
         </>
     )
