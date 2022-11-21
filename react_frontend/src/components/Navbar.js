@@ -1,8 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import './Navbar.css'
 import {Link} from "react-router-dom";
+import {Context} from "../store/appContext";
 
 function Navbar() {
+
+    const {store, actions} = useContext(Context)
 
     return (
         <div className='navbar-container'>
@@ -25,9 +28,15 @@ function Navbar() {
                     <img src={require('../images/favorite-products-icon.png')} alt=""/>
                 </div>
                 <div className='button-container'>
-                    <Link to="/login">
-                      <button type="submit">Log in</button>
-                    </Link>
+                    { !store.token ?
+                        <Link to="/login">
+                            <button type="submit">Login</button>
+                        </Link>
+                        :
+                        <Link to="/">
+                            <button type="submit">Logout</button>
+                        </Link>
+                    }
                 </div>
             </div>
         </div>

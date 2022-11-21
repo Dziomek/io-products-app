@@ -1,43 +1,23 @@
 import './Login.css'
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import {useNavigate} from 'react-router-dom'
+import {Context} from "../store/appContext";
 
 function Login() {
     const navigate = useNavigate()
-    const [token, setToken] = useState(sessionStorage.getItem("token"))
+    const {store, actions} = useContext(Context)
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
 
-    useEffect(() => {
-        if (token) navigate('/')
-    }, [token])
-
     const handleClick = () => {
-        const options = {
-            method: 'POST',
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        }
-
-        fetch("http://127.0.0.1:5000/token", options)
-            .then(response => {
-                if(response.status === 200) return response.json()
-                else alert("An error occured")
-            })
-            .then(data => {
-                sessionStorage.setItem("token", data.access_token)
-                setToken(data.access_token)
-                console.log(data.access_token)
-            })
-            .catch(error => {
-                console.error("An error occured")
-            })
+        actions.login(email, password)
+        console.log(store.token)
     }
+
+    useEffect(() => {
+        console.log(store.token)
+        if(store.token) navigate('/')
+    }, [store.token])
 
     return(
         <>

@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import {Route, Routes} from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import injectContext from "./store/appContext";
 
 function App() {
     const [data, setData] = useState([])
@@ -24,4 +25,4 @@ function App() {
     );
 }
 
-export default App;
+export default injectContext(App);
