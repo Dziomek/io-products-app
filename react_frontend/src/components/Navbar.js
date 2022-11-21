@@ -33,9 +33,7 @@ function Navbar() {
                             <button type="submit">Login</button>
                         </Link>
                         :
-                        <Link to="/">
-                            <button type="submit">Logout</button>
-                        </Link>
+                        <button onClick={() => actions.logout()}>Logout</button>
                     }
                 </div>
             </div>

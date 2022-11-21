@@ -36,6 +36,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log('An error occured')
 				}
 			},
+			logout: () => {
+				sessionStorage.removeItem("token")
+				setStore({ token: null })
+			}
 		}
 	};
 };
