@@ -4,7 +4,7 @@ from . import app
 from flask_jwt_extended import create_access_token
 from .models import db, User
 from flask_bcrypt import generate_password_hash, check_password_hash
-
+from .utils import email_check
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -31,7 +31,7 @@ def register():
     email = request.json.get("email")
     password = request.json.get("password")
     hashed_password = generate_password_hash(password)
-    if email and password:
+    if email_check(email) and password:
         user = User(username='User', email=email, password=hashed_password, is_active=True)
         db.session.add(user)
         db.session.commit()
