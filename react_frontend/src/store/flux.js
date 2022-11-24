@@ -37,8 +37,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			logout: () => {
-				sessionStorage.removeItem("token")
-				setStore({ token: null })
+				fetch("http://127.0.0.1:5000/logout")
+					.then(response => {
+						if(response.status === 200) {
+							console.log('WYLOGOWANO')
+							sessionStorage.removeItem("token")
+							setStore({ token: null })
+						}
+					})
 			}
 		}
 	};
