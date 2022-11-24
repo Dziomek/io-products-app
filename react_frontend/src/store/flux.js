@@ -2,6 +2,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			token: null,
+			username: null
 		},
 		actions: {
 			syncTokenFromSessionStorage: () => {
@@ -29,7 +30,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 					const data = await response.json()
 					sessionStorage.setItem("token", data.access_token)
+					sessionStorage.setItem("username", data.username)
 					setStore({ token: data.access_token })
+					setStore({ username: data.username })
 					return true
 				}
 				catch(error) {
@@ -42,7 +45,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						if(response.status === 200) {
 							console.log('WYLOGOWANO')
 							sessionStorage.removeItem("token")
+							sessionStorage.removeItem("username")
 							setStore({ token: null })
+							setStore({ username: null })
 						}
 					})
 			}

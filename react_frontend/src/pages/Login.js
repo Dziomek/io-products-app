@@ -22,6 +22,10 @@ function Login() {
     return(
         <>
             <div className='login-container'>
+                <div className="login-title">
+                    <h2>Log in to</h2>
+                    <h1>PRODUCTS APP</h1>
+                </div>
                 <div className="login-form" >
                     <div className="form-icon">
                         <img src={require('../images/user-icon.png')} alt=""/>

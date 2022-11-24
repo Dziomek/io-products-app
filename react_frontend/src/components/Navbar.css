@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@900&display=swap');
 
 :root {
     --navbar-background-color: transparent;
@@ -9,14 +10,14 @@
 .navbar-container {
     position: absolute;
     display: grid;
-    grid-template-columns: 3fr 8fr 4fr;
+    grid-template-columns: 2fr 6fr 4fr;
     height: var(--navbar-height);
     width: 100%;
     background-color: var(--navbar-background-color);
 }
 
-.navbar-container div {
-    padding: 0.5em 1.5em 0.5em 1.5em;
+.navbar-container section {
+    padding: 1em 1.5em 1em 1.5em;
     display: flex;
     align-items: center;
 }
@@ -27,8 +28,8 @@
 }
 
 .title-container h1 {
-    font-family: 'Courgette', cursive;
-    font-size: calc(var(--navbar-height) / 2);
+    font-family: 'Mulish', sans-serif;
+    font-size: calc(var(--navbar-height) / 2.5);
     cursor: pointer;
 }
 
@@ -62,8 +63,8 @@
 .search-bar button {
     border: 0;
     border-radius: 60px;
-    height: calc(var(--navbar-height) / 2);
-    width: calc(var(--navbar-height) / 2);
+    height: calc(var(--navbar-height) / 4);
+    width: calc(var(--navbar-height) / 4);
     background-color: #72889d;
     cursor: pointer;
 }
@@ -76,25 +77,46 @@
     justify-content: space-between;
 }
 
+.icons-container {
+    display: flex;
+}
+
 .icons-container img {
-    width: calc(var(--navbar-height) * 1.5);
+    width: calc(var(--navbar-height) * 1.1);
     padding: 0 0.5em;
 }
 
 .button-container {
+    display: flex;
+    justify-content: end;
     width: 100%;
+}
+
+.button-container div {
+    display: flex;
+}
+
+.button-container div h1{
+    padding: 0 calc(var(--navbar-height) * 0.3) 0 0;
+    margin: auto;
+    color: var(--text-color);
 }
 
 .button-container button {
     height: calc(var(--navbar-height) * 0.8);
-    width: calc(var(--navbar-height) * 2);
+    width: calc(var(--navbar-height) * 1.5);
+    margin: 0 calc(var(--navbar-height) * 0.2) 0 calc(var(--navbar-height) * 0.2);
     border-radius: 25px;
     border: 0;
     color: var(--text-color);
-    flex: 1;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(4px) saturate(130%);
     cursor: pointer;
+}
+
+.button-container button:hover {
+    border: 2px solid var(--text-color);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 
