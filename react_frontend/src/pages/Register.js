@@ -8,7 +8,7 @@ import './Register.css'
 function Register() {
     const navigate = useNavigate()
     const {store, actions} = useContext(Context)
-    const {errorMessage, setErrorMessage} = useState('null')
+    const [errorMessage, setErrorMessage] = useState(null)
 
     const usernameInput = useRef()
     const emailInput = useRef()
@@ -44,7 +44,7 @@ function Register() {
             })
             .catch(error => {
                 console.error("An error occured")
-               setErrorMessage('siemanko')
+                setErrorMessage('siemanko')
             })
     }
 
@@ -53,9 +53,6 @@ function Register() {
         if(store.token) navigate('/')
     }, [store.token])
 
-    useEffect(() => {
-        console.log('ERROR', errorMessage)
-    }, [errorMessage])
 
     return(
         <>
@@ -66,7 +63,7 @@ function Register() {
                 </div>
                 <div className="login-form">
                     <div className="error-container">
-                        {errorMessage}
+                        <p>{errorMessage}</p>
                     </div>
                     <div className="inner-container input">
                         <input type="username" name="username" placeholder="username" ref={usernameInput}/>

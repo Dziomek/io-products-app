@@ -1,0 +1,9 @@
+.error-container {
+    display: flex;
+    justify-content: center;
+}
+
+.error-container p {
+    color: #a11212;
+    font-weight: 700;
+}

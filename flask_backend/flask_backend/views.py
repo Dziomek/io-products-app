@@ -34,15 +34,25 @@ def register():
     email = request.json.get("email")
     password = request.json.get("password")
     confirm_password = request.json.get("confirmPassword")
-    if email_check(email) and password_check(password, confirm_password):
-        hashed_password = generate_password_hash(password)
-        user = User(username=username, email=email, password=hashed_password, is_active=True)
-        db.session.add(user)
-        db.session.commit()
-        response = {"message": "User succesfully created"}
-        return response
 
-    return {"message": "Something went wrong. Please try again"}
+    if not (username and email and password and confirm_password):
+        return {"message": "Missing fields. Please try again"}
+    user = User.query.filter_by(username=username).first()
+    if user:
+        return {"message": "User with this username already exists"}
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return {"message": "User with this email already exists"}
+    if not email_check(email):
+        return {"message": "Invalid email address. Please try again"}
+    if not password_check(password, confirm_password):
+        return {"message": "Passwords don't match. Please try again"}
+
+    hashed_password = generate_password_hash(password)
+    user = User(username=username, email=email, password=hashed_password, is_active=True)
+    db.session.add(user)
+    db.session.commit()
+    return {"message": "User succesfully created"}
 
 
 @app.route('/logout', methods=['GET'])
