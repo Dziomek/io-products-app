@@ -2,6 +2,8 @@ import './Login.css'
 import {useEffect, useState, useContext} from "react";
 import {useNavigate} from 'react-router-dom'
 import {Context} from "../store/appContext";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 
 function Login() {
     const navigate = useNavigate()
@@ -31,6 +33,7 @@ function Login() {
                         <img src={require('../images/user-icon.png')} alt=""/>
                     </div>
                     <div className="inner-container input">
+                        <FontAwesomeIcon icon={faEnvelope}/>
                         <input type="text" name="email" placeholder="email" onChange={
                             (e) => setEmail(e.target.value)}/>
                     </div>
