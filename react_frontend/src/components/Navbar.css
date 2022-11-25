@@ -103,7 +103,7 @@
 }
 
 .button-container button {
-    height: calc(var(--navbar-height) * 0.8);
+    height: calc(var(--navbar-height) * 0.5);
     width: calc(var(--navbar-height) * 1.5);
     margin: 0 calc(var(--navbar-height) * 0.2) 0 calc(var(--navbar-height) * 0.2);
     border-radius: 25px;
@@ -119,7 +119,22 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
+.navbar-icon {
+    margin: 0 calc(var(--page-height) / 40) 0 calc(var(--page-height) / 40);
+    width: calc(var(--page-height) / 25);
+    height: calc(var(--page-height) / 25);
+    color: var(--text-color);
+}
 
+.navbar-icon:hover {
+    color: #72889d;
+}
+
+.navbar-spacer {
+    width: 100%;
+    height: 2px;
+    background-color: wheat;
+}
 
 
 

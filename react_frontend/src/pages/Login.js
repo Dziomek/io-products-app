@@ -1,9 +1,10 @@
 import './Login.css'
 import {useEffect, useState, useContext} from "react";
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {Context} from "../store/appContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
+import {faKey, faEnvelope} from '@fortawesome/free-solid-svg-icons'
+import {faUser} from '@fortawesome/free-regular-svg-icons'
 
 function Login() {
     const navigate = useNavigate()
@@ -33,17 +34,26 @@ function Login() {
                         <img src={require('../images/user-icon.png')} alt=""/>
                     </div>
                     <div className="inner-container input">
-                        <FontAwesomeIcon icon={faEnvelope}/>
+                        <FontAwesomeIcon icon={faEnvelope} className="login-icon"/>
                         <input type="text" name="email" placeholder="email" onChange={
                             (e) => setEmail(e.target.value)}/>
                     </div>
                     <div className="inner-container input">
+                        <FontAwesomeIcon icon={faKey} className="login-icon"/>
                         <input type="password" name="password" placeholder="password" onChange={
                                 (e) => setPassword(e.target.value)}/>
                     </div>
                     <div className="spacer"></div>
                     <div className="inner-container">
                         <button type="submit" onClick={handleClick}>Log in</button>
+                    </div>
+                    <div className="inner-container less-margin">
+                        <Link to='/'>
+                            <button>
+                                <FontAwesomeIcon icon={faUser} className="button-icon"/>
+                                Continue as a guest
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

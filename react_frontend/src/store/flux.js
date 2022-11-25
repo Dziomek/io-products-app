@@ -7,8 +7,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 		actions: {
 			syncTokenFromSessionStorage: () => {
 				const token = sessionStorage.getItem("token")
+				const username = sessionStorage.getItem("username")
 				if(token) setStore({ token: token })
-				console.log('Store loaded, token:', token)
+				if(username) setStore({ username: username})
+				console.log('Store loaded', token, username)
 			},
 			login: async (email, password) => {
 				const options = {

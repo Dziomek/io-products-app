@@ -1,8 +1,11 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useContext, useEffect, useState, useRef} from "react";
 import {Context} from "../store/appContext";
 import './Register.css'
+import {faEnvelope, faKey, faPlus, faCheck, faUser, faHouse} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+
 
 
 function Register() {
@@ -62,24 +65,39 @@ function Register() {
                     <h1>ACCOUNT</h1>
                 </div>
                 <div className="login-form">
+                    <div className="inner-container no-margin">
+                        <FontAwesomeIcon icon={faPlus} className="register-icon"/>
+                    </div>
                     <div className="error-container">
                         <p>{errorMessage}</p>
                     </div>
-                    <div className="inner-container input">
+                    <div className="inner-container input no-margin">
+                        <FontAwesomeIcon icon={faUser} className="login-icon"/>
                         <input type="username" name="username" placeholder="username" ref={usernameInput}/>
                     </div>
                     <div className="inner-container input">
+                        <FontAwesomeIcon icon={faEnvelope} className="login-icon"/>
                         <input type="text" name="email" placeholder="email" ref={emailInput}/>
                     </div>
                     <div className="inner-container input">
+                        <FontAwesomeIcon icon={faKey} className="login-icon"/>
                         <input type="password" name="password" placeholder="password" ref={passwordInput}/>
                     </div>
                     <div className="inner-container input">
+                        <FontAwesomeIcon icon={faCheck} className="login-icon"/>
                         <input type="password" name="confirm-password" placeholder="confirm password" ref={confirmPasswordInput}/>
                     </div>
                     <div className="spacer"></div>
                     <div className="inner-container">
                         <button type="submit" onClick={submitRegistration}>Register</button>
+                    </div>
+                    <div className="inner-container less-margin">
+                        <Link to='/'>
+                            <button>
+                                <FontAwesomeIcon icon={faHouse} className="button-icon"/>
+                                Back to home page
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

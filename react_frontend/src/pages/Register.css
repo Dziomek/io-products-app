@@ -6,4 +6,17 @@
 .error-container p {
     color: #a11212;
     font-weight: 700;
+    height: calc(var(--page-height) / 50);
+}
+
+.register-icon {
+    color: lightgreen;
+    width: calc(var(--page-height) / 7);
+    height: calc(var(--page-height) / 7);
+    padding: 5px;
+    margin-bottom: calc(var(--page-height) / 40);
+}
+
+.no-margin {
+    margin-top: 0;
 }

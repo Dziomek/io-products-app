@@ -53,6 +53,7 @@
 
 .login-form button {
     cursor: pointer;
+    font-size: calc(var(--page-height) / 50);
 }
 
 .login-form button:hover {
@@ -89,9 +90,27 @@
     color: var(--text-color);
 }
 
+.login-icon {
+    margin-right: calc(var(--page-height) / 30);
+    width: calc(var(--page-height) / 20);
+    height: calc(var(--page-height) / 20);
+    color: var(--text-color);
+}
+
+.button-icon {
+    width: calc(var(--page-height) / 40);
+    height: calc(var(--page-height) / 40);
+    margin-right: calc(var(--page-height) / 50);
+    color: black
+}
+
 .login-title h1 {
     font-size: calc(var(--page-height) / 12);
     font-weight: 900;
     font-family: 'Mulish', sans-serif;
     color: #72889d;
+}
+
+.inner-container.less-margin {
+    margin-top: calc(var(--page-height) / 100);
 }

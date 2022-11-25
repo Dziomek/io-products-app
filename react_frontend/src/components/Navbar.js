@@ -2,6 +2,8 @@ import React, {useContext, useEffect, useState} from "react";
 import './Navbar.css'
 import {Link} from "react-router-dom";
 import {Context} from "../store/appContext";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCartShopping, faStar} from '@fortawesome/free-solid-svg-icons'
 
 function Navbar() {
 
@@ -25,10 +27,10 @@ function Navbar() {
             <section className='user-container'>
                 <div className='icons-container'>
                     <Link to='/'>
-                        <img src={require('../images/shopping-cart-icon.png')} alt=""/>
+                        <FontAwesomeIcon icon={faStar} className="navbar-icon"/>
                     </Link>
                     <Link to='/'>
-                        <img src={require('../images/favorite-products-icon.png')} alt=""/>
+                        <FontAwesomeIcon icon={faCartShopping} className="navbar-icon"/>
                     </Link>
                 </div>
                 <div className='button-container'>
