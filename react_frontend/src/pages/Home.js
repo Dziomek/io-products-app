@@ -1,9 +1,14 @@
 import Navbar from "../components/Navbar";
+import Progressbar from "../components/ProgressBar";
 
 function Home() {
     return (
-        <Navbar/>
-    )
+        <>
+            <Navbar/>
+            <Progressbar/>
+
+        </>
+            )
 }
 
 export default Home
