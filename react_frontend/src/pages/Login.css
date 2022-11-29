@@ -23,7 +23,6 @@
     margin-top: calc(var(--page-height) / 30)
 }
 
-
 .login-form {
     background: rgba(255, 255, 255, 0.2);
     padding: calc(var(--page-height) / 15) calc(var(--page-height) / 20);
@@ -31,7 +30,7 @@
     border-radius: 15px;
 }
 
-.login-form button, .login-form input {
+.login-form button, .inner-container input {
     background-color: #72889d;
     color: var(--text-color);
     border: none;
@@ -41,13 +40,13 @@
     outline: transparent;
 }
 
-.login-form input::placeholder {
+.inner-container input::placeholder {
     color: var(--text-color);
     opacity: 0.4;
     font-size: calc(var(--page-height) / 40);
 }
 
-.login-form input:hover, .login-form input:focus {
+.inner-container input:hover, .inner-container input:focus {
     background: rgba(255, 255, 255, 0.3);
 }
 

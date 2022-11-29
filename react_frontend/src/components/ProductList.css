@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@500&display=swap');
+
+.product-list-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Mulish', sans-serif;
+    height: 60vh;
+}
+.list-title {
+    margin-bottom: calc(var(--page-height) / 30);
+}
+
+.product-list-title {
+    margin-right: calc(var(--page-height) / 10);
+}
+
+.product-list-title h1 {
+    font-size: calc(var(--page-height) /15);
+    color: #72889d;
+}
+
+.product-list-title h2 {
+    font-size: calc(var(--page-height) / 20);
+    color: var(--text-color);
+}
+
+.product-list {
+    padding: 20px;
+    width: var(--page-height);
+    backdrop-filter: blur(4px) saturate(130%);
+    border-radius: 20px;
+    border: 1px solid #72889d;
+    background-image: linear-gradient(rgba(0, 8, 51, 0.8), rgba(0, 8, 51, 0.8)), url("../images/paper.jpg");
+}
+
+.product-list h1 {
+    color: var(--text-color);
+}
+
+#submit-product {
+    background: transparent;
+    cursor: pointer;
+    border: none;
+    padding: calc(var(--page-height) / 100) calc(var(--page-height) / 100);
+}
+
+.submit-icon {
+    color: lightgreen;
+    width: calc(var(--page-height) / 20);
+    height: calc(var(--page-height) / 20);
+    padding: 5px;
+}
+
+.submit-icon:hover {
+    color: var(--text-color);
+}
+
+.added-product {
+    padding: 3px;
+    color: #72889d;
+}
+.inner-secondary {
+    display: flex;
+    align-items: center;
+}
+
+.inner-secondary.search {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+#submit-list {
+    background: transparent;
+    border: 1px solid var(--text-color);
+    border-radius: 60px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.submit-list-icon {
+    color: #72889d;
+    width: calc(var(--page-height) / 20);
+    height: calc(var(--page-height) / 20);
+}

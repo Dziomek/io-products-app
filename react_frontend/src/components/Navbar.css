@@ -14,7 +14,7 @@
     height: 10vh;
     width: 100%;
     background-color: var(--navbar-background-color);
-    margin-bottom: calc(var(--page-height) / 20)
+    margin-bottom: calc(var(--page-height) / 12);
 }
 
 .navbar-container section {

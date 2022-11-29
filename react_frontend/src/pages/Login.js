@@ -27,6 +27,7 @@ function Login() {
         }
         fetch("http://127.0.0.1:5000/token", options)
             .then(response => {
+                console.log(response.status)
                 if (response.status !== 200) {
                     setErrorMessage("Invalid credentials. Please try again")
                 }
@@ -40,8 +41,6 @@ function Login() {
             .catch(error => {
                 setErrorMessage("Invalid credentials. Please try again")
             })
-
-
         console.log(store.token)
     }
 
