@@ -2,21 +2,31 @@ import './ProductList.css'
 import React from "react";
 import {useState, useRef} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faMagnifyingGlass, faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
 
 function ProductList() {
 
     const [productList, setProductList] = useState([])
+    const [errorMessage, setErrorMessage] = useState(null)
     const productInput = useRef()
 
     const submitProduct = () => {
         const product = productInput.current.value
-        if (product) setProductList([...productList, product])
+        if (product && !productList.includes(product)) {
+            setProductList([...productList, product])
+            setErrorMessage(null)
+        }
+        else if(!product) setErrorMessage('Invalid name of the product')
+        else setErrorMessage('Product is already in the list')
         console.log(productList)
     }
 
     const submitListOfProducts = () => {
         console.log(productList)
+    }
+
+    const deleteProductFromList = (product) => {
+        setProductList(productList.filter(item => item !== product))
     }
 
     return (
@@ -33,9 +43,15 @@ function ProductList() {
                 </div>
                 <div className="products-container">
                     {productList.map((product, index) => {
-                        return <div key={index} style={{display: "flex"}}>
+                        return <div key={index} style={{display: "flex", padding: "3px"}}>
                             <h3 className="added-product">{product}</h3>
-                            <button>Remove</button>
+                            <div style={{display: "flex", width: "100%", justifyContent: "end"}}>
+                                <button onClick={() => deleteProductFromList(product)}
+                                style={{background: "transparent", border: "none", cursor: "pointer"}}>
+                                    <FontAwesomeIcon icon={faXmark} className="submit-list-icon"
+                                    style={{color: "red"}}/>
+                                </button>
+                            </div>
                         </div>
                     })}
                 </div>
@@ -45,6 +61,9 @@ function ProductList() {
                         <button id="submit-product" onClick={submitProduct}>
                             <FontAwesomeIcon icon={faPlus} className="submit-icon"/>
                         </button>
+                    </div>
+                    <div className="inner-secondary" style={{color: "red", marginLeft: "10px"}}>
+                        <h4>{errorMessage}</h4>
                     </div>
                     <div className="inner-secondary search">
                         <button id="submit-list" onClick={submitListOfProducts}>

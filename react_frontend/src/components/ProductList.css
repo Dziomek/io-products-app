@@ -73,7 +73,7 @@
 
 #submit-list {
     background: transparent;
-    border: 1px solid var(--text-color);
+    border: 2px solid var(--text-color);
     border-radius: 60px;
     cursor: pointer;
     padding: 10px;
