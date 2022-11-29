@@ -5,15 +5,43 @@ import {Context} from "../store/appContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faKey, faEnvelope} from '@fortawesome/free-solid-svg-icons'
 import {faUser} from '@fortawesome/free-regular-svg-icons'
+import React from "react";
 
 function Login() {
     const navigate = useNavigate()
     const {store, actions} = useContext(Context)
+    const [errorMessage, setErrorMessage] = useState(null)
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
 
     const handleClick = () => {
-        actions.login(email, password)
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        }
+        fetch("http://127.0.0.1:5000/token", options)
+            .then(response => {
+                if (response.status !== 200) {
+                    setErrorMessage("Invalid credentials. Please try again")
+                }
+                return response.json()
+            })
+            .then(data => {
+                sessionStorage.setItem("token", data.access_token)
+                sessionStorage.setItem("username", data.username)
+                actions.login(data.access_token, data.username)
+            })
+            .catch(error => {
+                setErrorMessage("Invalid credentials. Please try again")
+            })
+
+
         console.log(store.token)
     }
 
@@ -32,6 +60,9 @@ function Login() {
                 <div className="login-form" >
                     <div className="form-icon">
                         <img src={require('../images/user-icon.png')} alt=""/>
+                    </div>
+                    <div className="error-container">
+                        <p>{errorMessage}</p>
                     </div>
                     <div className="inner-container input">
                         <FontAwesomeIcon icon={faEnvelope} className="login-icon"/>

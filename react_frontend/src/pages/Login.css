@@ -68,7 +68,7 @@
 }
 
 .form-icon {
-    margin: 0 auto calc(var(--page-height) / 10);
+    margin: 0 auto calc(var(--page-height) / 20);
     border-radius: 50%;
     height: calc(var(--page-height) / 6);
     width: calc(var(--page-height) / 6);

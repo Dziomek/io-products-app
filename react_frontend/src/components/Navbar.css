@@ -8,12 +8,13 @@
 }
 
 .navbar-container {
-    position: absolute;
+    position: relative;
     display: grid;
     grid-template-columns: 2fr 6fr 4fr;
-    height: var(--navbar-height);
+    height: 10vh;
     width: 100%;
     background-color: var(--navbar-background-color);
+    margin-bottom: calc(var(--page-height) / 20)
 }
 
 .navbar-container section {

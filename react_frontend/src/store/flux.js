@@ -12,34 +12,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if(username) setStore({ username: username})
 				console.log('Store loaded', token, username)
 			},
-			login: async (email, password) => {
-				const options = {
-					method: 'POST',
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						email: email,
-						password: password
-					})
-				}
-
-				try {
-					const response = await fetch("http://127.0.0.1:5000/token", options)
-					if (response.status !== 200) {
-						alert("An error occured")
-						return false
-					}
-					const data = await response.json()
-					sessionStorage.setItem("token", data.access_token)
-					sessionStorage.setItem("username", data.username)
-					setStore({ token: data.access_token })
-					setStore({ username: data.username })
-					return true
-				}
-				catch(error) {
-					console.log('An error occured')
-				}
+			login: async (token, username) => {
+				setStore({ token: token })
+				setStore({ username: username })
 			},
 			logout: () => {
 				fetch("http://127.0.0.1:5000/logout")
