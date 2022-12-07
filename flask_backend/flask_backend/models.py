@@ -10,3 +10,4 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     is_active = db.Column(db.Boolean)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
