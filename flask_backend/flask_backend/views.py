@@ -1,15 +1,18 @@
-from flask import jsonify, request
+from flask import jsonify, request, url_for
 from flask_login import login_user, logout_user
 from . import app
+from . import email_verification
 from flask_jwt_extended import create_access_token
 from .models import db, User
 from flask_bcrypt import generate_password_hash, check_password_hash
-from .utils import email_check, password_check
+from .utils import email_check, password_check, email_verification_token, verify_email, send_email_with_token
+from .email_verification import MailService
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+
 
 @app.route('/', methods=['GET'])
 def hello_world():
     response = jsonify({"data": ["data1", "data2", "data3"]})
-
     return response
 
 
@@ -52,7 +55,23 @@ def register():
     user = User(username=username, email=email, password=hashed_password, is_active=True)
     db.session.add(user)
     db.session.commit()
+
+    token = email_verification_token(email)
+    link = url_for('confirm_email', token=token, email=email, _external=True)
+    send_email_with_token(link, email, username)
+
     return {"message": "User succesfully created"}
+
+
+@app.route('/confirm_email/<string:token>/<string:email>', methods=['GET'])
+def confirm_email(token, email):
+    try:
+        verify_email(token)
+        db.session.query(User).filter(User.email == email).update({User.verified: True})
+        db.session.commit()
+    except SignatureExpired:
+        return {"verified": "False"}
+    return {"verified": "True"}
 
 
 @app.route('/logout', methods=['GET'])
