@@ -22,10 +22,11 @@ class ceneoScraping(scrapy.Spider):
         for products in response.css('div.cat-prod-row__content'):
             product_name = products.css('span::text').get()
             price = products.css('span.value::text').get() + products.css('span.penny::text').get()
-            #link = products.css() - jeszcze to dodam
+            link = products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
             data = {
                 'name': product_name,
-                'price': price
+                'price': price,
+                'link': 'https://www.ceneo.pl' + link
             }
             yield data
         next_page = response.css('a.pagination__item.pagination__next').attrib['href']
@@ -47,10 +48,11 @@ class urodaScraping(scrapy.Spider):
         for products in response.css('div.cat-prod-row__content'):
             product_name = products.css('span::text').get()
             price = products.css('span.value::text').get() + products.css('span.penny::text').get()
-            #link = products.css() - jeszcze to dodam
+            link = products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
             data = {
                 'name': product_name,
-                'price': price
+                'price': price,
+                'link': 'https://www.ceneo.pl' + link
             }
             yield data
         next_page = response.css('a.pagination__item.pagination__next').attrib['href']
@@ -72,10 +74,11 @@ class zdrowieScraping(scrapy.Spider):
         for products in response.css('div.cat-prod-row__content'):
             product_name = products.css('span::text').get()
             price = products.css('span.value::text').get() + products.css('span.penny::text').get()
-            #link = products.css() - jeszcze to dodam
+            link = products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
             data = {
                 'name': product_name,
-                'price': price
+                'price': price,
+                'link': 'https://www.ceneo.pl' + link
             }
             yield data
         next_page = response.css('a.pagination__item.pagination__next').attrib['href']
