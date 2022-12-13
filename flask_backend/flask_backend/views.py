@@ -5,13 +5,9 @@ from . import email_verification
 from flask_jwt_extended import create_access_token
 from .models import db, User
 from flask_bcrypt import generate_password_hash, check_password_hash
-from .utils import email_check, password_check, email_verification_token
+from .utils import email_check, password_check, email_verification_token, verify_email, send_email_with_token
 from .email_verification import MailService
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
-
-
-s = URLSafeTimedSerializer('Thisisasecret!')
-m = MailService()
 
 
 @app.route('/', methods=['GET'])
@@ -60,20 +56,19 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    token = s.dumps(email, salt='SALT')
-
-    link = url_for('confirm_email', token=token, _external=True)
-
-    m.sendVerificationLink(link, email)
+    token = email_verification_token(email)
+    link = url_for('confirm_email', token=token, email=email, _external=True)
+    send_email_with_token(link, email, username)
 
     return {"message": "User succesfully created"}
 
 
-@app.route('/confirm_email/<string:token>', methods=['GET'])
-def confirm_email(token):
+@app.route('/confirm_email/<string:token>/<string:email>', methods=['GET'])
+def confirm_email(token, email):
     try:
-        email = s.loads(token, salt='SALT', max_age=3600)
-        print(email)
+        verify_email(token)
+        db.session.query(User).filter(User.email == email).update({User.verified: True})
+        db.session.commit()
     except SignatureExpired:
         return {"verified": "False"}
     return {"verified": "True"}

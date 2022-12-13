@@ -17,7 +17,7 @@ class MailService:
         self.smtpObj.starttls()
         self.smtpObj.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
-    def sendVerificationLink(self, link, emailUser):
+    def sendVerificationLink(self, link, emailUser, username):
         msg = EmailMessage()
         msg['Subject'] = f'Verification Link'
         msg['From'] = EMAIL_ADDRESS
@@ -26,7 +26,7 @@ class MailService:
         file_loader = FileSystemLoader('flask_backend/flask_backend/templates')
         env = Environment(loader=file_loader)
         template = env.get_template('email_verification.html')
-        output = template.render(link=link)
+        output = template.render(link=link, username=username)
         msg.add_alternative(output, subtype='html')
 
         self.smtpObj.send_message(msg)
