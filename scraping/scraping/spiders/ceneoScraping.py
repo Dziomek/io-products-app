@@ -6,7 +6,7 @@ from scrapy.crawler import CrawlerProcess
 
 #obie kategorie
 class ceneoScraping(scrapy.Spider):
-    name = "ceneo_serach"
+    name = "ceneo_search"
 
     def __init__(self, keyword_list=None, *args, **kwargs):
         super(ceneoScraping, self).__init__(*args, **kwargs)
