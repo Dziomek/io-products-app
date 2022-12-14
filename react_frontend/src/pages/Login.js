@@ -27,7 +27,7 @@ function Login() {
         }
         fetch("http://127.0.0.1:5000/token", options)
             .then(response => {
-                console.log(response.status)
+                console.log('Response status:', response.status)
                 if (response.status !== 200) {
                     setErrorMessage("Invalid credentials. Please try again")
                 }
@@ -35,10 +35,11 @@ function Login() {
             })
             .then(data => {
                 console.log(data)
+                sessionStorage.setItem("is_active", data.is_active)
+                sessionStorage.setItem("emailToConfirm", data.email)
                 if(data.is_active) {
                     sessionStorage.setItem("username", data.username)
                     sessionStorage.setItem("email", data.email)
-                    sessionStorage.setItem("is_active", data.is_active)
                     sessionStorage.setItem("token", data.access_token)
                     if (sessionStorage.getItem("emailToConfirm")) sessionStorage.removeItem("emailToConfirm")
                     actions.login(data.access_token, data.username, data.email, data.is_active)
@@ -51,13 +52,15 @@ function Login() {
             .catch(error => {
                 setErrorMessage("Invalid credentials. Please try again")
             })
-        console.log(store.token)
     }
 
     useEffect(() => {
-        console.log(store.token)
         if(store.token) navigate('/')
     }, [store.token])
+
+    useEffect(() => {
+        actions.syncDataFromSessionStorage()
+    }, [])
 
     return(
         <>

@@ -8,7 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			is_active: null
 		},
 		actions: {
-			syncTokenFromSessionStorage: () => {
+			syncDataFromSessionStorage: () => {
 				const emailToConfirm = sessionStorage.getItem("emailToConfirm")
 				const token = sessionStorage.getItem("token")
 				const username = sessionStorage.getItem("username")
@@ -25,6 +25,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					'email to confirm', emailToConfirm,
 					'is_active', is_active)
 			},
+			removeStoreData: () => {
+				sessionStorage.removeItem("emailToConfirm")
+				sessionStorage.removeItem("token")
+				sessionStorage.removeItem("username")
+				sessionStorage.removeItem("email")
+				sessionStorage.removeItem("is_active")
+				setStore({ emailToConfirm: null })
+				setStore({ token: null })
+				setStore({ username: null })
+				setStore({ email: null })
+				setStore({ is_active: null })
+			},
 			login: async (token, username, email, is_active) => {
 				setStore({ token: token })
 				setStore({ username: username })
@@ -37,7 +49,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				fetch("http://127.0.0.1:5000/logout")
 					.then(response => {
 						if(response.status === 200) {
-							console.log('WYLOGOWANO')
+							console.log('Logged out')
 							sessionStorage.removeItem("token")
 							sessionStorage.removeItem("username")
 							sessionStorage.removeItem("email")
@@ -49,7 +61,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					})
 			},
-			register: (username, email) => {
+			register: (email) => {
 				setStore({ emailToConfirm: email })
 			}
 		}

@@ -4,14 +4,35 @@
 .confirm-title h2 {
     font-size: calc(var(--page-height) / 11);
     font-family: 'Mulish', sans-serif;
-    font-weight: 500;
+    font-weight: 900;
     color: var(--text-color);
 }
 
-.confirm-title h1 {
-    font-size: calc(var(--page-height) / 12);
+.confirm-title h3 {
+    font-size: calc(var(--page-height) / 18);
+    font-weight: 500;
+    font-family: 'Mulish', sans-serif;
+    text-align: center;
+    color: var(--text-color);
+}
+
+.confirm-title h4 {
+    font-size: calc(var(--page-height) / 15);
     font-weight: 900;
     font-family: 'Mulish', sans-serif;
     color: #72889d;
     text-align: center;
+}
+
+#return-button {
+    background-color: #72889d;
+    color: var(--text-color);
+    border: none;
+    border-radius: 18px;
+    padding: calc(var(--page-height) / 60) calc(var(--page-height) / 20);
+    outline: transparent;
+}
+
+#return-button:hover {
+    background: rgba(255, 255, 255, 0.1);
 }

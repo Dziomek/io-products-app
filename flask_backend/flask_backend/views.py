@@ -65,7 +65,7 @@ def register():
 
     return {
         "message": "User succesfully created",
-        "email": email,
+        "email": email
     }
 
 

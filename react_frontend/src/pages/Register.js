@@ -60,6 +60,9 @@ function Register() {
         if(store.token) navigate('/')
     }, [store.token])
 
+    useEffect(() => {
+        actions.syncDataFromSessionStorage()
+    }, [])
 
     return(
         <>
