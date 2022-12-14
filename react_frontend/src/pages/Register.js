@@ -42,7 +42,11 @@ function Register() {
             })
             .then(data => {
                 console.log(data)
-                if(data.message === "User succesfully created") navigate('/login')
+                if(data.message === "User succesfully created") {
+                    sessionStorage.setItem("emailToConfirm", data.email)
+                    actions.register(data.email)
+                    navigate('/confirm')
+                }
                 else setErrorMessage(data.message)
             })
             .catch(error => {

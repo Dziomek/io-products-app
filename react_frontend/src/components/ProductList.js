@@ -18,10 +18,13 @@ function ProductList() {
         }
         else if(!product) setErrorMessage('Invalid name of the product')
         else setErrorMessage('Product is already in the list')
-        console.log(productList)
     }
 
     const submitListOfProducts = () => {
+        if (productList.length === 0) setErrorMessage('List of products is empty')
+        else {
+            setErrorMessage(null)
+        }
         console.log(productList)
     }
 
@@ -43,9 +46,9 @@ function ProductList() {
                 </div>
                 <div className="products-container">
                     {productList.map((product, index) => {
-                        return <div key={index} style={{display: "flex", padding: "3px"}}>
+                        return <div key={index} style={{display: "flex", padding: "3px", alignItems: "center"}}>
                             <h3 className="added-product">{product}</h3>
-                            <div style={{display: "flex", width: "100%", justifyContent: "end"}}>
+                            <div style={{display: "flex", width: "100%", justifyContent: "end", alignItems: "center"}}>
                                 <button onClick={() => deleteProductFromList(product)}
                                 style={{background: "transparent", border: "none", cursor: "pointer"}}>
                                     <FontAwesomeIcon icon={faXmark} className="submit-list-icon"

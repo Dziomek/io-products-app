@@ -34,9 +34,19 @@ function Login() {
                 return response.json()
             })
             .then(data => {
-                sessionStorage.setItem("token", data.access_token)
-                sessionStorage.setItem("username", data.username)
-                actions.login(data.access_token, data.username)
+                console.log(data)
+                if(data.is_active) {
+                    sessionStorage.setItem("username", data.username)
+                    sessionStorage.setItem("email", data.email)
+                    sessionStorage.setItem("is_active", data.is_active)
+                    sessionStorage.setItem("token", data.access_token)
+                    if (sessionStorage.getItem("emailToConfirm")) sessionStorage.removeItem("emailToConfirm")
+                    actions.login(data.access_token, data.username, data.email, data.is_active)
+                    navigate('/')
+                }
+                else {
+                    navigate('/confirm')
+                }
             })
             .catch(error => {
                 setErrorMessage("Invalid credentials. Please try again")

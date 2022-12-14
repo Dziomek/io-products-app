@@ -27,7 +27,10 @@ def login():
             access_token = create_access_token(identity=email)
             response = {
                 "access_token": access_token,
-                "username": user.username}
+                "username": user.username,
+                "email": user.email,
+                "is_active": user.is_active
+            }
             return response
 
 
@@ -52,7 +55,7 @@ def register():
         return {"message": "Passwords don't match. Please try again"}
 
     hashed_password = generate_password_hash(password)
-    user = User(username=username, email=email, password=hashed_password, is_active=True)
+    user = User(username=username, email=email, password=hashed_password, is_active=False)
     db.session.add(user)
     db.session.commit()
 
@@ -60,14 +63,17 @@ def register():
     link = url_for('confirm_email', token=token, email=email, _external=True)
     send_email_with_token(link, email, username)
 
-    return {"message": "User succesfully created"}
+    return {
+        "message": "User succesfully created",
+        "email": email,
+    }
 
 
 @app.route('/confirm_email/<string:token>/<string:email>', methods=['GET'])
 def confirm_email(token, email):
     try:
         verify_email(token)
-        db.session.query(User).filter(User.email == email).update({User.verified: True})
+        db.session.query(User).filter(User.email == email).update({User.is_active: True})
         db.session.commit()
     except SignatureExpired:
         return {"verified": "False"}
