@@ -8,6 +8,8 @@ from flask_bcrypt import generate_password_hash, check_password_hash
 from .utils import email_check, password_check, email_verification_token, verify_email, send_email_with_token
 from .email_verification import MailService
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from scraping.scraping.spiders.ceneoScraping import ceneoScraping, zdrowieScraping, urodaScraping
+from scrapy.crawler import CrawlerProcess
 
 
 @app.route('/', methods=['GET'])
@@ -84,3 +86,14 @@ def confirm_email(token, email):
 def logout():
     logout_user()
     return {"message": "user logged out"}
+
+
+@app.route('/scraping', methods=['POST'])
+def scraping():
+    product_list = request.json.get("productList")
+    print(type(product_list))
+
+    return {
+        "message": "Keyword list passed successfully",
+        "product_list": product_list
+    }

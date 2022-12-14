@@ -2,16 +2,22 @@ import scrapy
 from scrapy.crawler import CrawlerProcess
 
 #wybór czy chcemy scrapować w kategorii uroda/ zdrowie czy obu
-value = input("Please enter a category (uroda/zdrowie/obie):\n")
+#value = input("Please enter a category (uroda/zdrowie/obie):\n")
 
 #obie kategorie
 class ceneoScraping(scrapy.Spider):
     name = "ceneo_serach"
 
+    def __init__(self, keyword_list=None, *args, **kwargs):
+        super(ceneoScraping, self).__init__(*args, **kwargs)
+        if keyword_list is None:
+            keyword_list = []
+        self.keyword_list = keyword_list
+
     #przygotowywanie urli po których zaczniemy scrapowac - wyniki są posortowane od najniższej ceny
     def start_requests(self):
-        keyword_list = ['witamina c']
-        for keyword in keyword_list:
+        #keyword_list = ['szminka', 'puder']
+        for keyword in self.keyword_list:
             urls = [f"https://www.ceneo.pl/Uroda;szukaj-{keyword};0112-0.htm",
                     f"https://www.ceneo.pl/Zdrowie;szukaj-{keyword};0112-0.htm"]
             for ceneo_serch_url in urls:
@@ -86,17 +92,16 @@ class zdrowieScraping(scrapy.Spider):
             yield response.follow(next_page, callback=self.parse_search_results)
 
 #zapisywanie do pliku csv - da się do bazki ale to potem
-process = CrawlerProcess(settings={
-    'FEED_URI': 'scraping.csv',
-    'FEED_FORMAT': 'csv'
-})
+# process = CrawlerProcess(settings={
+#     'FEED_URI': 'scraping.csv',
+#     'FEED_FORMAT': 'csv'
+# })
 
 #wybor spidera w zaleznosci od kategorii
-if value=='uroda':
-    process.crawl(urodaScraping)
-elif value=='zdrowie':
-    process.crawl(zdrowieScraping)
-else:
-    process.crawl(ceneoScraping)
-
-process.start() # the script will block here until the crawling is finished
+# if value=='uroda':
+#     process.crawl(urodaScraping)
+# elif value=='zdrowie':
+#     process.crawl(zdrowieScraping)
+# else:
+# process.crawl(ceneoScraping)
+# process.start() # the script will block here until the crawling is finished
