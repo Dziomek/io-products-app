@@ -26,3 +26,6 @@ Jeśli wybralismy interpreter możemy startować serwer Flaska.
 Z poziomu folderu z Reactem: 
 - npm install - zaciąga potrzebne moduły
 - npm start - startuje serwer Reacta
+
+##Scraping
+plik uruchamiający to scraping/scraping/spiders/ceneoScraping.py

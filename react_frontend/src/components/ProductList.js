@@ -21,11 +21,35 @@ function ProductList() {
     }
 
     const submitListOfProducts = () => {
-        if (productList.length === 0) setErrorMessage('List of products is empty')
-        else {
-            setErrorMessage(null)
+        if (productList.length === 0) {
+            setErrorMessage('List of products is empty')
+            return {"message": "List of products is empty"}
         }
-        console.log(productList)
+        setErrorMessage(null)
+
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                productList: productList
+            })
+        }
+        fetch("http://127.0.0.1:5000/scraping", options)
+            .then(response => {
+                console.log('Response status:', response.status)
+                if (response.status !== 200) {
+                    setErrorMessage("An error occured")
+                }
+                return response.json()
+            })
+            .then(data => {
+                console.log(data)
+            })
+            .catch(error => {
+                setErrorMessage("Server error")
+            })
     }
 
     const deleteProductFromList = (product) => {
