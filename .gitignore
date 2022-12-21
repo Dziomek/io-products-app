@@ -6,3 +6,4 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+flask_backend/flask_backend/__pycache__/
