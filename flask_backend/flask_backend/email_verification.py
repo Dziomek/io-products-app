@@ -6,7 +6,7 @@ from flask_backend import app
 EMAIL_ADDRESS = app.config["EMAIL_ADDRESS"]
 EMAIL_PASSWORD = app.config["EMAIL_PASSWORD"]
 
-
+#TODO: Mayby a class with only static methods would be better
 class MailService:
 
     def __init__(self):
