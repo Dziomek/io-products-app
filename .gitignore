@@ -7,3 +7,6 @@ ENV/
 env.bak/
 venv.bak/
 flask_backend/flask_backend/__pycache__/
+scraping/scraping/__pycache__/
+scraping/scraping/spiders/__pycache__/
+scraping/logs/
