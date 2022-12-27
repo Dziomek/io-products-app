@@ -3,7 +3,7 @@ import requests
 from flask import jsonify, request, url_for
 from . import app
 from .database_connector import DatabaseConnector
-from scraping.scraping.spiders.ceneoScraping import ceneoScraping, zdrowieScraping, urodaScraping
+# from scraping.scraping.spiders.ceneoScraping import ceneoScraping, zdrowieScraping, urodaScraping
 from scrapy.crawler import CrawlerProcess
 
 db = DatabaseConnector()
@@ -11,6 +11,7 @@ db = DatabaseConnector()
 @app.route('/', methods=['GET'])
 def hello_world():
     response = jsonify({"data": ["data1", "data2", "data3"]})
+    
     return response
 
 @app.route('/scraping', methods=['POST'])

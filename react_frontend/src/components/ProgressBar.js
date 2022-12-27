@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import './ProgressBar.css'
+import '../css/ProgressBar.css'
+
 
 export default function Progressbar() {
 	const [filled, setFilled] = useState(0);

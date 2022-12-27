@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext} from "react";
-import "./ConfirmEmail.css";
+import "../css/ConfirmEmail.css";
 import {Context} from "../store/appContext";
 import {useNavigate} from "react-router-dom";
 

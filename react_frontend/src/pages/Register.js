@@ -2,7 +2,7 @@ import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useContext, useEffect, useState, useRef} from "react";
 import {Context} from "../store/appContext";
-import './Register.css'
+import '../css/Register.css'
 import {faEnvelope, faKey, faPlus, faCheck, faUser, faHouse} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 

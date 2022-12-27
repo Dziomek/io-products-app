@@ -1,14 +1,20 @@
-import './ProductList.css'
+import '../css/ProductList.css'
 import React from "react";
 import {useState, useRef} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass, faPlus, faXmark} from "@fortawesome/free-solid-svg-icons";
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function ProductList() {
 
     const [productList, setProductList] = useState([])
     const [errorMessage, setErrorMessage] = useState(null)
     const productInput = useRef()
+    const categoryButton = useRef()
+
+    const [category, setCategory] = useState('Wszystkie kategorie')
 
     const submitProduct = () => {
         const product = productInput.current.value
@@ -33,9 +39,11 @@ function ProductList() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                productList: productList
+                productList: productList,
+                category: category,
             })
         }
+        console.log(options)
         fetch("http://127.0.0.1:5000/scraping", options)
             .then(response => {
                 console.log('Response status:', response.status)
@@ -96,6 +104,25 @@ function ProductList() {
                         <button id="submit-list" onClick={submitListOfProducts}>
                             <FontAwesomeIcon icon={faMagnifyingGlass} className="submit-list-icon"/>
                         </button>
+                    </div>
+                    <div>
+                    <DropdownButton id="dropdown-item-button" title={category} ref={categoryButton}>
+                    <Dropdown.Item as="button" onClick={() => {
+                        setCategory('Wszystkie katerogie')
+                    }}>
+                        Wszystkie kategorie
+                    </Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {
+                        setCategory('Zdrowie')
+                    }}>
+                        Zdrowie
+                    </Dropdown.Item>
+                    <Dropdown.Item as="button" onClick={() => {
+                        setCategory('Uroda')
+                    }}>
+                        Uroda
+                    </Dropdown.Item>
+                    </DropdownButton>
                     </div>
                 </div>
             </div>
