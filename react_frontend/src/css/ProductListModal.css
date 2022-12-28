@@ -17,7 +17,7 @@
 }
 
 .modal-header {
-    border-bottom: var(--bs-modal-header-border-width) solid orange !important;
+    /* border-bottom: var(--bs-modal-header-border-width) solid orange !important; */
 }
 
 .modal-body h1{

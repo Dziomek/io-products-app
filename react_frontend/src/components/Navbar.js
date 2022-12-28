@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {Context} from "../store/appContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartShopping, faStar} from '@fortawesome/free-solid-svg-icons'
+import LoginRegisterModal from "./LoginRegisterModal";
 
 function Navbar() {
 
@@ -36,12 +37,7 @@ function Navbar() {
                 <div className='button-container'>
                     { !store.token ?
                         <div>
-                            <Link to="/login">
-                               <button type="submit">Log in</button>
-                            </Link>
-                            <Link to="/register">
-                                <button type="submit">Register</button>
-                            </Link>
+                            <LoginRegisterModal/>
                         </div>
                         :
                         <div>

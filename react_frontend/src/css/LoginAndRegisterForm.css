@@ -1,0 +1,48 @@
+/* Register i Login korzystaja w wiekszosci ze wspolnego css (to samo nazewnictwo klas) */
+
+.login-modal-form, .register-modal-form {
+    margin-top: calc(var(--page-height) / 25);
+}
+
+.form-inner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: calc(var(--page-height) / 60);
+}
+
+.login-modal-form input, .register-modal-form input {
+    width: 80%;
+    padding: 1%;
+    font-size: 20px;
+    border: 0.5px solid gray;
+    border-radius: 30px;
+    margin-left: 2%;
+    outline: none;
+}
+
+.login-form-icon, .register-form-icon {
+    margin-right: calc(var(--page-height) / 60);
+    width: calc(var(--page-height) / 20);
+    height: calc(var(--page-height) / 20);
+    color: gray;
+}
+
+.login-form-footer {
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.login-form-footer button {
+    padding: 1%;
+    border: none;
+    background-color: orange;
+    font-size: 20px;
+    width: 70%;
+    outline: none;
+    border-radius: 30px;
+}
+.login-form-footer button:hover {
+    background-color: #facb32;
+}
