@@ -41,10 +41,7 @@ function Home() {
             <button className="search-btn">Search</button>
             <ProductListModal/>
         </div>
-
-
-
-
+        <a className="log-in-a">Log in</a><p className="log-in-paragraph"> to save your lists.</p>
         </>
     )
 }

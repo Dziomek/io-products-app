@@ -10,7 +10,7 @@
 .title-container h1{
     cursor: pointer;
     font-size: 30px;
-    font-family: UberMove, sans-serif;
+    font-family: 'Futura', sans-serif;
     display: inline;
     color: black;
 }
@@ -30,7 +30,7 @@
 .search-bar-container h1{
     color:black;
     font-weight: bold;
-    font-family: UberMove, sans-serif;
+    font-family: 'Futura', sans-serif;
     padding-bottom: 1em;
 }
 .search-bar-container form{
@@ -44,7 +44,7 @@
     border: none;
     width: 460px;
     height: 40px;
-    font-family: UberMove, sans-serif;
+    font-family: 'Futura', sans-serif;
 }
 .search-bar-container input:focus{
     outline: none;
@@ -67,10 +67,22 @@
 
 .search-btn{
     background-color: white;
-    font-family: UberMove, sans-serif;
+    font-family: 'Futura', sans-serif;
     font-weight: 500;
     height: 56px;
     width: 200px;
     margin-right: 5px;
     border: none;
+}
+.log-in-a{
+    font-family: 'Futura', sans-serif;    
+    margin-left: 2rem;
+    text-decoration:underline;
+    color: black;
+    display: inline;
+}
+.log-in-paragraph{
+    color: black;
+    font-family: 'Futura', sans-serif;
+    display: inline;
 }
