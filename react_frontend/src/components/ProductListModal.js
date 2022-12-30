@@ -25,8 +25,13 @@ const ProductListModal = () => {
     const quantityInput = useRef()
     const categoryButton = useRef()
 
+    console.log('ProductList rendered')
+
     const handleClose = () => setShow(false);
     const handleShow = () =>  {
+        setQuantity(1)
+        setProductList([])
+        setCategory('All')
         setProgress(0)
         setShow(true)
         setSearching(false)

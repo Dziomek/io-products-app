@@ -80,7 +80,7 @@ const LoginForm = () => {
             <>
                 <ConfirmEmailModal email={email}/>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <button style={{width: '30%', borderRadius: '30px', backgroundColor: 'orange', border: 'none', fontSize: '20px'}} onClick={() => setLoggedIn(false)}>Powrót</button>
+                    <button style={{width: '30%', borderRadius: '30px', backgroundColor: 'orange', border: 'none', fontSize: '20px'}} onClick={() => setLoggedIn(false)}>Return</button>
                 </div>
             </>
             }

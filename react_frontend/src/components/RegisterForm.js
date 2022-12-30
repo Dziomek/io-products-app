@@ -89,7 +89,7 @@ const RegisterForm = () => {
             <>
                 <ConfirmEmailModal email={email}/>
                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                    <button style={{width: '30%', borderRadius: '30px', backgroundColor: 'orange', border: 'none', fontSize: '20px'}} onClick={() => setRegistered(false)}>Powrót</button>
+                    <button style={{width: '30%', borderRadius: '30px', backgroundColor: 'orange', border: 'none', fontSize: '20px'}} onClick={() => setRegistered(false)}>Return</button>
                 </div>
             </>
             }
