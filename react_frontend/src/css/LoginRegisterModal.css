@@ -12,3 +12,12 @@
 .login-register-form-footer {
     margin-top: calc(var(--page-height) / 15) !important;
 }
+.login-register-button{
+    padding: 10px 14px;
+    border-radius: 500px;
+    border: 1px solid white;
+}
+.icon{
+    display: inline;
+    color: black;
+}

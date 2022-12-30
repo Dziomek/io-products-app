@@ -126,3 +126,17 @@
     border: 0.5px solid gray;
     border-radius: 30px;
 }
+.product-list-modal-btn{
+    font-family: UberMove, sans-serif;
+    font-weight: 500;
+    height: 56px;
+    width: 200px;
+    background-color: black;
+    color:white;
+    margin-right: 5px;
+    border: none;
+    border-radius: 8px; 
+}
+.product-list-modal-btn:hover{
+    background-color:rgb(51, 51, 51);
+}
