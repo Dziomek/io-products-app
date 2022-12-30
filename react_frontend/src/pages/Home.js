@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import {useContext, useEffect} from "react";
 import {Context} from "../store/appContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
