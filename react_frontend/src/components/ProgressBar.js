@@ -9,7 +9,7 @@ export default function Progressbar(props) {
 	// 	console.log('Ustawiono progressbar')
 	// }, [props.filled]) 
 
-	console.log('progressbar rendered with parameter', props.filled)
+	console.log('ProgressBar rendered with parameter', props.filled)
 	
  	return (
 	  	<div className='progressbar-container'>

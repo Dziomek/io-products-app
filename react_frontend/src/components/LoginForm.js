@@ -15,7 +15,7 @@ const LoginForm = () => {
     const emailInput = useRef()
     const passwordInput = useRef()
 
-    console.log('Login form wyrenderowany. loggedIn: ', loggedIn)
+    console.log('LoginForm rendered. loggedIn: ', loggedIn)
 
     const login = () => {
         const options = {
