@@ -14,13 +14,14 @@ class ceneoScraping(scrapy.Spider):
     #keyword_list = ['szminka', 'puder']
     #keyword_list = ['ibuprom zatoki sprint 10 kapsulek']
     # keyword_list = ['ahgvkds']
-    def get_keyword_list(self):
+    def start_requests(self):
         for keyword in self.keyword_list:
-            start_urls = [f"https://www.ceneo.pl/Uroda;szukaj-{keyword};0112-0.htm",
+            urls = [f"https://www.ceneo.pl/Uroda;szukaj-{keyword};0112-0.htm",
                     f"https://www.ceneo.pl/Zdrowie;szukaj-{keyword};0112-0.htm"]
-            self.start_urls = start_urls
+            for ceneo_serch_url in urls:
+                yield scrapy.Request(url=ceneo_serch_url, callback=self.parse, meta={'keyword': keyword})
 
-    #przygotowywanie urli po których zaczniemy scrapowac - wyniki są posortowane od najniższej ceny
+    #przygotowywanie urli po których zaczniemy scrapowac 
     def parse(self, response, **kwargs):
         urls = self.start_urls
         for ceneo_serch_url in urls:
