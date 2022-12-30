@@ -4,7 +4,7 @@ import '../css/LoginRegisterModal.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPlus, faMinus, faXmark} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faMinus, faXmark,faUser} from "@fortawesome/free-solid-svg-icons";
 import Form from 'react-bootstrap/Form'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
@@ -26,9 +26,9 @@ const LoginRegisterModal = () => {
 
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>
-            Login/register
-        </Button>
+        <button className='login-register-button' onClick={handleShow}>
+            <FontAwesomeIcon className='icon' icon={faUser}/> Login/Register
+        </button>   
   
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

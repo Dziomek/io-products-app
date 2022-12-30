@@ -100,9 +100,9 @@ const ProductListModal = () => {
   
     return (
       <>
-        <Button variant="primary" onClick={handleShow}>
-            LISTA PRODUKTOW
-        </Button>
+        <button className='product-list-modal-btn' onClick={handleShow}>
+            Your product list
+        </button>
         
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>

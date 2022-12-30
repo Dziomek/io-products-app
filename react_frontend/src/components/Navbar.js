@@ -14,27 +14,10 @@ function Navbar() {
         <div className='navbar-container'>
             <section className='title-container'>
                 <Link to="/">
-                  <h1>PRODUCTS APP</h1>
+                  <h1 >PRODUCTS <p className="title2">APP</p></h1>
                 </Link>
             </section>
-            <section className='search-container'>
-                <form action="" className='search-bar'>
-                    <input type="text" placeholder="Search for products..."/>
-                    <button type="submit">
-                        <img src={require('../images/search-icon.png')} alt=""/>
-                    </button>
-                </form>
-            </section>
-            <section className='user-container'>
-                <div className='icons-container'>
-                    <Link to='/'>
-                        <FontAwesomeIcon icon={faStar} className="navbar-icon"/>
-                    </Link>
-                    <Link to='/'>
-                        <FontAwesomeIcon icon={faCartShopping} className="navbar-icon"/>
-                    </Link>
-                </div>
-                <div className='button-container'>
+            <div className='button-container'>
                     { !store.token ?
                         <div>
                             <LoginRegisterModal/>
@@ -45,6 +28,24 @@ function Navbar() {
                             <button onClick={() => actions.logout()}>Log out</button>
                         </div>
                     }
+                </div>
+            <section className='search-container'>
+                <form action="" className='search-bar'>
+                    <input type="text" placeholder="Search for products..."/>
+                    <button type="submit">
+                        <img src={require('../images/search-icon.png')} alt=""/>
+                    </button>
+                </form>
+            </section>
+            
+            <section className='user-container'>
+                <div className='icons-container'>
+                    <Link to='/'>
+                        <FontAwesomeIcon icon={faStar} className="navbar-icon"/>
+                    </Link>
+                    <Link to='/'>
+                        <FontAwesomeIcon icon={faCartShopping} className="navbar-icon"/>
+                    </Link>
                 </div>
             </section>
         </div>

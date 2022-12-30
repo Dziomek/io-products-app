@@ -1,0 +1,76 @@
+.title-container{
+    position: relative;
+    display: grid;
+    grid-template-columns: 10fr 2fr;
+    width: 100%;
+    background-color: var(--navbar-background-color);
+    padding: 1em 1em 1em 1em;
+    justify-content: center;
+}
+.title-container h1{
+    cursor: pointer;
+    font-size: 30px;
+    font-family: UberMove, sans-serif;
+    display: inline;
+    color: black;
+}
+.title-2nd-part{
+    font-weight: bold;
+}
+.login-container{
+    display: grid;
+    padding: 0;
+    position: relative;
+    justify-content: right;
+}
+.search-bar-container{
+    margin-top: 18vh;
+    padding:3em 2em;
+}
+.search-bar-container h1{
+    color:black;
+    font-weight: bold;
+    font-family: UberMove, sans-serif;
+    padding-bottom: 1em;
+}
+.search-bar-container form{
+    margin-top: 8px;
+    display: inline;
+    
+}
+.search-bar-container input{
+    margin-left: 10px;
+    margin-top: 8px;    
+    border: none;
+    width: 460px;
+    height: 40px;
+    font-family: UberMove, sans-serif;
+}
+.search-bar-container input:focus{
+    outline: none;
+}
+.search-bar-inner-container{
+    display: inline-block;
+    background-color: white;
+    width: 560px;
+    height: 56px;
+    margin-right: 5px;
+    transition: 0.1s;
+    transition-timing-function: ease-in-out;
+}
+.search-bar-inner-container:focus-within{
+    border-bottom:3px solid black;
+}
+.icon{
+    margin-left: 5px;
+}
+
+.search-btn{
+    background-color: white;
+    font-family: UberMove, sans-serif;
+    font-weight: 500;
+    height: 56px;
+    width: 200px;
+    margin-right: 5px;
+    border: none;
+}
