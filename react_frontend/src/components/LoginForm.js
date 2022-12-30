@@ -3,14 +3,19 @@ import { Context } from '../store/appContext'
 import '../css/LoginAndRegisterForm.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faKey, faEnvelope, faK} from '@fortawesome/free-solid-svg-icons'
+import ConfirmEmailModal from './ConfirmEmailModal';
 
 const LoginForm = () => {
 
     const {store, actions} = useContext(Context)
     const [errorMessage, setErrorMessage] = useState(null)
+    const [email, setEmail] = useState(null)
+    const [loggedIn, setLoggedIn] = useState(false)
     
     const emailInput = useRef()
     const passwordInput = useRef()
+
+    console.log('Login form wyrenderowany. loggedIn: ', loggedIn)
 
     const login = () => {
         const options = {
@@ -36,6 +41,8 @@ const LoginForm = () => {
                 console.log(data)
                 sessionStorage.setItem("is_active", data.is_active)
                 sessionStorage.setItem("emailToConfirm", data.email)
+                setLoggedIn(true)
+                setEmail(data.email)
                 if(data.is_active) {
                     sessionStorage.setItem("username", data.username)
                     sessionStorage.setItem("email", data.email)
@@ -52,20 +59,31 @@ const LoginForm = () => {
 
     return (
         <div className='login-modal-form'>
-            <div className='form-inner-container'>
-                <FontAwesomeIcon icon={faEnvelope} className='login-form-icon'/>
-                <input type='text' placeholder='email...' ref={emailInput}></input>
-            </div>
-            <div className='form-inner-container'>
-                <FontAwesomeIcon icon={faKey} className='login-form-icon'/>
-                <input type='password' placeholder='password...' ref={passwordInput}></input>
-            </div>
-            <div className='form-inner-container'>
-                <p style={{margin: '0', color: 'red'}}>{errorMessage}</p>
-            </div>
-            <div className='login-form-footer'>
-                <button type='button' onClick={login}>SIGN IN</button>
-            </div>
+            {!loggedIn ?
+            <>
+                <div className='form-inner-container'>
+                    <FontAwesomeIcon icon={faEnvelope} className='login-form-icon'/>
+                    <input type='text' placeholder='email...' ref={emailInput}></input>
+                </div>
+                <div className='form-inner-container'>
+                    <FontAwesomeIcon icon={faKey} className='login-form-icon'/>
+                    <input type='password' placeholder='password...' ref={passwordInput}></input>
+                </div>
+                <div className='form-inner-container'>
+                    <p style={{margin: '0', color: 'red'}}>{errorMessage}</p>
+                </div>
+                <div className='login-form-footer'>
+                    <button type='button' onClick={login}>SIGN IN</button>
+                </div>
+            </> 
+            :
+            <>
+                <ConfirmEmailModal email={email}/>
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <button style={{width: '30%', borderRadius: '30px', backgroundColor: 'orange', border: 'none', fontSize: '20px'}} onClick={() => setLoggedIn(false)}>Powrót</button>
+                </div>
+            </>
+            }
         </div>
     )
 }

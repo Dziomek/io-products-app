@@ -4,7 +4,7 @@ import Login from "./unused/Login";
 import Home from "./pages/Home";
 import injectContext from "./store/appContext";
 import Register from "./unused/Register";
-import ConfirmEmail from "./pages/ConfirmEmail";
+import ConfirmEmail from "./unused/ConfirmEmail";
 
 function App() {
 
@@ -14,7 +14,7 @@ function App() {
                 <Route exact path='/' element={<Home/>}/>
                 {/* <Route exact path='/login' element={<Login/>}/>
                 <Route exact path='/register' element={<Register/>}/> */}
-                <Route exact path='/confirm' element={<ConfirmEmail/>}/>
+                {/* <Route exact path='/confirm' element={<ConfirmEmail/>}/> */}
             </Routes>
         </BrowserRouter>
     );
