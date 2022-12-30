@@ -8,7 +8,7 @@ from scrapy.crawler import CrawlerProcess
 class ceneoScraping(scrapy.Spider):
     name = "ceneo_search"
 
-    def __init__(self, keyword_list=None, *args, **kwargs):
+    def __init__(self, keyword_list, *args, **kwargs):
         super(ceneoScraping, self).__init__(*args, **kwargs)
         if keyword_list is None:
             keyword_list = []
@@ -16,7 +16,6 @@ class ceneoScraping(scrapy.Spider):
 
     #przygotowywanie urli po których zaczniemy scrapowac - wyniki są posortowane od najniższej ceny
     def start_requests(self):
-        #keyword_list = ['szminka', 'puder']
         for keyword in self.keyword_list:
             urls = [f"https://www.ceneo.pl/Uroda;szukaj-{keyword};0112-0.htm",
                     f"https://www.ceneo.pl/Zdrowie;szukaj-{keyword};0112-0.htm"]

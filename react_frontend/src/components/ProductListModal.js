@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form'
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import Dropdown from 'react-bootstrap/Dropdown';
+import ProgressBar from './ProgressBar';
 
 const ProductListModal = () => {
 
@@ -18,12 +19,15 @@ const ProductListModal = () => {
     const [category, setCategory] = useState('All')
     const [searching, setSearching] = useState(false)
 
+    const [progress, setProgress] = useState(0)
+
     const nameInput = useRef()
     const quantityInput = useRef()
     const categoryButton = useRef()
 
     const handleClose = () => setShow(false);
     const handleShow = () =>  {
+        setProgress(0)
         setShow(true)
         setSearching(false)
         setErrorMessage(null)
@@ -59,34 +63,40 @@ const ProductListModal = () => {
         setErrorMessage(null)
         
         const mappedProductList = productList.map(item => item.product)
-
-        const options = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                productList: mappedProductList,
-                category: category,
-            })
-        }
-        console.log(options)
-        setSearching(true)
-        fetch("http://127.0.0.1:5000/scraping", options)
-            .then(response => {
-                console.log('Response status:', response.status)
-                if (response.status !== 200) {
-                    setErrorMessage("An error occured")
-                }
-                return response.json()
-            })
-            .then(data => {
-                console.log(data)
-                handleClose()
-            })
-            .catch(error => {
-                setErrorMessage("Server error")
-            })
+        const iterations = mappedProductList.length
+        let currentIteration = 0
+        mappedProductList.forEach(product => {
+            console.log('WPISANY DO SCRAPERA', product)
+            const options = {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productList: [product],
+                    category: category,
+                })
+            }
+            console.log(options)
+            setSearching(true)
+            fetch("http://127.0.0.1:5000/scraping", options)
+                .then(response => {
+                    console.log('Response status:', response.status)
+                    if (response.status !== 200) {
+                        setErrorMessage("An error occured")
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    console.log(data)
+                    currentIteration += 1
+                    setProgress(Math.round(currentIteration / iterations * 100))
+                    if (currentIteration === iterations) handleClose()
+                })
+                .catch(error => {
+                    setErrorMessage("Server error")
+                }) 
+        })
     }
 
     const countTen = () => {
@@ -108,7 +118,7 @@ const ProductListModal = () => {
             <Modal.Header closeButton>
                 <Modal.Title>Search for best offers</Modal.Title>
             </Modal.Header>
-            {searching ? <h1>Tu będzie progressbar</h1> : <Modal.Body>
+            {searching ? <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10% 0'}}><ProgressBar filled={progress}/></div> : <Modal.Body>
                 <div style={{display: 'flex', justifyContent: 'center'}}>
                     <h1 style={{fontWeight: '300'}}>Enter the names of the products you are looking for</h1>
                 </div>
@@ -154,7 +164,7 @@ const ProductListModal = () => {
                 <p style={{color: 'red', margin: '0', height: '2vh'}}>{errorMessage}</p>
             </Modal.Body>
             }
-            <Modal.Footer>
+            {searching ? null : <Modal.Footer>
                 <button type='text' onClick={submitListOfProducts} id='search-button'>Search</button>
                 <DropdownButton id="dropdown-item-button" title={category} ref={categoryButton}>
                     <Dropdown.Item as="button" onClick={() => {
@@ -174,7 +184,7 @@ const ProductListModal = () => {
                     </Dropdown.Item>
                 </DropdownButton>
             </Modal.Footer>
-            
+            }
         </Modal>
         
       </>

@@ -60,8 +60,8 @@ def register():
     db.insert_into_users(username=username, email=email, password_hash=password_hash.hexdigest(), is_active=False)
 
     token = email_verification_token(email)
-    # link = url_for('confirm_email', token=token, email=email, _external=True)
-    # send_email_with_token(link, email, username)
+    link = url_for('confirm_email', token=token, email=email, _external=True)
+    send_email_with_token(link, email, username)
 
     return {
         "message": "User succesfully created",
