@@ -31,7 +31,7 @@ function Home() {
             }        
         </div>
         <div className="search-bar-container">
-            <h1>Najkorzystniejsze oferty dla Ciebie</h1>
+            <h1>The best deals for You.</h1>
             <div className="search-bar-inner-container">
             <FontAwesomeIcon className='icon' icon={faMagnifyingGlass}/>
                 <form action="" >
