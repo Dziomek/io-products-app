@@ -1,0 +1,23 @@
+.login-register-navigation button {
+    width: 50%;
+    font-size: 20px;
+    border: none;
+    background-color: white;
+}
+
+.login-register-navigation .active {
+    border-bottom: 4px solid orange;
+}
+
+.login-register-form-footer {
+    margin-top: calc(var(--page-height) / 15) !important;
+}
+.login-register-button{
+    padding: 10px 14px;
+    border-radius: 500px;
+    border: 1px solid white;
+}
+.icon{
+    display: inline;
+    color: black;
+}

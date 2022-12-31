@@ -1,0 +1,22 @@
+.confirm-email-container {
+    margin-bottom: 5%;
+}
+
+.confirm-email-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#confirm-title {
+    font-size: 40px;
+    font-weight: 400;
+}
+#confirm-subtitle {
+    font-size: 20px;
+    font-weight: 300;
+}
+#confirm-email {
+    font-size: 20px;
+    font-weight: 500;
+    color: orange
+}

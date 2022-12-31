@@ -1,4 +1,4 @@
-import '../css/ProductList.css'
+import './ProductList.css'
 import React from "react";
 import {useState, useRef} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";

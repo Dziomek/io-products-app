@@ -5,7 +5,7 @@ from scrapy.crawler import CrawlerProcess
 class ceneoScraping(scrapy.Spider):
     name = "ceneo_search"
 
-    def __init__(self, keyword_list=None, *args, **kwargs):
+    def __init__(self, keyword_list, *args, **kwargs):
         super(ceneoScraping, self).__init__(*args, **kwargs)
         if keyword_list is None:
             keyword_list = []
