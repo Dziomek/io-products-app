@@ -14,7 +14,6 @@ login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 db = DatabaseConnector
 
-
 if __name__ == '__main__':
     app.run()
 

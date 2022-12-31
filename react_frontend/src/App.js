@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import {Route, Routes, BrowserRouter} from "react-router-dom";
 import Login from "./unused/Login";
 import Home from "./pages/Home";
-import injectContext from "./store/appContext";
+import injectContext, { Context } from "./store/appContext";
 import Register from "./unused/Register";
 import ConfirmEmail from "./unused/ConfirmEmail";
 
 function App() {
+
+    console.log('App rendered')
 
     return (
         <BrowserRouter>

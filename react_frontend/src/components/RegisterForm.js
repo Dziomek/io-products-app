@@ -46,8 +46,6 @@ const RegisterForm = () => {
             .then(data => {
                 console.log(data)
                 if(data.message === "User succesfully created") {
-                    sessionStorage.setItem("emailToConfirm", data.email)
-                    actions.register(data.email)
                     setEmail(email)
                     setRegistered(true)
                 }

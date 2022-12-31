@@ -103,15 +103,6 @@ const ProductListModal = () => {
                 }) 
         })
     }
-
-    const countTen = () => {
-        for (let i = 10; i >= 0; i--) {
-            setTimeout(function() {
-              console.log(i);
-            }, (10 - i) * 1000);
-          }
-          handleClose()
-    }
   
     return (
       <>
@@ -153,7 +144,7 @@ const ProductListModal = () => {
                         <button type='button' onClick={increaseQuantity}>
                             <FontAwesomeIcon icon={faPlus} className='button-icon' style={{margin: '0', color: 'darkgreen'}}/>
                         </button>
-                        <input type='text' value={quantity} id='product-quantity-input' ref={quantityInput}></input>
+                        <input type='text' value={quantity} readOnly={true} id='product-quantity-input' ref={quantityInput}></input>
                         <button type='button' onClick={decreaseQuantity}>
                             <FontAwesomeIcon icon={faMinus} className='button-icon' style={{margin: '0', color: 'darkred'}}/>
                         </button>

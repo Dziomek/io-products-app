@@ -3,7 +3,7 @@ import { Context } from '../store/appContext'
 import '../css/LoginAndRegisterForm.css'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faKey, faEnvelope, faK} from '@fortawesome/free-solid-svg-icons'
-import ConfirmEmailModal from './ConfirmEmailModal';
+import ConfirmEmailModal from './ConfirmEmailModal'
 
 const LoginForm = () => {
 
@@ -20,6 +20,7 @@ const LoginForm = () => {
     const login = () => {
         const options = {
             method: 'POST',
+            // credentials: 'same-origin',
             headers: {
                 "Content-Type": "application/json"
             },
@@ -39,17 +40,10 @@ const LoginForm = () => {
             })
             .then(data => {
                 console.log(data)
-                sessionStorage.setItem("is_active", data.is_active)
-                sessionStorage.setItem("emailToConfirm", data.email)
                 setLoggedIn(true)
                 setEmail(data.email)
                 if(data.is_active) {
-                    sessionStorage.setItem("username", data.username)
-                    sessionStorage.setItem("email", data.email)
-                    sessionStorage.setItem("token", data.access_token)
-                    if (sessionStorage.getItem("emailToConfirm")) sessionStorage.removeItem("emailToConfirm")
-                    actions.login(data.access_token, data.username, data.email, data.is_active)
-                    
+                    actions.login(data.access_token, data.username, data.email)
                 }
             })
             .catch(error => {

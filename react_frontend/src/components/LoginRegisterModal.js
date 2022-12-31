@@ -24,6 +24,8 @@ const LoginRegisterModal = () => {
         setActiveButton(event.target.dataset.button)
     }
 
+    console.log('LoginRegisterModal rendered')
+
     return (
       <>
         <button className='login-register-button' onClick={handleShow}>

@@ -10,9 +10,7 @@ function Home() {
 
     const {store, actions} = useContext(Context)
 
-    useEffect(() => {
-        actions.syncDataFromSessionStorage()
-    }, [])
+    console.log('Home rendered')
 
     return (
         <>
