@@ -21,23 +21,23 @@ class ceneoScraping(scrapy.Spider):
             urls.append(f"https://www.ceneo.pl/Uroda;szukaj-{new}")
             urls.append(f"https://www.ceneo.pl/Zdrowie;szukaj-{new}")
         for ceneo_search_url in urls:
-            # self.ceneo_search_url = ceneo_search_url
             # print(ceneo_search_url)
             yield scrapy.Request(url=ceneo_search_url, callback=self.parse, meta={'keyword': new})
 
         self.urls = urls
         #print(self.urls)
 
+
     #przygotowywanie urli po których zaczniemy scrapowac
     def parse(self, response, **kwargs):
         for ceneo_search_url in self.urls:
             # niejednoznaczne wyszukanie
-            if len(response.css('div.cat-prod-row__content')) > 1:
+            if len(response.css('div.cat-prod-row__body')) > 1:
                 link = ceneo_search_url + ';0112-0.htm'
                 yield scrapy.Request(url=link, callback=self.parse_search_results)
                 print(link)
             # jednoznaczne wyszukanie
-            elif len(response.css('div.cat-prod-row__content')) == 1:
+            elif len(response.css('div.cat-prod-row__body')) == 1:
                 try:
                     link = 'https://www.ceneo.pl' + response.css('a.js_seoUrl.js_clickHash.go-to-product').attrib[
                         'href'] + ';0284-0.htm'
@@ -55,14 +55,27 @@ class ceneoScraping(scrapy.Spider):
 
     # scrapowanie danych dla niejednoznacznego wyszukania
     def parse_search_results(self, response):
-        for products in response.css('div.cat-prod-row__content')[0:10]:
+        for products in response.css('div.cat-prod-row__body')[0:4]:
             product_name = products.css('span::text').get()
             price = products.css('span.value::text').get() + products.css('span.penny::text').get()
-            link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
+            #link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
+            image = 'https:' + products.css('img').attrib['src']
             data = {
                 'name': product_name,
-                'price': price
-                # 'link': link
+                'price': price,
+                'image': image
+            }
+            yield data
+
+        for products in response.css('div.cat-prod-row__body')[4:10]:
+            product_name = products.css('span::text').get()
+            price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+            #link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
+            image = 'https:' + products.css('img').attrib['data-original']
+            data = {
+                'name': product_name,
+                'price': price,
+                'image': image
             }
             yield data
 
@@ -71,33 +84,37 @@ class ceneoScraping(scrapy.Spider):
         data = {}
         productName = response.css(
             'h1.product-top__product-info__name.js_product-h1-link.js_product-force-scroll.js_searchInGoogleTooltip.default-cursor::text').get()
+        image = 'https:' + response.css('img.js_gallery-media.gallery-carousel__media').attrib['src']
         for products in response.css(
                 'div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[0:1]:
             price = products.css('span.value::text').get() + products.css('span.penny::text').get()
             key1 = 'name'
             key2 = 'price'
+            key3 = 'image'
             if key1 not in data:
                 data[key1] = productName
                 data[key2] = price
+                data[key3] = image
             else:
                 data[key1].append(productName)
                 data[key2].append(price)
+                data[key3].append(image)
         for supplier in response.css('div.product-offer__store')[0:1]:
             shopName = supplier.css('img').attrib['alt']
-            key3 = 'shop name'
-            if key3 not in data:
-                data[key3] = shopName
+            key4 = 'shop name'
+            if key4 not in data:
+                data[key4] = shopName
             else:
-                data[key3].append(shopName)
+                data[key4].append(shopName)
         for products_link in response.css(
                 'div.product-offer__actions.js_product-offer__actions.js_actions.specific-variant-content')[0:1]:
             link = 'https://www.ceneo.pl/' + \
                    products_link.css('a.button.button--primary.button--flex.go-to-shop').attrib['href']
-            key4 = 'link'
-            if key4 not in data:
-                data[key4] = link
+            key5 = 'link'
+            if key5 not in data:
+                data[key5] = link
             else:
-                data[key4].append(link)
+                data[key5].append(link)
         yield data
 
 #zapisywanie do pliku csv
