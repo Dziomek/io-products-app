@@ -87,33 +87,18 @@ class ceneoScraping(scrapy.Spider):
         image = 'https:' + response.css('img.js_gallery-media.gallery-carousel__media').attrib['src']
         for products in response.css(
                 'div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[0:1]:
-            product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
-            if products.css('div.free-delivery-label::text').get():
-                delivery_price = 0
-            else:
-                total_price = products.css('span.product-delivery-info.js_deliveryInfo::text').get()
-                d1 = total_price.replace("\n", "")
-                d2 = d1.replace(" ", "")
-                d3 = d2.strip('Zwysyłkąodzł')
-                d4 = d3.replace(",", ".")
-                p1 = product_price.replace(",", ".")
-                delivery_price = round(float(d4) - float(p1), 2)
-
+            price = products.css('span.value::text').get() + products.css('span.penny::text').get()
             key1 = 'name'
             key2 = 'price'
             key3 = 'image'
-            key6 = 'delivery price'
             if key1 not in data:
                 data[key1] = productName
-                data[key2] = product_price
-                data[key6] = delivery_price
+                data[key2] = price
                 data[key3] = image
             else:
                 data[key1].append(productName)
-                data[key2].append(product_price)
-                data[key6].append(delivery_price)
+                data[key2].append(price)
                 data[key3].append(image)
-
         for supplier in response.css('div.product-offer__store')[0:1]:
             shopName = supplier.css('img').attrib['alt']
             key4 = 'shop name'
