@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import '../css/ProgressBar.css'
 
 
-export default function Progressbar(props) {
+export default function ProgressBar(props) {
 	
 	// useEffect(() => {
 	// 	if (props.filled) setFilled(props.filled)
