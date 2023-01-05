@@ -144,7 +144,7 @@ const ProductListModal = () => {
                                 </div>
                                 <div style={{display: "flex", width: "100%", justifyContent: "end", alignItems: "center"}}>
                                     <button onClick={() => deleteProduct(item.product)}
-                                    style={{background: "orange", border: "none", borderRadius: '60px', cursor: "pointer", padding: '1%', display: 'flex', alignItems: 'center'}}>
+                                    style={{background: "#f5c422", border: "none", borderRadius: '8px', cursor: "pointer", padding: '0.5%', display: 'flex', alignItems: 'center'}}>
                                         <FontAwesomeIcon icon={faXmark}
                                         style={{objectFit: 'cover', height: '20px', width: '20px', margin: '0', padding: '0'}}/>
                                     </button>

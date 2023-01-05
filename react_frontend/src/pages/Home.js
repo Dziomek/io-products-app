@@ -18,6 +18,8 @@ function Home() {
     const submitProduct = () => {
         const receivedProductLists = []
         const productName = productInput.current.value
+
+        if(!productName) return
         
         const options = {
             method: 'POST',
