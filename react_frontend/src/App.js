@@ -6,6 +6,7 @@ import injectContext, { Context } from "./store/appContext";
 import Register from "./unused/Register";
 import ConfirmEmail from "./unused/ConfirmEmail";
 import Products from "./pages/Products";
+import History from "./pages/History";
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
                 <Route exact path='/register' element={<Register/>}/> */}
                 {/* <Route exact path='/confirm' element={<ConfirmEmail/>}/> */}
                 <Route exact path='/products' element={<Products/>}/>
+                <Route exact path='/history' element={<History/>}/>
             </Routes>
         </BrowserRouter>
     );

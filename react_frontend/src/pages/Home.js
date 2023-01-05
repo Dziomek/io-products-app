@@ -5,7 +5,7 @@ import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import ProductListModal from "../components/ProductListModal";
 import LoginRegisterModal from "../components/LoginRegisterModal";
 import '../css/Home.css'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Home() {
 
@@ -19,8 +19,12 @@ function Home() {
         const receivedProductLists = []
         const productName = productInput.current.value
 
-        if(!productName) return
+        if(!productName) {
+            setErrorMessage('Type in product name')
+            return
+        }
         
+        setErrorMessage(null)
         const options = {
             method: 'POST',
             headers: {
@@ -70,6 +74,7 @@ function Home() {
                 <div className="login-container">
                     <h1>{store.username}</h1>
                     <button onClick={() => actions.logout()}>Log out</button>
+                    <Link to='/history' state={{token: store.token}}>History</Link>
                 </div>
             }        
         </div>
@@ -82,6 +87,7 @@ function Home() {
             <button className="search-btn" onClick={submitProduct}>Search</button>
             <ProductListModal/>
         </div>
+        {errorMessage}
         <a className="log-in-a">Log in</a><p className="log-in-paragraph"> to save your lists.</p>
         </>
     )

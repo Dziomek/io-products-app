@@ -19,7 +19,7 @@ const Products = () => {
                     <h1>{object.searchedProduct}</h1>
                     {object.productList.map((product, secondIndex) => {
                         return <div key={secondIndex} style={{marginBottom: '2%'}}>
-                            <img src={product.image}></img>
+                            <img src={product.image} alt='Product'></img>
                             <h4>{product.name}</h4>
                             <h5>{product.price}</h5>
                             
