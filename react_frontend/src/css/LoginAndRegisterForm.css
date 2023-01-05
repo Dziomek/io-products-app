@@ -15,17 +15,25 @@
     width: 80%;
     padding: 1%;
     font-size: 20px;
-    border: 0.5px solid gray;
-    border-radius: 30px;
+    border: 0.5px solid lightgray;
+    border-radius: 8px;
     margin-left: 2%;
     outline: none;
+}
+
+.login-modal-form input:focus, .register-modal-form input:focus {
+    border: 0.5px solid #f5c422;
+}
+
+.login-modal-form input:focus::placeholder, .register-modal-form input:focus::placeholder {
+    color: black;
 }
 
 .login-form-icon, .register-form-icon {
     margin-right: calc(var(--page-height) / 60);
     width: calc(var(--page-height) / 20);
     height: calc(var(--page-height) / 20);
-    color: gray;
+    color: black;
 }
 
 .login-form-footer {
@@ -37,12 +45,13 @@
 .login-form-footer button {
     padding: 1%;
     border: none;
-    background-color: orange;
+    background-color: black;
+    color: white;
     font-size: 20px;
-    width: 70%;
+    width: 50%;
     outline: none;
-    border-radius: 30px;
+    border-radius: 8px;
 }
 .login-form-footer button:hover {
-    background-color: #facb32;
+    background-color: rgb(51, 51, 51);
 }

@@ -9,6 +9,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ProgressBar from './ProgressBar';
+import { useNavigate } from 'react-router-dom';
 
 const ProductListModal = () => {
 
@@ -24,6 +25,8 @@ const ProductListModal = () => {
     const nameInput = useRef()
     const quantityInput = useRef()
     const categoryButton = useRef()
+
+    const navigate = useNavigate()
 
     console.log('ProductList rendered')
 
@@ -61,6 +64,8 @@ const ProductListModal = () => {
     }
 
     const submitListOfProducts = () => {
+        const receivedProductLists = []
+        
         if (productList.length === 0) {
             setErrorMessage('List of products is empty')
             return {"message": "List of products is empty"}
@@ -93,10 +98,20 @@ const ProductListModal = () => {
                     return response.json()
                 })
                 .then(data => {
+                    receivedProductLists.push({
+                        searchedProduct: product,
+                        category: category,
+                        productList: data.product_list.items
+                    })
                     console.log(data)
                     currentIteration += 1
                     setProgress(Math.round(currentIteration / iterations * 100))
-                    if (currentIteration === iterations) handleClose()
+                    if (currentIteration === iterations) {
+                        handleClose()
+                        navigate('/products', {state: { 
+                                productLists: receivedProductLists
+                            }})
+                    }
                 })
                 .catch(error => {
                     setErrorMessage("Server error")
@@ -129,7 +144,7 @@ const ProductListModal = () => {
                                 </div>
                                 <div style={{display: "flex", width: "100%", justifyContent: "end", alignItems: "center"}}>
                                     <button onClick={() => deleteProduct(item.product)}
-                                    style={{background: "orange", border: "none", borderRadius: '60px', cursor: "pointer", padding: '1%', display: 'flex', alignItems: 'center'}}>
+                                    style={{background: "#f5c422", border: "none", borderRadius: '8px', cursor: "pointer", padding: '0.5%', display: 'flex', alignItems: 'center'}}>
                                         <FontAwesomeIcon icon={faXmark}
                                         style={{objectFit: 'cover', height: '20px', width: '20px', margin: '0', padding: '0'}}/>
                                     </button>
