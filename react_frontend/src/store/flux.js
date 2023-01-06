@@ -10,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const token = sessionStorage.getItem("token")
 				const username = sessionStorage.getItem("username")
 				const email = sessionStorage.getItem("email")
+				
 				if(token) setStore({ token: token })
 				if(username) setStore({ username: username})
 				if(email) setStore({ email: email })

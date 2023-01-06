@@ -60,7 +60,7 @@ function Home() {
             }) 
     }
 
-    console.log('Home rendered')
+    console.log('Home rendered', store.token)
 
     return (
         <>
@@ -74,7 +74,7 @@ function Home() {
                 <div className="login-container">
                     <h1>{store.username}</h1>
                     <button onClick={() => actions.logout()}>Log out</button>
-                    <Link to='/history' state={{token: store.token}}>History</Link>
+                    <Link to='/history'>History</Link>
                 </div>
             }        
         </div>

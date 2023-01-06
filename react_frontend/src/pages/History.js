@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import '../css/History.css'
 import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
@@ -10,14 +10,26 @@ const History = () => {
 
     const location = useLocation()
     const navigate = useNavigate()
+    
+    console.log('History page rendered. Token: ', store.token)
 
-    const token = location.state && location.state.token
+    useEffect(() => {
+        actions.syncDataFromSessionStorage()
+        if (!store.token) navigate('/')
+    }, [])
+    
 
-    console.log('History page rendered. Token: ', token)
+    
 
     return (
         <div>
-            History
+            { store.token ?
+            <>
+                {store.username} {store.email}
+            </>
+            :
+            null
+            }
         </div>
     )
 }
