@@ -10,6 +10,7 @@ import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import Dropdown from 'react-bootstrap/Dropdown';
 import ProgressBar from './ProgressBar';
 import { useNavigate } from 'react-router-dom';
+import Papa from "papaparse";
 
 const ProductListModal = () => {
 
@@ -22,8 +23,17 @@ const ProductListModal = () => {
 
     const [progress, setProgress] = useState(0)
 
+    const [file, setFile] = useState("");
+    const [data, setData] = useState([]);
+
+    const [parsedData, setParsedData] = useState([]);
+    const [tableRows, setTableRows] = useState([]);
+    const [values, setValues] = useState([]);
+
     const nameInput = useRef()
     const quantityInput = useRef()
+    const fileInput = useRef()
+    const allowedExtensions = ["csv"];
     const categoryButton = useRef()
 
     const navigate = useNavigate()
@@ -63,9 +73,44 @@ const ProductListModal = () => {
         setErrorMessage(null)
     }
 
+    const uploadFile = (event) => {
+        const inputFile = event.target.files[0];
+        // todo: validate file extension
+        setFile(inputFile);
+        console.log(inputFile)
+
+        Papa.parse(inputFile, {
+            header: true,
+            skipEmptyLines: true,
+            complete: function (results) {
+                const rowsArray = [];
+                const valuesArray = [];
+                results.data.map((d) => {
+                    rowsArray.push(Object.keys(d));
+                    valuesArray.push(Object.values(d));
+                })
+                setParsedData(results.data);
+                setTableRows(rowsArray[0]);
+                setValues(valuesArray);
+                console.log(parsedData)
+                console.log(values)
+
+            },
+        })
+        // const reader = new FileReader();
+        // reader.onload = async ({ target }) => {
+        // const csv = Papa.parse(target.result, { header: true });
+        // const parsedData = csv?.data;
+        // const columns = Object.keys(parsedData[0]);
+        // setData(columns);
+        // }
+        // reader.readAsText(file)
+        // console.log('Dupa');
+    }
+
     const submitListOfProducts = () => {
         const receivedProductLists = []
-        
+
         if (productList.length === 0) {
             setErrorMessage('List of products is empty')
             return {"message": "List of products is empty"}
@@ -168,7 +213,7 @@ const ProductListModal = () => {
                     <div className='file-section'>
                     <Form.Group controlId="formFile" className="mb-3">
                         <div style={{display: 'flex', justifyContent: 'center'}}><Form.Label>Import list from file</Form.Label></div>
-                        <Form.Control type="file" />
+                        <Form.Control type="file" ref={fileInput} onChange={uploadFile}/>
                     </Form.Group>
                     </div>
                 </div>
