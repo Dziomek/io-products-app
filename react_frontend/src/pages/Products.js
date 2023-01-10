@@ -104,7 +104,7 @@ const Products = () => {
     console.log('Products rendered. ProductsList: ', productLists)
 
     return (
-        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none'}}>  
+        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>  
         <div>
             <div className='title-container-products'>
                 <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
@@ -137,15 +137,13 @@ const Products = () => {
                                                 <img src={product.image} alt='Product'></img>
                                                 <div className='product-top-name'>
                                                     <h5>{product.name}</h5>
-                                                    <h6>link</h6>
-                                                    <h6>link</h6>
-
-                                                    <h6>link</h6>
-
+                                                    <h6>Delivery price: {String(product.deliveryprice.toFixed(2)).replace(/\./g,",")}zł</h6>
+                                                    <a href={product.link}>Link to the shop</a>
                                                 </div>
                                                 <div className='price-add-container'>    
                                                     <h3>{product.price}zł</h3>
                                                     <button>Add to list</button>
+                                                    <p>With ship {String((parseFloat(product.price)+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
                                                 </div>
                                             </div>
                                         })}

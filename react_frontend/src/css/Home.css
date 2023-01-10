@@ -1,5 +1,5 @@
 .title-container{
-    position: relative;
+        position: relative;
     display: grid;
     grid-template-columns: 10fr 2fr;
     width: 100%;
@@ -85,4 +85,14 @@
     color: black;
     font-family: 'Futura', sans-serif;
     display: inline;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+footer p{
+    display: inline;
+    padding: 5px;
+    margin-right: 10px;
 }

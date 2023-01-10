@@ -1,4 +1,8 @@
 .title-container-products{
+    background-color: white;
+    top: 0;
+    overflow: visible;
+    position: sticky;
     display: grid;  
     grid-template-columns: 2fr 6fr 1fr;
     width: 100%;
@@ -35,6 +39,7 @@
     margin-bottom: 30px;
 }
 .products-container{
+    background-color:#f2f5f7;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 2fr));
     justify-items: center;
@@ -72,8 +77,13 @@
     background-color: orange;
     border: none;
 }
+.product-top-name a{
+    color: orange;
+}
+.product-top-name a:hover{
+    color: orange;
 
-
+}
 .single-product-container{
     padding: 20px;
     background-color: aliceblue;
