@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import '../css/ProductListModal.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -20,15 +20,9 @@ const ProductListModal = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [category, setCategory] = useState('All')
     const [searching, setSearching] = useState(false)
+    const [csvFile, setCsvFile] = useState(null)
 
     const [progress, setProgress] = useState(0)
-
-    const [file, setFile] = useState("");
-    const [data, setData] = useState([]);
-
-    const [parsedData, setParsedData] = useState([]);
-    const [tableRows, setTableRows] = useState([]);
-    const [values, setValues] = useState([]);
 
     const nameInput = useRef()
     const quantityInput = useRef()
@@ -38,7 +32,31 @@ const ProductListModal = () => {
 
     const navigate = useNavigate()
 
-    console.log('ProductList rendered')
+    console.log('ProductList rendered. Current csv file: ', csvFile, typeof csvFile)
+
+    const handleFileUpload = async (event) => {
+        event.preventDefault()
+        setCsvFile(event.target.files[0])
+    }
+
+    useEffect(() => {
+        if (!csvFile) return
+
+        Papa.parse(csvFile, {
+            header: true,
+            complete: (results) => {
+                const newProductList = results.data.map(row => {
+                    return {
+                        product: row.name,
+                        quantity: 1
+                    }
+                });
+                setProductList(prevProductList => [...prevProductList, ...newProductList])
+            }
+        });
+        setCsvFile(null)
+    }, [csvFile]);
+
 
     const handleClose = () => setShow(false);
     const handleShow = () =>  {
@@ -49,6 +67,7 @@ const ProductListModal = () => {
         setShow(true)
         setSearching(false)
         setErrorMessage(null)
+        setCsvFile(null)
     }
     const increaseQuantity = () => {if (quantity < 10) setQuantity(quantity + 1)}
     const decreaseQuantity = () => {if (quantity > 0) setQuantity(quantity - 1)}
@@ -73,40 +92,40 @@ const ProductListModal = () => {
         setErrorMessage(null)
     }
 
-    const uploadFile = (event) => {
-        const inputFile = event.target.files[0];
-        // todo: validate file extension
-        setFile(inputFile);
-        console.log(inputFile)
+    // const uploadFile = (event) => {
+    //     const inputFile = event.target.files[0];
+    //     // todo: validate file extension
+    //     setFile(inputFile);
+    //     console.log(inputFile)
 
-        Papa.parse(inputFile, {
-            header: true,
-            skipEmptyLines: true,
-            complete: function (results) {
-                const rowsArray = [];
-                const valuesArray = [];
-                results.data.map((d) => {
-                    rowsArray.push(Object.keys(d));
-                    valuesArray.push(Object.values(d));
-                })
-                setParsedData(results.data);
-                setTableRows(rowsArray[0]);
-                setValues(valuesArray);
-                console.log(parsedData)
-                console.log(values)
+    //     Papa.parse(inputFile, {
+    //         header: true,
+    //         skipEmptyLines: true,
+    //         complete: function (results) {
+    //             const rowsArray = [];
+    //             const valuesArray = [];
+    //             results.data.map((d) => {
+    //                 rowsArray.push(Object.keys(d));
+    //                 valuesArray.push(Object.values(d));
+    //             })
+    //             setParsedData(results.data);
+    //             setTableRows(rowsArray[0]);
+    //             setValues(valuesArray);
+    //             console.log(parsedData)
+    //             console.log(values)
 
-            },
-        })
-        // const reader = new FileReader();
-        // reader.onload = async ({ target }) => {
-        // const csv = Papa.parse(target.result, { header: true });
-        // const parsedData = csv?.data;
-        // const columns = Object.keys(parsedData[0]);
-        // setData(columns);
-        // }
-        // reader.readAsText(file)
-        // console.log('Dupa');
-    }
+    //         },
+    //     })
+    //     // const reader = new FileReader();
+    //     // reader.onload = async ({ target }) => {
+    //     // const csv = Papa.parse(target.result, { header: true });
+    //     // const parsedData = csv?.data;
+    //     // const columns = Object.keys(parsedData[0]);
+    //     // setData(columns);
+    //     // }
+    //     // reader.readAsText(file)
+    //     // console.log('Dupa');
+    // }
 
     const submitListOfProducts = () => {
         const receivedProductLists = []
@@ -213,7 +232,7 @@ const ProductListModal = () => {
                     <div className='file-section'>
                     <Form.Group controlId="formFile" className="mb-3">
                         <div style={{display: 'flex', justifyContent: 'center'}}><Form.Label>Import list from file</Form.Label></div>
-                        <Form.Control type="file" ref={fileInput} onChange={uploadFile}/>
+                        <Form.Control type="file" ref={fileInput} onChange={handleFileUpload}/>
                     </Form.Group>
                     </div>
                 </div>
