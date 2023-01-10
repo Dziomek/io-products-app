@@ -8,7 +8,7 @@ class ceneoScraping(scrapy.Spider):
     tab = []
     url_tab = []
 
-    #keyword_list = ['Xylometazolin 123ratio 0.1% aerozol']
+    #keyword_list = ['perfum']
     category = 'Health'
     sort_mode = 'product_price'
 
@@ -170,18 +170,19 @@ class ceneoScraping(scrapy.Spider):
 
         # przekazywanie 10 najtanszych z jednej kat - gites dziala
         else:
-            data = {}
             for products in response.css('div.cat-prod-row__body')[0:4]:
                 product_name = products.css('span::text').get()
                 price = products.css('span.value::text').get() + products.css('span.penny::text').get()
                 # link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
                 image = 'https:' + products.css('img').attrib['src']
-                data[key1] = product_name
-                data[key2] = price
-                data[key3] = image
-                data[key4] = ''
-                data[key5] = ''
-                data[key6] = ''
+                data = {
+                    'name': product_name,
+                    'price': price,
+                    'image': image,
+                    'delivery_price': '',
+                    'shop name': '',
+                    'link': ''
+                }
                 yield data
 
             for products in response.css('div.cat-prod-row__body')[4:10]:
@@ -189,12 +190,14 @@ class ceneoScraping(scrapy.Spider):
                 price = products.css('span.value::text').get() + products.css('span.penny::text').get()
                 # link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
                 image = 'https:' + products.css('img').attrib['data-original']
-                data[key1] = product_name
-                data[key2] = price
-                data[key3] = image
-                data[key4] = ''
-                data[key5] = ''
-                data[key6] = ''
+                data = {
+                    'name': product_name,
+                    'price': price,
+                    'image': image,
+                    'delivery_price': '',
+                    'shop name': '',
+                    'link': ''
+                }
                 yield data
 
 
@@ -256,6 +259,6 @@ class ceneoScraping(scrapy.Spider):
 #      'FEED_URI': 'scraping.csv',
 #      'FEED_FORMAT': 'csv'
 # })
-#
+# 
 # process.crawl(ceneoScraping)
 # process.start() # the script will block here until the crawling is finished
