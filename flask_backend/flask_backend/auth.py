@@ -2,7 +2,7 @@ import base64
 import hashlib
 import os
 
-from flask import request, url_for, session, flash
+from flask import request, url_for, session, flash, render_template
 from flask_jwt_extended import create_access_token
 from itsdangerous import SignatureExpired
 
@@ -84,8 +84,9 @@ def confirm_email(token, email):
         verify_email(token)
         db.update_users_account_activation(email)
     except SignatureExpired:
-        return {"verified": "False"}
-    return {"verified": "True"}
+        return render_template("email_verification_failure.html")
+    return render_template("email_verification_success.html")
+
 
 @app.route('/logout', methods=['GET'])
 def logout():
