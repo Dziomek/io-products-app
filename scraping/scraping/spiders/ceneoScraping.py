@@ -7,8 +7,10 @@ class ceneoScraping(scrapy.Spider):
     name = "ceneo_search"
     tab = []
     url_tab = []
+    i = 0
+    count = 0
 
-    #keyword_list = ['perfum']
+    #keyword_list = ['dupa']
     category = 'Health'
     sort_mode = 'product_price'
 
@@ -24,9 +26,15 @@ class ceneoScraping(scrapy.Spider):
 
     def start_requests(self):
         urls = []
+        w, h = 8, 200
+        product = [[0 for x in range(w)] for y in range(h)]
+        new_list = []
+        self.product = product
         for keyword in self.keyword_list:
             new = keyword.replace(',', ' ').replace('.', ' ').translate(
                 str.maketrans('', '', string.punctuation)).replace(" ", "+")
+            new_list.append(new)
+            new_list.append(new)
             self.new = new
             if self.category == 'Health':
                 urls.append(f"https://www.ceneo.pl/Zdrowie;szukaj-{new}")
@@ -36,29 +44,26 @@ class ceneoScraping(scrapy.Spider):
                 urls.append(f"https://www.ceneo.pl/Uroda;szukaj-{new}")
                 urls.append(f"https://www.ceneo.pl/Zdrowie;szukaj-{new}")
 
+        self.new_list = new_list
         for ceneo_search_url in urls:
             self.url = ceneo_search_url
             yield scrapy.Request(url=ceneo_search_url, callback=self.parse, dont_filter=True)
 
-
     #przygotowywanie urli po których zaczniemy scrapowac
     def parse(self, response, **kwargs):
-        list_url = response.xpath("/html/head/meta[11]/@content").extract()
+        list_url = response.xpath('//*[@id="body"]/div/div/div[3]/div/section/div[1]/div[1]/div/a/@href').extract()
         url = ''.join(list_url)
-
         # niejednoznaczne wyszukanie
         if len(response.css('div.cat-prod-row__body')) > 1:
-            link = url + ';0112-0.htm'
-            # print('wywolanie parse search dla: ' + link)
-            yield scrapy.Request(url=link, callback=self.parse_search_results, dont_filter=True)
-
-        # jednoznaczne wyszukanie - sortowanie według ceny prosuktu lub ceny z wysyłka
+            link = 'https://www.ceneo.pl' + url + ';0112-0.htm'
+            self.count += 1
+            yield scrapy.Request(url=link, callback=self.parse_search_results, dont_filter=True, priority=10)
+        # jednoznaczne wyszukanie
         elif len(response.css('div.cat-prod-row__body')) == 1:
             try:
                 if self.sort_mode == 'product_price':
                     link = 'https://www.ceneo.pl' + response.css('a.js_seoUrl.js_clickHash.go-to-product').attrib[
                         'href'] + ';0280-0.htm'
-                    # print('wywolanie parse details1 dla: ' + link)
                     yield scrapy.Request(url=link, callback=self.parse_details, dont_filter=True)
                 elif self.sort_mode == 'total_price':
                     link = 'https://www.ceneo.pl' + response.css('a.js_seoUrl.js_clickHash.go-to-product').attrib[
@@ -69,7 +74,6 @@ class ceneoScraping(scrapy.Spider):
                     link = 'https://www.ceneo.pl' + \
                            response.css('a.cat-prod-row__product-link.js_clickHash.js_seoUrl.go-to-product').attrib[
                                'href'] + ';0280-0.htm'
-                    # print('wywolanie parse details2 dla: ' + link)
                     yield scrapy.Request(url=link, callback=self.parse_details, dont_filter=True)
                 elif self.sort_mode == 'total_price':
                     link = 'https://www.ceneo.pl' + \
@@ -85,9 +89,11 @@ class ceneoScraping(scrapy.Spider):
 
     # scrapowanie danych dla niejednoznacznego wyszukania
     def parse_search_results(self, response):
-        list_url = response.xpath("/html/head/meta[11]/@content").extract()
+        list_url = response.xpath('//*[@id="body"]/div/div/div[3]/div/section/div[1]/div[1]/div/a/@href').extract()
         url = ''.join(list_url)
-        keyword = url.lstrip('https://www.ceneo.pl/ZdrowieUroda')
+        keyword1 = url.lstrip('https://www.ceneo.pl/ZdrowieUroda')
+        keyword2 = keyword1.lstrip(';szukaj').rstrip('0112-0.htm')
+        keyword = keyword2.lstrip('-').rstrip(';').replace('+', ' ')
         self.tab.append(keyword)
         key1 = 'name'
         key2 = 'price'
@@ -98,81 +104,79 @@ class ceneoScraping(scrapy.Spider):
 
         # przkazywanie 10 najtanszych z obu kat łącznie (a nie 20) - jeszcze nie działa !!
         if self.category == "All":
-            final = {}
-            data = {}
+
             for products in response.css('div.cat-prod-row__body')[0:4]:
                 product_name = products.css('span::text').get()
-                price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                p1 = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                string_price = p1.replace(",", ".")
+                price = float(string_price)
                 # link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
                 image = 'https:' + products.css('img').attrib['src']
 
-                if key1 not in data:
-                    data[key1] = product_name
-                    data[key2] = price
-                    data[key3] = image
-                    data[key4] = ''
-                    data[key5] = ''
-                    data[key6] = ''
-                elif type(data[key1]) == list:
-                    data[key1].append(product_name)
-                    data[key2].append(price)
-                    data[key3].append(image)
-                    data[key4].append('')
-                    data[key5].append('')
-                    data[key6].append('')
-                else:
-                    data[key1] = [data[key1], product_name]
-                    data[key2] = [data[key2], price]
-                    data[key3] = [data[key3], image]
-                    data[key4] = [data[key4], '']
-                    data[key5] = [data[key5], '']
-                    data[key6] = [data[key6], '']
+                self.product[self.i] = [product_name, price, image, '', '', '', url, keyword]
+                self.i += 1
 
             for products in response.css('div.cat-prod-row__body')[4:10]:
                 product_name = products.css('span::text').get()
-                price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                p1 = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                string_price = p1.replace(",", ".")
+                price = float(string_price)
                 # link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
                 image = 'https:' + products.css('img').attrib['data-original']
 
-                if key1 not in data:
-                    data[key1] = product_name
-                    data[key2] = price
-                    data[key3] = image
-                    data[key4] = ''
-                    data[key5] = ''
-                    data[key6] = ''
-                elif type(data[key1]) == list:
-                    data[key1].append(product_name)
-                    data[key2].append(price)
-                    data[key3].append(image)
-                    data[key4].append('')
-                    data[key5].append('')
-                    data[key6].append('')
-                else:
-                    data[key1] = [data[key1], product_name]
-                    data[key2] = [data[key2], price]
-                    data[key3] = [data[key3], image]
-                    data[key4] = [data[key4], '']
-                    data[key5] = [data[key5], '']
-                    data[key6] = [data[key6], '']
+                self.product[self.i] = [product_name, price, image, '', '', '', url, keyword]
+                self.i += 1
 
-            # output = sorted(data, key=lambda k: data.get(k)[2])
-            # final = {k: data[k] for k in output}
-            for x in range(len(self.tab) - 1):
-                if self.tab[x + 1] == self.tab[x]:
-                    for key, value in sorted(data.items(), key=lambda r: r[1][1]):
-                        # print('tablica wynikow posortowana')
-                        # print(key, value)
-                        final[key] = value
-                    yield final
-                else:
-                    yield data
+            # jeżeli scraping wykonal sie dla wszystkich produktow sortuj po kat
+            y = 0
+            if len(self.tab) == self.count:
+                print(self.tab)
+                print(self.count)
+                del self.product[self.i: 200]
+                self.product.sort(key=lambda x: (x[7], x[1]))
+
+            # posortowane dane przekaz dalej
+                for n in range(len(self.product) - 2):
+                    y += 1
+                    if self.product[n + 1][7] != self.product[n][7] or n == (len(self.product) - 3):
+                        if y <= 10:
+                            for x in range(n + 1 - y, n + 1):
+                                # print('n1 = ', n)
+                                # print('y1 = ', y)
+                                data = {
+                                    'name': self.product[x][0],
+                                    'price': self.product[x][1],
+                                    'image': self.product[x][2],
+                                    'delivery_price': self.product[x][3],
+                                    'shop name': self.product[x][4],
+                                    'link': self.product[x][5]
+                                }
+                                y = 0
+                                print('data: ', data)
+                                yield data
+                        else:
+                            for x in range(n + 1 - y, n - y + 11):
+                                # print('n2 = ', n)
+                                # print('y2 = ', y)
+                                data = {
+                                    'name': self.product[x][0],
+                                    'price': self.product[x][1],
+                                    'image': self.product[x][2],
+                                    'delivery_price': self.product[x][3],
+                                    'shop name': self.product[x][4],
+                                    'link': self.product[x][5]
+                                }
+                                y = 0
+                                print('data: ', data)
+                                yield data
 
         # przekazywanie 10 najtanszych z jednej kat - gites dziala
         else:
             for products in response.css('div.cat-prod-row__body')[0:4]:
                 product_name = products.css('span::text').get()
-                price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                p1 = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                string_price = p1.replace(",", ".")
+                price = float(string_price)
                 # link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
                 image = 'https:' + products.css('img').attrib['src']
                 data = {
@@ -187,7 +191,9 @@ class ceneoScraping(scrapy.Spider):
 
             for products in response.css('div.cat-prod-row__body')[4:10]:
                 product_name = products.css('span::text').get()
-                price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                p1 = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                string_price = p1.replace(",", ".")
+                price = float(string_price)
                 # link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
                 image = 'https:' + products.css('img').attrib['data-original']
                 data = {
@@ -259,6 +265,6 @@ class ceneoScraping(scrapy.Spider):
 #      'FEED_URI': 'scraping.csv',
 #      'FEED_FORMAT': 'csv'
 # })
-# 
+#
 # process.crawl(ceneoScraping)
 # process.start() # the script will block here until the crawling is finished
