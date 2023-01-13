@@ -7,18 +7,16 @@ import os
 EMAIL_ADDRESS = app.config["EMAIL_ADDRESS"]
 EMAIL_PASSWORD = app.config["EMAIL_PASSWORD"]
 
-#TODO: Mayby a class with only static methods would be better
+
 class MailService:
 
-    def __init__(self):
-        #   with smtplib.SMTP_SSL('smtp.gmail.com', 465) as self.smtp:
-        #   self.smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-        self.smtpObj = smtplib.SMTP("smtp.gmail.com", 587)
-        self.smtpObj.ehlo()
-        self.smtpObj.starttls()
-        self.smtpObj.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+    smtpObj = smtplib.SMTP("smtp.gmail.com", 587)
+    smtpObj.ehlo()
+    smtpObj.starttls()
+    smtpObj.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
-    def sendVerificationLink(self, link, emailUser, username):
+    @staticmethod
+    def sendVerificationLink(link, emailUser, username):
         msg = EmailMessage()
         msg['Subject'] = f'Verification Link'
         msg['From'] = EMAIL_ADDRESS
@@ -28,7 +26,7 @@ class MailService:
         file_loader = FileSystemLoader(template_dir)
         env = Environment(loader=file_loader)
         template = env.get_template('email_verification.html')
-        output = template.render(link=link, username=username) 
+        output = template.render(link=link, username=username)
         msg.add_alternative(output, subtype='html')
 
-        self.smtpObj.send_message(msg)
+        MailService.smtpObj.send_message(msg)
