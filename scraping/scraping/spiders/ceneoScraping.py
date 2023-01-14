@@ -305,10 +305,10 @@ class ceneoScraping(scrapy.Spider):
         yield data
 
 #zapisywanie do pliku csv
-process = CrawlerProcess(settings={
-     'FEED_URI': 'scraping.csv',
-     'FEED_FORMAT': 'csv'
-})
-
-process.crawl(ceneoScraping)
-process.start() # the script will block here until the crawling is finished
+# process = CrawlerProcess(settings={
+#      'FEED_URI': 'scraping.csv',
+#      'FEED_FORMAT': 'csv'
+# })
+#
+# process.crawl(ceneoScraping)
+# process.start() # the script will block here until the crawling is finished
