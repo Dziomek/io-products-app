@@ -235,7 +235,7 @@ class ceneoScraping(scrapy.Spider):
             key1 = 'name'
             key2 = 'price'
             key3 = 'image'
-            key4 = 'delivery price'
+            key4 = 'deliveryprice'
 
             data[key1] = productName
             data[key2] = product_pricef
