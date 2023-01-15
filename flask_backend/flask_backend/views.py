@@ -17,10 +17,13 @@ def hello_world():
 @app.route('/scraping', methods=['POST'])
 def scraping():
     product_list = request.json.get("productList")
+    quantity = request.json.get("quantity")
+    
     print(type(product_list))
 
     crawl_args = {
-        "keyword_list": product_list
+        "keyword_list": product_list,
+        "quantity": quantity
     }
 
     crawl_args_json = json.dumps(crawl_args)

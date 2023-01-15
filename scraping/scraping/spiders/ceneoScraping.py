@@ -16,11 +16,12 @@ class ceneoScraping(scrapy.Spider):
     sort_mode = 'product_price'
 
 # na razie tryb sortowania ustawiony ręcznie, jak będą przekazywane z frontu to wtedy z tej funkcji
-    def __init__(self, keyword_list, *args, **kwargs):
+    def __init__(self, keyword_list, quantity, *args, **kwargs):
         super(ceneoScraping, self).__init__(*args, **kwargs)
         if keyword_list is None:
             keyword_list = []
         self.keyword_list = keyword_list
+        self.quantity = quantity
         #self.category = category
         # self.sort_mode = sort_mode
 
