@@ -1,5 +1,6 @@
 import scrapy
 import string
+import time
 from scrapy.crawler import CrawlerProcess
 
 
@@ -8,7 +9,6 @@ class ceneoScraping(scrapy.Spider):
     tab = []
     url_tab = []
     i = 0
-    start = 0
     count = 0
     urls = []
     new_list = []
@@ -25,20 +25,14 @@ class ceneoScraping(scrapy.Spider):
             keyword_list = []
         self.keyword_list = keyword_list
         self.quantity = quantity
-        print('ilosc produktow: ', quantity)
-        w, h = 8, 200
-        product = [[0 for x in range(w)] for y in range(h)]
-        self.product = product
+        #print('ilosc produktow: ', quantity)
         #self.category = category
         # self.sort_mode = sort_mode
 
     def start_requests(self):
-        self.start +=1
-        print('start uruchamia się: ', self.start)
-        # w, h = 8, 200
-        # product = [[0 for x in range(w)] for y in range(h)]
-        # self.product = product
+        #print('start uruchamia się')
         substring = 'https://www.ceneo.pl'
+        #print('keyword list w start request: ', self.keyword_list)
         for keyword in self.keyword_list:
             # jeżeli keyword to link -> wyszukanie jednoznaczne dla tego linku
             if substring in keyword:
@@ -57,12 +51,20 @@ class ceneoScraping(scrapy.Spider):
                 else:
                     self.urls.append(f"https://www.ceneo.pl/Uroda;szukaj-{new}")
                     self.urls.append(f"https://www.ceneo.pl/Zdrowie;szukaj-{new}")
-        if len(self.new_list) == self.quantity*2:
-            print('lista url, ktore beda scrapowane: ', self.urls)
+
+        if len(self.new_list) == self.quantity*2 and self.category=='All':
+            product = [[0 for x in range(8)] for y in range(200)]
+            self.product = product
             self.new_list = self.new_list
-            print('new list: ', self.new_list)
             for ceneo_search_url in self.urls:
-                #self.url = ceneo_search_url
+                #print('wywolanie parse dla: ', ceneo_search_url)
+                yield scrapy.Request(url=ceneo_search_url, callback=self.parse, dont_filter=True)
+
+        elif len(self.new_list) == self.quantity and (self.category=='Health' or self.category=='Beauty'):
+            product = [[0 for x in range(8)] for y in range(200)]
+            self.product = product
+            self.new_list = self.new_list
+            for ceneo_search_url in self.urls:
                 yield scrapy.Request(url=ceneo_search_url, callback=self.parse, dont_filter=True)
 
     #przygotowywanie urli po których zaczniemy scrapowac
@@ -74,7 +76,7 @@ class ceneoScraping(scrapy.Spider):
             link = 'https://www.ceneo.pl' + url + ';0112-0.htm'
             self.count += 1
             print('wywolanie parse search dla: ', link)
-            print('count = ', self.count)
+            #print('count = ', self.count)
             yield scrapy.Request(url=link, callback=self.parse_search_results, dont_filter=True, priority=10)
         # jednoznaczne wyszukanie
         elif len(response.css('div.cat-prod-row__body')) == 1:
@@ -109,51 +111,41 @@ class ceneoScraping(scrapy.Spider):
 
     # scrapowanie danych dla niejednoznacznego wyszukania
     def parse_search_results(self, response):
+        time.sleep(5)
         list_url = response.xpath('//*[@id="body"]/div/div/div[3]/div/section/div[1]/div[1]/div/a/@href').extract()
         url = ''.join(list_url)
         keyword1 = url.lstrip('https://www.ceneo.pl/ZdrowieUroda')
         keyword2 = keyword1.lstrip(';szukaj').rstrip('0112-0.htm')
         keyword = keyword2.lstrip('-').rstrip(';').replace('+', ' ')
         self.tab.append(keyword)
-        print(self.tab)
+        #print(self.tab)
 
         # przkazywanie 10 najtanszych z obu kat łącznie (a nie 20)
         if self.category == "All":
-            print('scrapowanie danych dla: ', url)
             for products in response.css('div.cat-prod-row__body')[0:4]:
-                #print('scrapowanie 0-4 dla: ', url)
                 product_name = products.css('span::text').get()
                 p1 = products.css('span.value::text').get() + products.css('span.penny::text').get()
                 string_price = p1.replace(",", ".")
                 price = float(string_price)
                 link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
-
                 image = 'https:' + products.css('img').attrib['src']
-
                 self.product[self.i] = [product_name, price, image, '', '', link, url, keyword]
-                #print(self.product)
                 self.i += 1
-                #print(self.i)
 
             for products in response.css('div.cat-prod-row__body')[4:10]:
-                #print('scrapowanie 5-10 dla: ', url)
                 product_name = products.css('span::text').get()
                 p1 = products.css('span.value::text').get() + products.css('span.penny::text').get()
                 string_price = p1.replace(",", ".")
                 price = float(string_price)
                 link = 'https://www.ceneo.pl' + products.css('a.js_seoUrl.js_clickHash.go-to-product').attrib['href']
-
                 image = 'https:' + products.css('img').attrib['data-original']
-
                 self.product[self.i] = [product_name, price, image, '', '', link, url, keyword]
-
                 self.i += 1
-                #print(self.i)
 
             # jeżeli scraping wykonal sie dla wszystkich produktow sortuj po kat
             y = 0
             if len(self.tab) == self.count:
-                print('koniec scrapowania, lista keywords: ', self.tab, ', dlugosc oryginalnej listy: ', self.count)
+                #print('koniec scrapowania, lista keywords: ', self.tab, ', dlugosc oryginalnej listy: ', self.count)
                 del self.product[self.i: 200]
                 self.product.sort(key=lambda x: (x[7], x[1]))
 
@@ -170,7 +162,7 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                print(data)
+                                #print(data)
                                 yield data
                         else:
                             for x in range(n + 1 - y, n - y + 11):
@@ -181,7 +173,7 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                print(data)
+                                #print(data)
                                 yield data
                     elif n == (len(self.product) - 3):
                         if y <= 10:
@@ -195,10 +187,14 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                self.tab.clear()
-                                self.i = 0
-                                self.count = 0
                                 yield data
+                            self.tab.clear()
+                            self.new_list.clear()
+                            self.urls.clear()
+                            #self.i = 0
+                            self.count = 0
+                            # self.product.clear()
+                            # self.product = [[0 for x in range(8)] for y in range(200)]
                         else:
                             for x in range(n + 1 - y, n - y + 11):
                                 data = {
@@ -210,10 +206,16 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                self.tab.clear()
-                                self.i = 0
-                                self.count = 0
                                 yield data
+                            self.tab.clear()
+                            self.new_list.clear()
+                            self.urls.clear()
+                            #self.i = 0
+                            self.count = 0
+                            # self.product.clear()
+                            # self.product = [[0 for x in range(8)] for y in range(200)]
+
+
                 # for r in self.product:
                 #     for c in r:
                 #         print(c, end=" ")
