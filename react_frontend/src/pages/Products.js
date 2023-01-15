@@ -13,6 +13,13 @@ const Products = () => {
     const location = useLocation()
     const productLists = location.state && location.state.productLists
     const [errorMessage, setErrorMessage] = useState(null)
+    const [selectedItems, setSelectedItems] = useState(Array(productLists.length).fill(null));
+
+    const handleChange = (index, value) => {
+        const newSelectedItems = [...selectedItems];
+        newSelectedItems[index] = value;
+        setSelectedItems(newSelectedItems);
+      };
 
     function submitProductFromList(productName){
         const receivedProductLists = []
@@ -102,6 +109,7 @@ const Products = () => {
     }
 
     console.log('Products rendered. ProductsList: ', productLists)
+    console.log('selected items', selectedItems)
 
     return (
         <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>  
@@ -116,19 +124,29 @@ const Products = () => {
                 <>
                     {
                         productLists.map((object, index) => {
-                            return <div key={index}>
+                            return <div key={index} style={{backgroundColor:'#f2f5f7'}}>                              
                                 {object.productList.length > 1 && <>
-                                    <h3 className='search-result'>Wyniki wyszukiwania dla: {object.searchedProduct}</h3>
+                                    <h3 className='search-result' style={{backgroundColor:'#f2f5f7'}}>Wyniki wyszukiwania dla: {object.searchedProduct}</h3>
                                     <div className='products-container'>
                                         {object.productList.map((product, secondIndex) => {
                                             return <div className='product_container' key={secondIndex} style={{ marginBottom: '2%' }}>
                                                 <img src={product.image} alt='Product'></img>
-                                                <div className='product-name'>{product.name}</div>
+                                                <div className='product-name'>{product.name }</div>
                                                 <div className='product-price'>{product.price}zł</div>
                                                 <button onClick={()=>{submitProductFromList(product.name)}}>Check product</button>
+                                                <input 
+                                                type='radio'
+                                                name={`product-${index}-${secondIndex}`}
+                                                value={product.link}
+                                                checked={selectedItems[index] === product.link}
+                                                onChange={()=>handleChange(index ,product.link)}
+                                                ></input>
                                             </div>
-                                        })}</div>
+                                        })}
+                                        </div>
+                                    
                                 </>}
+                                
                                 {object.productList.length === 1 && <>
                                     <h3 className='search-result'>Wyniki wyszukiwania dla: {object.searchedProduct}</h3>
                                     <div>
