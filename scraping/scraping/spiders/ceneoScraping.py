@@ -60,7 +60,7 @@ class ceneoScraping(scrapy.Spider):
         if len(self.new_list) == self.quantity*2:
             print('lista url, ktore beda scrapowane: ', self.urls)
             self.new_list = self.new_list
-            print('idk co to tu robi, new list: ', self.new_list)
+            print('new list: ', self.new_list)
             for ceneo_search_url in self.urls:
                 #self.url = ceneo_search_url
                 yield scrapy.Request(url=ceneo_search_url, callback=self.parse, dont_filter=True)
@@ -74,6 +74,7 @@ class ceneoScraping(scrapy.Spider):
             link = 'https://www.ceneo.pl' + url + ';0112-0.htm'
             self.count += 1
             print('wywolanie parse search dla: ', link)
+            print('count = ', self.count)
             yield scrapy.Request(url=link, callback=self.parse_search_results, dont_filter=True, priority=10)
         # jednoznaczne wyszukanie
         elif len(response.css('div.cat-prod-row__body')) == 1:
@@ -308,10 +309,10 @@ class ceneoScraping(scrapy.Spider):
         yield data
 
 #zapisywanie do pliku csv
-process = CrawlerProcess(settings={
-     'FEED_URI': 'scraping.csv',
-     'FEED_FORMAT': 'csv'
-})
-
-process.crawl(ceneoScraping)
-process.start() # the script will block here until the crawling is finished
+# process = CrawlerProcess(settings={
+#      'FEED_URI': 'scraping.csv',
+#      'FEED_FORMAT': 'csv'
+# })
+#
+# process.crawl(ceneoScraping)
+# process.start() # the script will block here until the crawling is finished
