@@ -34,7 +34,7 @@ class ceneoScraping(scrapy.Spider):
         for keyword in self.keyword_list:
             # jeżeli keyword to link -> wyszukanie jednoznaczne dla tego linku
             if substring in keyword:
-                print('wywolanie parse detail dla linku: ', keyword)
+                #print('wywolanie parse detail dla linku: ', keyword)
                 yield scrapy.Request(url=keyword, callback=self.parse_details, dont_filter=True)
             else:
                 new = keyword.replace(',', ' ').replace('.', ' ').translate(
@@ -63,7 +63,7 @@ class ceneoScraping(scrapy.Spider):
         if len(response.css('div.cat-prod-row__body')) > 1:
             link = 'https://www.ceneo.pl' + url + ';0112-0.htm'
             self.count += 1
-            print('wywolanie parse search dla: ', link)
+            #('wywolanie parse search dla: ', link)
             yield scrapy.Request(url=link, callback=self.parse_search_results, dont_filter=True, priority=10)
         # jednoznaczne wyszukanie
         elif len(response.css('div.cat-prod-row__body')) == 1:
@@ -71,7 +71,7 @@ class ceneoScraping(scrapy.Spider):
                 if self.sort_mode == 'product_price':
                     link = 'https://www.ceneo.pl' + response.css('a.js_seoUrl.js_clickHash.go-to-product').attrib[
                         'href'] + ';0280-0.htm'
-                    print('wywolanie parse details1 dla: ', link)
+                    #print('wywolanie parse details1 dla: ', link)
                     yield scrapy.Request(url=link, callback=self.parse_details, dont_filter=True)
                 elif self.sort_mode == 'total_price':
                     link = 'https://www.ceneo.pl' + response.css('a.js_seoUrl.js_clickHash.go-to-product').attrib[
@@ -82,7 +82,7 @@ class ceneoScraping(scrapy.Spider):
                     link = 'https://www.ceneo.pl' + \
                            response.css('a.cat-prod-row__product-link.js_clickHash.js_seoUrl.go-to-product').attrib[
                                'href'] + ';0280-0.htm'
-                    print('wywolanie parse details2 dla: ', link)
+                    #print('wywolanie parse details2 dla: ', link)
                     yield scrapy.Request(url=link, callback=self.parse_details, dont_filter=True)
                 elif self.sort_mode == 'total_price':
                     link = 'https://www.ceneo.pl' + \
@@ -130,16 +130,9 @@ class ceneoScraping(scrapy.Spider):
                 self.product[self.i] = [product_name, price, image, '', '', link, url, keyword]
                 self.i += 1
 
-            #print(self.product)
-            for r in self.product:
-                for c in r:
-                    print(c, end=" ")
-                print()
             # jeżeli scraping wykonal sie dla wszystkich produktow sortuj po kat
             y = 0
             if len(self.tab) == self.count:
-                print(self.tab)
-                print(self.count)
                 del self.product[self.i: 200]
                 self.product.sort(key=lambda x: (x[7], x[1]))
 
@@ -149,8 +142,6 @@ class ceneoScraping(scrapy.Spider):
                     if self.product[n + 1][7] != self.product[n][7]:
                         if y <= 10:
                             for x in range(n + 1 - y, n + 1):
-                                # print('n1 = ', n)
-                                # print('y1 = ', y)
                                 data = {
                                     'name': self.product[x][0],
                                     'price': self.product[x][1],
@@ -160,12 +151,9 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                print('data: ', data)
                                 yield data
                         else:
                             for x in range(n + 1 - y, n - y + 11):
-                                # print('n2 = ', n)
-                                # print('y2 = ', y)
                                 data = {
                                     'name': self.product[x][0],
                                     'price': self.product[x][1],
@@ -175,13 +163,10 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                print('data: ', data)
                                 yield data
                     elif n == (len(self.product) - 3):
                         if y <= 10:
                             for x in range(n + 1 - y, n + 3):
-                                print('n1 = ', n)
-                                print('y1 = ', y)
                                 data = {
                                     'name': self.product[x][0],
                                     'price': self.product[x][1],
@@ -191,12 +176,9 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                print('data: ', data)
                                 yield data
                         else:
                             for x in range(n + 1 - y, n - y + 11):
-                                print('n2 = ', n)
-                                print('y2 = ', y)
                                 data = {
                                     'name': self.product[x][0],
                                     'price': self.product[x][1],
@@ -206,14 +188,8 @@ class ceneoScraping(scrapy.Spider):
                                     'link': self.product[x][5]
                                 }
                                 y = 0
-                                print('data: ', data)
                                 yield data
 
-            print('po sortowaniu: ')
-            for r in self.product:
-                for c in r:
-                    print(c, end=" ")
-                print()
         # przekazywanie 10 najtanszych z jednej kat - gites dziala
         else:
             for products in response.css('div.cat-prod-row__body')[0:4]:
@@ -278,7 +254,6 @@ class ceneoScraping(scrapy.Spider):
             else:
                 total_price = products.css('span.product-delivery-info.js_deliveryInfo::text').get()
                 d1 = total_price.replace("\n", "").replace(" ", "").strip('Zwysyłkąodzł').replace(",", ".")
-                print('cena dostawy przed zamiana na float: ', d1)
                 fd1 = float(d1)
                 delivery_price = round(fd1 - product_pricef, 2)
 
