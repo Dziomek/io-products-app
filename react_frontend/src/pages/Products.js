@@ -1,7 +1,7 @@
 import { React, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import '../css/Products.css'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
@@ -20,6 +20,23 @@ const Products = () => {
         newSelectedItems[index] = value;
         setSelectedItems(newSelectedItems);
       };
+    const allChecked = () =>{
+        return selectedItems[0] != null ;
+    }
+    const handleSubmit = () => {
+        fetch("http://127.0.0.1:5000/list", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: selectedItems })
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log("data send to api:",data);
+          })
+          .catch(error => {
+            console.error(error);
+          })
+        }
 
     function submitProductFromList(productName){
         const receivedProductLists = []
@@ -113,7 +130,7 @@ const Products = () => {
 
     return (
         <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>  
-        <div>
+        <div style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>
             <div className='title-container-products'>
                 <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
                 <input type="text" placeholder="Type in product name" ref={productInput} />
@@ -160,13 +177,18 @@ const Products = () => {
                                                 </div>
                                                 <div className='price-add-container'>    
                                                     <h3>{product.price}zł</h3>
-                                                    <button>Add to list</button>
+                                                    <button onClick={()=>handleChange(index ,product.name)}>Add to list</button>
                                                     <p>With ship {String((parseFloat(product.price)+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
                                                 </div>
                                             </div>
                                         })}
                                     </div>
                                 </>}
+                                {object.productList.length === 0 && <>
+                                {object.searchedProduct}
+                                </>
+
+                                }
 
                             </div>
                         })
@@ -177,7 +199,7 @@ const Products = () => {
                     <h1>PUSTA LISTA PRODUKTÓW</h1>
                 </>
             }
-
+        <button disabled={!allChecked()} onClick={handleSubmit}className='finish-btn'><FontAwesomeIcon className='cart-icon' icon={faShoppingCart}></FontAwesomeIcon></button>
         </div>
         </body>
     )
