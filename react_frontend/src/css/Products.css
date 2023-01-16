@@ -1,0 +1,121 @@
+.title-container-products{
+    background-color: white;
+    top: 0;
+    overflow: visible;
+    position: sticky;
+    display: grid;  
+    grid-template-columns: 2fr 6fr 1fr;
+    width: 100%;
+    padding: 1em 1em 1em 1em;
+    justify-content: center;
+}
+.title-container-products h1{
+    cursor: pointer;
+    font-size: 30px;
+    font-family: 'Futura', sans-serif;
+    display: inline;
+    color: black;
+}
+.title-2nd-part{
+    font-weight: bold;
+}
+.title-container-products button{
+    background-color: black;
+    color: white;
+    border: none;
+}
+.title-container-products button:hover{
+    background-color: rgb(51, 51, 51)
+}
+.title-container-products input{
+    padding: 12px;
+    border: 1px solid;
+}
+.title-container-products input:focus{
+    outline: none;
+}
+.search-result{
+    text-align: center;
+    margin-bottom: 30px;
+}
+.products-container{
+    background-color:#f2f5f7;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 2fr));
+    justify-items: center;
+    align-items: center;
+    column-gap: 0;
+    row-gap: 10px;
+    /*grid-template-columns: 1fr 1fr 1fr 1fr 1fr;*/
+}
+.product_container{
+    width: 300px;
+    height: 300px;
+    text-align: center;
+    background-color: white;
+    align-items: center;
+    
+}
+.product_container img{
+    padding:10px 0px 10px;
+    width: 200px;
+    height: 150px;
+    object-fit:contain;
+}
+.product-name{
+    text-align: center;
+    overflow: hidden;
+    height: 50px;
+}
+.product-price{
+    height:24px;
+}
+.product_container button{
+    margin: 10px 0px 10px;
+    color: white;
+    padding: 10px;
+    background-color: orange;
+    border: none;
+}
+.product-top-name a{
+    color: orange;
+}
+.product-top-name a:hover{
+    color: orange;
+
+}
+.single-product-container{
+    padding: 20px;
+    background-color: aliceblue;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    gap: 16px;
+    height: 100%;
+    background-color: #fff;
+    margin: 0 2% 0 2%;
+}
+.single-product-container img{
+    align-self: baseline;
+}
+.product-top-name{
+    margin: 0 10px 0 10px;    
+    height: 100%;
+    padding: 1%;
+}
+.product-top-name h5,h6{
+    margin-bottom: 2%;
+}
+.price-add-container h3{
+    text-align: center;
+    font-weight: bold;
+    color: orange;
+}
+.price-add-container button{
+    color: white;
+    width: 90%;
+    margin: 10px 0px 10px;
+    padding: 10px;
+    background-color: orange;
+    border: none;
+}

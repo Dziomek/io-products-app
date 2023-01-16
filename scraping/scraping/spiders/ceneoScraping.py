@@ -102,7 +102,7 @@ class ceneoScraping(scrapy.Spider):
             key1 = 'name'
             key2 = 'price'
             key3 = 'image'
-            key6 = 'delivery price'
+            key6 = 'deliveryprice'
             if key1 not in data:
                 data[key1] = productName
                 data[key2] = product_price
