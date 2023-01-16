@@ -137,9 +137,9 @@ const Products = () => {
                                                 <input 
                                                 type='radio'
                                                 name={`product-${index}-${secondIndex}`}
-                                                value={product.link}
-                                                checked={selectedItems[index] === product.link}
-                                                onChange={()=>handleChange(index ,product.link)}
+                                                value={product.name}
+                                                checked={selectedItems[index] === product.name}
+                                                onChange={()=>handleChange(index ,product.name)}
                                                 ></input>
                                             </div>
                                         })}
