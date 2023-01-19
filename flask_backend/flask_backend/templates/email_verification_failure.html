@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Failure</title>
+    <style>
+        .verification-email-container {
+            margin-bottom: 5%;
+        }
+
+        .verification-email-inner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #verification-title {
+            font-size: 100px;
+            font-weight: 300;
+            font-family: 'Futura', sans-serif;
+        }
+        #verification-subtitle {
+            font-size: 70px;
+            font-weight: 200;
+            color: gray;
+            font-family: 'Futura', sans-serif;
+        }
+        #failure {
+            font-size: 120px;
+            font-weight: 800;
+            color: orange;
+            font-family: 'Futura', sans-serif;
+        }
+        #come-back {
+            font-size: 30px;
+            font-weight: 500;
+            color: lightgray;
+            font-family: 'Futura', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='verification-email-container'>
+        <br><br><br>
+        <div class='verification-email-inner'>
+            <span id='verification-title'>VERIFICATION FAILED!</span>
+        </div>
+        <br><br>
+        <div class='verification-email-inner'>
+            <span id='failure'>FAILURE</span>
+        </div>
+        <br><br><br><br>
+        <div class='verification-email-inner'>
+            <span id='verification-subtitle'>Something went wrong :(</span>
+        </div>
+        <br>
+        <div class='verification-email-inner'>
+            <span id='verification-subtitle'>Probably your verification link has expired</span>
+        </div>
+        <br><br><br>
+        <div class='verification-email-inner'>
+            <span id="come-back">You can close this window and try again sign up to our app</span>
+        </div>
+    </div>
+</body>
+</html>
