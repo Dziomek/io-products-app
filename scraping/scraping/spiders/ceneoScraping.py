@@ -17,7 +17,7 @@ class ceneoScraping(scrapy.Spider):
     # quantity = 1
     category = 'All'
     sort_mode = 'total_price'
-    flag = ''
+    flag = 'allegro'
 
 # na razie tryb sortowania ustawiony ręcznie, jak będą przekazywane z frontu to wtedy z tej funkcji
     def __init__(self, keyword_list, quantity, *args, **kwargs):
@@ -102,46 +102,106 @@ class ceneoScraping(scrapy.Spider):
 
     # scrapowanie danych dla jednoznacznego wyszukania
     def parse_details(self, response):
-
-        productName = response.css('h1.product-top__product-info__name.js_product-h1-link.js_product-force-scroll.js_searchInGoogleTooltip.default-cursor::text').get()
-        #print('wywolanie parse details dla ', productName)
-        image = 'https:' + response.css('img.js_gallery-media.gallery-carousel__media').attrib['src']
-        for products in response.css('div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[0:1]:
-            product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
-            if products.css('div.free-delivery-label::text').get():
-                delivery_price = 0
-            else:
-                total_price = products.css('span.product-delivery-info.js_deliveryInfo::text').get()
-                d1 = total_price.replace("\n", "")
-                d2 = d1.replace(" ", "")
-                d3 = d2.strip('Zwysyłkąodzł')
-                d4 = d3.replace(",", ".")
-                p1 = product_price.replace(",", ".")
-                delivery_price = round(float(d4) - float(p1), 2)
-
-            self.product[self.x][0] =productName
-            self.product[self.x][1] = product_price
-            self.product[self.x][2] = delivery_price
-            self.product[self.x][3] = image
-
-        for supplier in response.css('div.product-offer__store')[0:1]:
-            shopName = supplier.css('img').attrib['alt']
-            self.product[self.x][4] = shopName
-
-        for products_link in response.css('div.product-offer__actions.js_product-offer__actions.js_actions.specific-variant-content')[0:1]:
-            try:
-                link = 'https://www.ceneo.pl/' + products_link.css('a.button.button--primary.button--flex.go-to-shop').attrib['href']
-                self.product[self.x][5] = link
-            except:
-                pass
-
         self.x += 1
-        if self.x == len(self.url_tab):
-            #print('koniec parse details')
-            del self.product[self.x: 600]
-            yield self.product
+        z=0
+        productName = response.css(
+            'h1.product-top__product-info__name.js_product-h1-link.js_product-force-scroll.js_searchInGoogleTooltip.default-cursor::text').get()
+        # print('wywolanie parse details dla ', productName)
+        image = 'https:' + response.css('img.js_gallery-media.gallery-carousel__media').attrib['src']
 
-            # for r in self.product:
+        if self.flag == 'allegro':
+            for supplier in response.css('div.product-offer__store'):
+                shopName = supplier.css('img').attrib['alt']
+                z+=1
+                if shopName == 'allegro.pl':
+                    self.product[self.x][4] = shopName
+                else: pass
+            for products in response.css(
+                    'div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[
+                            z-1:z]:
+                product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                if products.css('div.free-delivery-label::text').get():
+                    delivery_price = 0
+                else:
+                    try:
+                        total_price = products.css('span.product-delivery-info.js_deliveryInfo::text').get()
+                        d1 = total_price.replace("\n", "")
+                        d2 = d1.replace(" ", "")
+                        d3 = d2.strip('Zwysyłkąodzł')
+                        d4 = d3.replace(",", ".")
+                        p1 = product_price.replace(",", ".")
+                        delivery_price = round(float(d4) - float(p1), 2)
+                    except:
+                        delivery_price = ''
+
+                self.product[self.x][0] = productName
+                self.product[self.x][1] = product_price
+                self.product[self.x][2] = delivery_price
+                self.product[self.x][3] = image
+            for products_link in response.css(
+                    'div.product-offer__actions.js_product-offer__actions.js_actions.specific-variant-content')[z-1:z]:
+                try:
+                    link = 'https://www.ceneo.pl/' + \
+                           products_link.css('a.button.button--primary.button--flex.go-to-shop').attrib['href']
+                    self.product[self.x][5] = link
+                except:
+                    pass
+
+
+        else:
+            for products in response.css(
+                    'div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[0:1]:
+                product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
+                if products.css('div.free-delivery-label::text').get():
+                    delivery_price = 0
+                else:
+                    try:
+                        total_price = products.css('span.product-delivery-info.js_deliveryInfo::text').get()
+                        d1 = total_price.replace("\n", "")
+                        d2 = d1.replace(" ", "")
+                        d3 = d2.strip('Zwysyłkąodzł')
+                        d4 = d3.replace(",", ".")
+                        p1 = product_price.replace(",", ".")
+                        delivery_price = round(float(d4) - float(p1), 2)
+                    except:
+                        delivery_price = ''
+
+                self.product[self.x][0] = productName
+                self.product[self.x][1] = product_price
+                self.product[self.x][2] = delivery_price
+                self.product[self.x][3] = image
+
+            for supplier in response.css('div.product-offer__store')[0:1]:
+                shopName = supplier.css('img').attrib['alt']
+                self.product[self.x][4] = shopName
+
+            for products_link in response.css(
+                    'div.product-offer__actions.js_product-offer__actions.js_actions.specific-variant-content')[0:1]:
+                try:
+                    link = 'https://www.ceneo.pl/' + \
+                           products_link.css('a.button.button--primary.button--flex.go-to-shop').attrib['href']
+                    self.product[self.x][5] = link
+                except:
+                    pass
+
+
+        if self.x == len(self.url_tab):
+            # print('koniec parse details')
+            del self.product[self.x: 600]
+            if self.flag == 'allegro':
+                final = [[0 for x in range(7)] for y in range(self.x)]
+                z = 0
+                for y in range(0, self.x):
+                    if self.product[y][4] == 'allegro.pl':
+                        final[z] = self.product[y]
+                        z+=1
+                del final[z: self.x]
+                yield final
+
+            else:
+                yield self.product
+
+            # for r in final:
             #     for c in r:
             #         print(c, end=" ")
             #     print()
