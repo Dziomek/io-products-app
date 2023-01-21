@@ -65,8 +65,8 @@ class DatabaseConnector:
             logging.error('Query has not been executed: ' + str(e))
 
     @staticmethod
-    def insert_into_products_history(user_id, name, link, price, timestamp):
-        query = 'INSERT INTO products_history (user_id, name, link, price, timestamp) VALUES (%d, %s, %s, %%.2f, %s)', (user_id, name, link, price, timestamp)
+    def insert_into_products_history(user_id, name, link, price, photo, timestamp):
+        query = 'INSERT INTO products_history (user_id, name, link, price, timestamp) VALUES (%d, %s, %s, %%.2f, %s, %s)', (user_id, name, link, price, photo, timestamp)
         print(query)
 
         try:

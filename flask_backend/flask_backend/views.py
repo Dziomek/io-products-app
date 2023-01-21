@@ -41,6 +41,8 @@ def scraping():
     response = requests.get('http://127.0.0.1:9080/crawl.json', params)
     data = json.loads(response.text)
 
+    #TODO Sorting
+
     return {
         "message": "Keyword list passed successfully",
         "product_list": data,
@@ -62,4 +64,20 @@ def save():
 
     return {
         "message": "Skipping database insert as user is not logged in"
+    }
+
+@app.route('/history', methods=['POST'])
+def history():
+    user_id = session['id']
+    history = db.select_from_products_history(user_id)
+    data = {}
+    for i in range(len(history)):
+        product = [history[i][2], history[i][3], history[i][4], history[i][5]]
+        if str(history[i][6]) not in data.keys():
+            data[str(history[i][6])] = [[product]]
+        else:
+            data[str(history[i][6])].append(product)
+    return {
+        "message": "History of requests passed succesfully",
+        "history": json.dumps(data)
     }
