@@ -37,7 +37,7 @@ const History = () => {
                 if (res.status === 200) return res.json()
             })
             .then(data => {
-                setHistoryData(data)
+                if (data.history) setHistoryData(data.history)
                 console.log(data)
             })
             .catch(error => {
@@ -49,7 +49,7 @@ const History = () => {
         <div>
             { store.token ?
             <>
-                {store.username} {store.email} {store.id}
+                {store.username} {store.email} {store.id} {JSON.stringify(historyData)}
             </>
             :
             null

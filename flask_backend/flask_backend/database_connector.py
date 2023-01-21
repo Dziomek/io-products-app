@@ -78,7 +78,7 @@ class DatabaseConnector:
 
     @staticmethod
     def select_from_products_history(user_id):
-        query = 'SELECT * FROM products_history WHERE user_id=%d', (user_id,)
+        query = 'SELECT * FROM products_history WHERE user_id=%s', (user_id,)
         print(query)
         try:
             cursor = DatabaseConnector.database.cursor()

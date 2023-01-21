@@ -65,7 +65,7 @@ function Home() {
     return (
         <>
         <div className="title-container">
-            <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
+            <h1>PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
             { !store.token ?
                 <div className="login-container">
                     <LoginRegisterModal/>

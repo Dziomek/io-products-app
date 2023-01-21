@@ -74,7 +74,6 @@ def save():
 def history():
     user_id = request.json.get('id')
     history = db.select_from_products_history(user_id)
-    print(history)
     data = {}
     for i in range(len(history)):
         product = [history[i][2], history[i][3], history[i][4], history[i][5]]
