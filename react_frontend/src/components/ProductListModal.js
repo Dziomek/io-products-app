@@ -149,6 +149,7 @@ const ProductListModal = () => {
                 body: JSON.stringify({
                     productList: [product],
                     category: category,
+                    quantity: mappedProductList.length
                 })
             }
             console.log(options)

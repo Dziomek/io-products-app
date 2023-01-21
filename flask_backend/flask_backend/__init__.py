@@ -9,8 +9,8 @@ app = Flask(__name__)
 CORS(app)
 jwt = JWTManager(app)
 app.config.from_prefixed_env()
-login_manager = LoginManager()
-login_manager.init_app(app)
+# login_manager = LoginManager()
+# login_manager.init_app(app)
 bcrypt = Bcrypt(app)
 db = DatabaseConnector
 

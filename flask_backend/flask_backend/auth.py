@@ -1,13 +1,17 @@
+import base64
 import hashlib
+import os
 
-from flask import jsonify, request, url_for, session, flash
-from . import app
+from flask import request, url_for, session, flash, render_template
 from flask_jwt_extended import create_access_token
-from .utils import email_check, password_check, email_verification_token, verify_email, send_email_with_token
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from itsdangerous import SignatureExpired
+
+from . import app
 from .database_connector import DatabaseConnector
+from .utils import email_check, password_check, email_verification_token, verify_email, send_email_with_token
 
 db = DatabaseConnector()
+
 
 @app.route('/token', methods=["POST"])
 def login():
@@ -16,8 +20,9 @@ def login():
 
     user = db.select_from_users_by_email(email)
     if len(user) != 0:
-        password_hash = hashlib.sha256(password.encode('utf-8'))
-        if password_hash.hexdigest() == user[0][3]:
+        salt, hashed_password_from_db = user[0][3].split(':')
+        hashed_password_to_verify = hashlib.sha256(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
+        if hashed_password_to_verify == hashed_password_from_db:
             session['logged_in'] = True
             session['id'] = user[0][0]
             session['username'] = user[0][1]
@@ -54,10 +59,14 @@ def register():
     if not password_check(password, confirm_password):
         return {"message": "Passwords don't match. Please try again"}
 
-    #TODO: Change hashing function to something that generates salt itself
-    password_hash = hashlib.sha256(password.encode('utf-8'))
+    # generate random salt
+    salt = base64.b64encode(os.urandom(32)).decode('utf-8')
 
-    db.insert_into_users(username=username, email=email, password_hash=password_hash.hexdigest(), is_active=False)
+    # hash password with the salt
+    hashed_password = hashlib.sha256(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
+    password_hash = f"{salt}:{hashed_password}"
+
+    db.insert_into_users(username=username, email=email, password_hash=password_hash, is_active=False)
 
     token = email_verification_token(email)
     link = url_for('confirm_email', token=token, email=email, _external=True)
@@ -75,8 +84,9 @@ def confirm_email(token, email):
         verify_email(token)
         db.update_users_account_activation(email)
     except SignatureExpired:
-        return {"verified": "False"}
-    return {"verified": "True"}
+        return render_template("email_verification_failure.html")
+    return render_template("email_verification_success.html")
+
 
 @app.route('/logout', methods=['GET'])
 def logout():
