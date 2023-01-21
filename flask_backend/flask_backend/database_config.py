@@ -1,4 +1,4 @@
-HOST = "127.0.0.1"
+HOST = "172.18.0.2"
 USER = "root"
 PASSWORD = "root"
-DATABASE = "io-mysql"
+DATABASE = "products_app"
