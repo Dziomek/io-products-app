@@ -52,12 +52,16 @@ def scraping():
 
 @app.route('/save', methods=['POST'])
 def save():
-    if session['logged_in'] == True:
-        data = request.json.get("data")
-        print(data)
+    id = request.json.get('id')
+    if id:
+        name = request.json.get('product')
+        link = request.json.get('link')
+        price = request.json.get('link')
+        # data = request.json.get("data")
+        # print(data)
         #TODO: Process the data
         now = datetime.now()
-        #db.insert_into_products_history(user_id=session['id'], name='', link='', price=0.00, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
+        #db.insert_into_products_history(user_id=id, name='', link='', price=0.00, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
         return {
             "message": "Successfully inserted products into database"
         }
@@ -70,6 +74,7 @@ def save():
 def history():
     user_id = request.json.get('id')
     history = db.select_from_products_history(user_id)
+    print(history)
     data = {}
     for i in range(len(history)):
         product = [history[i][2], history[i][3], history[i][4], history[i][5]]

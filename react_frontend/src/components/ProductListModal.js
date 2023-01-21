@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react'
+import React, {useState, useRef, useEffect, useContext} from 'react'
 import '../css/ProductListModal.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -11,9 +11,11 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ProgressBar from './ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import Papa from "papaparse";
+import { Context } from '../store/appContext';
 
 const ProductListModal = () => {
 
+    const {store, actions} = useContext(Context)
     const [show, setShow] = useState(false);
     const [quantity, setQuantity] = useState(1)
     const [productList, setProductList] = useState([])
@@ -185,7 +187,7 @@ const ProductListModal = () => {
                 })
                 .catch(error => {
                     setErrorMessage("Server error")
-                }) 
+                })
         })
     }
   

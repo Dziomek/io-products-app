@@ -27,7 +27,7 @@ const History = () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                id: 5
+                id: store.token ? store.id : ''
             })
         }
         console.log(options)
@@ -37,7 +37,7 @@ const History = () => {
                 if (res.status === 200) return res.json()
             })
             .then(data => {
-                setHistoryData(data.history)
+                setHistoryData(data)
                 console.log(data)
             })
             .catch(error => {
