@@ -60,12 +60,12 @@ function Home() {
             }) 
     }
 
-    console.log('Home rendered')
+    console.log('Home rendered', store.token)
 
     return (
         <>
         <div className="title-container">
-            <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
+            <h1>PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
             { !store.token ?
                 <div className="login-container">
                     <LoginRegisterModal/>
@@ -74,7 +74,7 @@ function Home() {
                 <div className="login-container">
                     <h1>{store.username}</h1>
                     <button onClick={() => actions.logout()}>Log out</button>
-                    <Link to='/history' state={{token: store.token}}>History</Link>
+                    <Link to='/history'>History</Link>
                 </div>
             }        
         </div>

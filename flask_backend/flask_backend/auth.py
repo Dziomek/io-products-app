@@ -1,6 +1,7 @@
 import base64
 import hashlib
 import os
+from datetime import datetime
 
 from flask import request, url_for, session, flash, render_template
 from flask_jwt_extended import create_access_token
@@ -32,6 +33,7 @@ def login():
             access_token = create_access_token(identity=email)
             response = {
                 "access_token": access_token,
+                "id": user[0][0],
                 "username": user[0][1],
                 "email": user[0][2],
                 "is_active": user[0][4]
@@ -66,7 +68,9 @@ def register():
     hashed_password = hashlib.sha256(salt.encode('utf-8') + password.encode('utf-8')).hexdigest()
     password_hash = f"{salt}:{hashed_password}"
 
-    db.insert_into_users(username=username, email=email, password_hash=password_hash, is_active=False)
+    now = datetime.now()
+
+    db.insert_into_users(username=username, email=email, password_hash=password_hash, is_active=False, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
 
     token = email_verification_token(email)
     link = url_for('confirm_email', token=token, email=email, _external=True)

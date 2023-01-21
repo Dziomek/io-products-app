@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react'
+import React, {useState, useRef, useEffect, useContext} from 'react'
 import '../css/ProductListModal.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -11,9 +11,11 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import ProgressBar from './ProgressBar';
 import { useNavigate } from 'react-router-dom';
 import Papa from "papaparse";
+import { Context } from '../store/appContext';
 
 const ProductListModal = () => {
 
+    const {store, actions} = useContext(Context)
     const [show, setShow] = useState(false);
     const [quantity, setQuantity] = useState(1)
     const [productList, setProductList] = useState([])
@@ -21,6 +23,8 @@ const ProductListModal = () => {
     const [category, setCategory] = useState('All')
     const [searching, setSearching] = useState(false)
     const [csvFile, setCsvFile] = useState(null)
+    const [allegro, setAllegro] = useState(false)
+    const [deliveryPrice, setDeliveryPrice] = useState(true)
 
     const [progress, setProgress] = useState(0)
 
@@ -68,6 +72,7 @@ const ProductListModal = () => {
         setSearching(false)
         setErrorMessage(null)
         setCsvFile(null)
+        setAllegro(false)
     }
     const increaseQuantity = () => {if (quantity < 10) setQuantity(quantity + 1)}
     const decreaseQuantity = () => {if (quantity > 0) setQuantity(quantity - 1)}
@@ -149,7 +154,9 @@ const ProductListModal = () => {
                 body: JSON.stringify({
                     productList: [product],
                     category: category,
-                    quantity: mappedProductList.length
+                    quantity: mappedProductList.length,
+                    allegro: allegro,
+                    deliveryPrice: deliveryPrice
                 })
             }
             console.log(options)
@@ -180,7 +187,7 @@ const ProductListModal = () => {
                 })
                 .catch(error => {
                     setErrorMessage("Server error")
-                }) 
+                })
         })
     }
   
@@ -259,6 +266,26 @@ const ProductListModal = () => {
                         Beauty
                     </Dropdown.Item>
                 </DropdownButton>
+                <Form>
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Allegro only"
+                        onChange={() => {
+                            if (!allegro) setAllegro(true)
+                            else setAllegro(false)
+                        }}
+                    />
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Do not include delivery price"
+                        onChange={() => {
+                            if (deliveryPrice) setDeliveryPrice(false)
+                            else setDeliveryPrice (true)
+                        }}
+                    />
+                </Form>
             </Modal.Footer>
             }
         </Modal>

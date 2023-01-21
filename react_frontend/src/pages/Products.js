@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import '../css/Products.css'
 import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { Link } from 'react-router-dom';
 
 
 const Products = () => {
@@ -132,10 +132,11 @@ const Products = () => {
         <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>  
         <div style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>
             <div className='title-container-products'>
-                <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
+                <Link style={{textDecoration: 'none'}} to='/'>
+                    <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
+                </Link>
                 <input type="text" placeholder="Type in product name" ref={productInput} />
                 <button className="search-btn-products" onClick={submitProduct}>Search</button>
-
             </div>
             {productLists ?
                 <>
