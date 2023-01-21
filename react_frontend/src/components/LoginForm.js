@@ -43,7 +43,7 @@ const LoginForm = () => {
                 setLoggedIn(true)
                 setEmail(data.email)
                 if(data.is_active) {
-                    actions.login(data.access_token, data.username, data.email)
+                    actions.login(data.access_token, data.username, data.email, data.id)
                 }
             })
             .catch(error => {

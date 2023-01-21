@@ -33,6 +33,7 @@ def login():
             access_token = create_access_token(identity=email)
             response = {
                 "access_token": access_token,
+                "id": user[0][0],
                 "username": user[0][1],
                 "email": user[0][2],
                 "is_active": user[0][4]

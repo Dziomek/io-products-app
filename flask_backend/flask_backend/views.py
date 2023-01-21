@@ -68,7 +68,7 @@ def save():
 
 @app.route('/history', methods=['POST'])
 def history():
-    user_id = session['id']
+    user_id = request.json.get('id')
     history = db.select_from_products_history(user_id)
     data = {}
     for i in range(len(history)):
