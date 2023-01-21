@@ -16,6 +16,7 @@ db = DatabaseConnector
 
 if __name__ == '__main__':
     app.run()
+    db.execute_database_retention()
 
 from . import views
 from . import auth
