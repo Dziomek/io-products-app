@@ -56,7 +56,7 @@ def save():
     if id:
         name = request.json.get('product')
         link = request.json.get('link')
-        price = request.json.get('link')
+        price = request.json.get('price')
         # data = request.json.get("data")
         # print(data)
         #TODO: Process the data

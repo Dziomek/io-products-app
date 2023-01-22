@@ -5,7 +5,6 @@ import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 
-
 const Products = () => {
 
     const navigate = useNavigate()
@@ -13,29 +12,49 @@ const Products = () => {
     const location = useLocation()
     const productLists = location.state && location.state.productLists
     const [errorMessage, setErrorMessage] = useState(null)
-    const [selectedItems, setSelectedItems] = useState(Array(productLists.length).fill(null));
+    const [selectedItems, setSelectedItems] = useState([]);
+    
+    console.log('Products page rendered. Searched items:', productLists, 'selected:', selectedItems)
 
     const handleChange = (index, value) => {
         const newSelectedItems = [...selectedItems];
         newSelectedItems[index] = value;
         setSelectedItems(newSelectedItems);
-      };
-    const allChecked = () =>{
-        return selectedItems[0] != null ;
+    };
+    const allChecked = () => {
+        let validLength = 0
+        productLists.forEach(item => {
+            if (item.productList.length !== 0) validLength += 1
+        })
+        console.log('Valid length: ', validLength)
+        
+        return selectedItems.filter(element => element !== undefined && element !== null && element !== "").length === validLength
     }
     const handleSubmit = () => {
-        fetch("http://127.0.0.1:5000/list", {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ data: selectedItems })
-        })
-          .then(response => response.json())
-          .then(data => {
-            console.log("data send to api:",data);
-          })
-          .catch(error => {
-            console.error(error);
-          })
+            // fetch("http://127.0.0.1:5000/list", {
+            // method: 'POST',
+            // headers: { 'Content-Type': 'application/json' },
+            // body: JSON.stringify({ data: selectedItems })
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+            //     console.log("data send to api:",data);
+            // })
+            // .catch(error => {
+            //     console.error(error);
+            // })
+            const nameList = selectedItems.filter(element => element !== undefined && element !== null && element !== "")
+            console.log(nameList)
+            const results = productLists.map(element => {
+                let filteredProducts = element.productList.filter(product => nameList.includes(product.name));
+                if (filteredProducts.length > 0) {
+                    return {
+                        ...element,
+                        productList: filteredProducts
+                    }
+                }
+            }).filter(element => element !== undefined && element !== null && element !== "")
+            navigate('/summary', { state: { productLists: results }})
         }
 
     function submitProductFromList(productName){
@@ -125,8 +144,8 @@ const Products = () => {
             })
     }
 
-    console.log('Products rendered. ProductsList: ', productLists)
-    console.log('selected items', selectedItems)
+    // console.log('Products rendered. ProductsList: ', productLists)
+    // console.log('selected items', selectedItems)
 
     return (
         <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>  
@@ -157,7 +176,7 @@ const Products = () => {
                                                 name={`product-${index}-${secondIndex}`}
                                                 value={product.name}
                                                 checked={selectedItems[index] === product.name}
-                                                onChange={()=>handleChange(index ,product.name)}
+                                                onChange={()=>handleChange(index, product.name)}
                                                 ></input>
                                             </div>
                                         })}
@@ -185,8 +204,9 @@ const Products = () => {
                                         })}
                                     </div>
                                 </>}
-                                {object.productList.length === 0 && <>
-                                {object.searchedProduct}
+                                {object.productList.length === 0 && 
+                                <>
+                                    <h3 className='search-result'>Nie udało się znaleźć produktów dla: {object.searchedProduct}</h3>
                                 </>
 
                                 }
