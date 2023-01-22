@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import re
 
 import requests
 from flask import jsonify, request, url_for, session
@@ -39,9 +40,15 @@ def scraping():
         'start_requests': True,
         'crawl_args': crawl_args_json
     }
-
-    response = requests.get('http://127.0.0.1:9080/crawl.json', params)
-    data = json.loads(response.text)
+    try:
+        response = requests.get('http://127.0.0.1:9080/crawl.json', params)
+        data = json.loads(response.text)
+    except Exception as e:
+        return {
+            "error": True,
+            "message": "Scraping request failed. Error occured",
+            "errorMessage": str(e)
+        }
 
     products = data['items']
     for product in products:
@@ -56,14 +63,24 @@ def scraping():
                 products.remove(product)
         products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
 
+    print(len(products_sorted))
+
     if len(product_list[0].split()) == 1:
         keyword = product_list[0].lower()
-        print(keyword)
+        print(len(products_sorted))
+        i = 1
         for product in products_sorted:
-            if keyword not in product['name'].lower():
+            dupa = product['name'].lower()
+            print(str(i) + " : "+ dupa)
+            pattern = re.search(keyword, dupa)
+            print(pattern)
+            i += 1
+            if pattern == None:
                 products_sorted.remove(product)
 
-    data['items'] = products_sorted
+
+    print(len(products_sorted))
+    data['items'] = products_sorted[:10]
 
     return {
         "message": "Keyword list passed successfully",
@@ -111,7 +128,6 @@ def history():
             product = {'name': element[0], 'link': element[1], 'price': element[2], 'image': element[3]}
             products.append(product)
         json_data.append({"timestamp": timestamp, "products": products})
-    dupa = json.dumps(json_data)
     return {
         "message": "History of requests passed succesfully",
         "history": json.dumps(json_data)
