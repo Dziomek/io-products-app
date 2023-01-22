@@ -22,28 +22,24 @@ const SelectedProducts = () => {
     }, [])
 
     const handleSubmit = () => {
-        productLists.forEach(product => {
-            const options = {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id: store.id, 
-                    link: product.link,
-                    name: product.name,
-                    price: product.price
-                })
-            }
-            console.log(options)
-            fetch("http://127.0.0.1:5000/save", options)
-                .then(res => {
-                    if (res.status === 200) return res.json()
-                })
-                .then(data => {
-                    console.log(data)
-                })
-        })
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: store.id, 
+                productLists: productLists
+            })
+        }
+        console.log(options)
+        fetch("http://127.0.0.1:5000/save", options)
+            .then(res => {
+                if (res.status === 200) return res.json()
+            })
+            .then(data => {
+                console.log(data)
+            })
     }
 
     return (
