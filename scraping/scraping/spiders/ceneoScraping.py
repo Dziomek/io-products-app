@@ -12,6 +12,7 @@ class ceneoScraping(scrapy.Spider):
     product=[]
 
     # keyword_list = ['perfumy']
+
     # category = 'ALl'
     # allegro = False
     # deliveryPrice=True
@@ -218,5 +219,3 @@ class ceneoScraping(scrapy.Spider):
             self.b+=1
             #print(data)
             yield data
-
-

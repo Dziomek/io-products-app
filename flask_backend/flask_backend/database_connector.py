@@ -66,7 +66,7 @@ class DatabaseConnector:
 
     @staticmethod
     def insert_into_products_history(user_id, name, link, price, photo, timestamp):
-        query = 'INSERT INTO products_history (user_id, name, link, price, timestamp) VALUES (%d, %s, %s, %%.2f, %s, %s)', (user_id, name, link, price, photo, timestamp)
+        query = 'INSERT INTO products_history (user_id, name, link, price, photo, timestamp) VALUES (%s, %s, %s, %s, %s, %s)', (user_id, name, link, price, photo, timestamp)
         print(query)
 
         try:

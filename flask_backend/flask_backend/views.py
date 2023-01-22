@@ -46,6 +46,8 @@ def scraping():
     data = json.loads(response.text)
 
     #TODO Sorting
+    print(data)
+
 
     return {
         "message": "Keyword list passed successfully",
@@ -57,15 +59,15 @@ def scraping():
 @app.route('/save', methods=['POST'])
 def save():
     id = request.json.get('id')
-    if id:
-        name = request.json.get('product')
-        link = request.json.get('link')
-        price = request.json.get('price')
-        # data = request.json.get("data")
-        # print(data)
-        #TODO: Process the data
+    if id != None:
+        products = request.json.get('productLists')
         now = datetime.now()
-        #db.insert_into_products_history(user_id=id, name='', link='', price=0.00, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
+        for product in products:
+            name = product['name']
+            link = product['link']
+            price = product['price'].replace(',', '.')
+            photo = product['image']
+            db.insert_into_products_history(user_id=int(id), name=name, link=link, price=float(price), photo=photo, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
         return {
             "message": "Successfully inserted products into database"
         }
