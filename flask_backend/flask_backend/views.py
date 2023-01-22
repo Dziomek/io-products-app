@@ -23,8 +23,6 @@ def scraping():
     quantity = request.json.get("quantity")
     allegro = request.json.get('allegro')
     delivery_price = request.json.get('deliveryPrice')    
-    
-    #print(type(product_list))
 
     crawl_args = {
         "keyword_list": product_list,
@@ -45,9 +43,27 @@ def scraping():
     response = requests.get('http://127.0.0.1:9080/crawl.json', params)
     data = json.loads(response.text)
 
-    #TODO Sorting
-    print(data)
+    products = data['items']
+    for product in products:
+        price = product['price']
+        product['price'] = price.replace(',', '.')
 
+    if not delivery_price:
+        products_sorted = sorted(products, key=lambda k: float(k['price']))
+    else:
+        for product in products:
+            if product['deliveryprice'] == '':
+                products.remove(product)
+        products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+
+    if len(product_list[0].split()) == 1:
+        keyword = product_list[0].lower()
+        print(keyword)
+        for product in products_sorted:
+            if keyword not in product['name'].lower():
+                products_sorted.remove(product)
+
+    data['items'] = products_sorted
 
     return {
         "message": "Keyword list passed successfully",
@@ -84,10 +100,19 @@ def history():
     for i in range(len(history)):
         product = [history[i][2], history[i][3], history[i][4], history[i][5]]
         if str(history[i][6]) not in data.keys():
-            data[str(history[i][6])] = [[product]]
+             data[str(history[i][6])] = [product]
         else:
             data[str(history[i][6])].append(product)
+
+    json_data = []
+    for timestamp in data.keys():
+        products = []
+        for element in data[timestamp]:
+            product = {'name': element[0], 'link': element[1], 'price': element[2], 'image': element[3]}
+            products.append(product)
+        json_data.append({"timestamp": timestamp, "products": products})
+    dupa = json.dumps(json_data)
     return {
         "message": "History of requests passed succesfully",
-        "history": json.dumps(data)
+        "history": json.dumps(json_data)
     }
