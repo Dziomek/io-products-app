@@ -145,7 +145,7 @@ const ProductListModal = () => {
         const iterations = mappedProductList.length
         let currentIteration = 0
         mappedProductList.forEach(product => {
-            console.log('WPISANY DO SCRAPERA', product)
+            // console.log('WPISANY DO SCRAPERA', product)
             const options = {
                 method: 'POST',
                 headers: {
@@ -159,10 +159,18 @@ const ProductListModal = () => {
                     deliveryPrice: deliveryPrice
                 })
             }
+            const fetchPromise = fetch("http://127.0.0.1:5000/scraping", options)
+            fetchPromise.abort = (product) => {
+                console.log('Request timed out', product)
+            }
+            const timeoutId = setTimeout(() => {
+                fetchPromise.abort(product)
+            }, 1000)
             console.log(options)
             setSearching(true)
-            fetch("http://127.0.0.1:5000/scraping", options)
+            fetchPromise
                 .then(response => {
+                    clearTimeout(timeoutId)
                     console.log('Response status:', response.status)
                     if (response.status !== 200) {
                         setErrorMessage("An error occured")
