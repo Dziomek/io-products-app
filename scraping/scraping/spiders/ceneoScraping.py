@@ -8,7 +8,14 @@ class ceneoScraping(scrapy.Spider):
     i=0
     a=0
     b=0
+    x = 0
     product=[]
+
+    # keyword_list = ['perfumy']
+    # category = 'ALl'
+    # allegro = False
+    # deliveryPrice=True
+    # quantity=1
 
     def __init__(self, keyword_list, category, quantity, allegro, deliveryPrice, *args, **kwargs):
         super(ceneoScraping, self).__init__(*args, **kwargs)
@@ -29,7 +36,7 @@ class ceneoScraping(scrapy.Spider):
         self.deliveryPrice = deliveryPrice
 
     def start_requests(self):
-        print('start request uruchamia sie')
+        #print('start request uruchamia sie')
         urls = []
         for keyword in self.keyword_list:
             new = keyword.replace(',', ' ').replace('.', ' ').translate(
@@ -49,7 +56,7 @@ class ceneoScraping(scrapy.Spider):
         #print(self.urls)
 
     def parse(self, response, **kwargs):
-        print('parse uruchamia się')
+        #print('parse uruchamia się dla: ', response.request.url)
         list_url = response.xpath("/html/head/meta[4]/@content").extract()
         url1 = ''.join(list_url)
         result = [x.strip() for x in url1.split(',')]
@@ -75,15 +82,14 @@ class ceneoScraping(scrapy.Spider):
             #print('wywolanie details dla:', link)
             yield scrapy.Request(url=link, callback=self.parse_details)
 
-        # x=0
-        # try:
-        #     while x < 2:
-        #         next_page = 'https://www.ceneo.pl' + response.css('a.pagination__item.pagination__next').attrib['href']
-        #         yield response.follow(next_page, callback=self.parse)
-        #         x+=1
-        #
-        # except:
-        #     pass
+
+        try:
+            next_page = 'https://www.ceneo.pl' + response.css('a.pagination__item.pagination__next').attrib['href']
+            l=response.request.url+";0020-30-0-0-1.htm"
+            yield response.follow(l, callback=self.parse)
+            self.x+=1
+        except:
+            pass
 
     def parse_details(self, response):
         data = {}
@@ -100,13 +106,13 @@ class ceneoScraping(scrapy.Spider):
 
         if self.allegro==True:
             z = 0
-            print('flaga allegro')
+            #print('flaga allegro')
             for supplier in response.css('div.product-offer__store'):
                 shopName = supplier.css('img').attrib['alt']
                 z += 1
                 if shopName == 'allegro.pl':
                     if key4 not in data:
-                        print('znaleziono allegro, z = ', z)
+                        #print('znaleziono allegro, z = ', z)
                         data[key4] = shopName
                     else:
                         data[key4].append(shopName)
@@ -151,8 +157,10 @@ class ceneoScraping(scrapy.Spider):
                             data[key5] = link
                         else:
                             data[key5].append(link)
+                    data[key7] = self.product[self.b]
+                    self.b += 1
                     z = 0
-                    print(data)
+                    #print(data)
                     yield data
                 else:
                     pass
@@ -206,8 +214,9 @@ class ceneoScraping(scrapy.Spider):
                     data[key5] = link
                 else:
                     data[key5].append(link)
-            #print(self.product[self.b])
             data[key7] = self.product[self.b]
             self.b+=1
             #print(data)
             yield data
+
+
