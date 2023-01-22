@@ -4,6 +4,7 @@ import '../css/Products.css'
 import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
+import { DropdownButton, Dropdown } from 'react-bootstrap';
 
 const Products = () => {
 
@@ -169,7 +170,8 @@ const Products = () => {
                                             return <div className='product_container' key={secondIndex} style={{ marginBottom: '2%' }}>
                                                 <img src={product.image} alt='Product'></img>
                                                 <div className='product-name'>{product.name }</div>
-                                                <div className='product-price'>{product.price}zł</div>
+                                                <div className='product-price'>Cena: {product.price}zł</div>
+                                                <div className='product-price'>Z dostawą: {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</div>
                                                 <button onClick={()=>{submitProductFromList(product.name)}}>Check product</button>
                                                 <input 
                                                 type='radio'
@@ -178,6 +180,8 @@ const Products = () => {
                                                 checked={selectedItems[index] === product.name}
                                                 onChange={()=>handleChange(index, product.name)}
                                                 ></input>
+
+
                                             </div>
                                         })}
                                         </div>
@@ -198,7 +202,7 @@ const Products = () => {
                                                 <div className='price-add-container'>    
                                                     <h3>{product.price}zł</h3>
                                                     <button onClick={()=>handleChange(index ,product.name)}>Add to list</button>
-                                                    <p>With ship {String((parseFloat(product.price)+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                                                    <p>With ship {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
                                                 </div>
                                             </div>
                                         })}
