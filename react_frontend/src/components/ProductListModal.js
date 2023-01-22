@@ -25,6 +25,7 @@ const ProductListModal = () => {
     const [csvFile, setCsvFile] = useState(null)
     const [allegro, setAllegro] = useState(false)
     const [deliveryPrice, setDeliveryPrice] = useState(true)
+    const [fileErrorMessage, setFileErrorMessage] = useState(null)
 
     const [progress, setProgress] = useState(0)
 
@@ -40,11 +41,21 @@ const ProductListModal = () => {
 
     const handleFileUpload = async (event) => {
         event.preventDefault()
-        setCsvFile(event.target.files[0])
+        setFileErrorMessage(null)
+        const file = event.target.files[0]
+        if(file && file.name.split('.').pop() !== 'csv'){
+            fileInput.current.value = null
+            setFileErrorMessage('Invalid file type. Please upload a CSV file')
+            return
+        }
+        fileInput.current.value = null
+        setCsvFile(file)
     }
 
     useEffect(() => {
         if (!csvFile) return
+
+        setProductList([])
 
         Papa.parse(csvFile, {
             header: true,
@@ -73,6 +84,7 @@ const ProductListModal = () => {
         setErrorMessage(null)
         setCsvFile(null)
         setAllegro(false)
+        setFileErrorMessage(null)
     }
     const increaseQuantity = () => {if (quantity < 10) setQuantity(quantity + 1)}
     const decreaseQuantity = () => {if (quantity > 0) setQuantity(quantity - 1)}
@@ -249,6 +261,7 @@ const ProductListModal = () => {
                     <Form.Group controlId="formFile" className="mb-3">
                         <div style={{display: 'flex', justifyContent: 'center'}}><Form.Label>Import list from file</Form.Label></div>
                         <Form.Control type="file" ref={fileInput} onChange={handleFileUpload}/>
+                        <p style={{color: 'red'}}>{fileErrorMessage}</p>
                     </Form.Group>
                     </div>
                 </div>
