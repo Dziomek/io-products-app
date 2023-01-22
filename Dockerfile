@@ -8,6 +8,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-WORKDIR /app/flask_backend/flask_backend
+CMD ["export", "FLASK_APP=flask_backend/flask_backend/__init__.py"]
 
-CMD ["python3", "-m" , "flask", "run", "--host=127.0.0.1"]
+CMD ["flask", "run", "--host=0.0.0.0"]

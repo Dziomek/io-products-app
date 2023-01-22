@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 9080
 
-CMD ["scrapyrt"]
+CMD ["scrapyrt", "-i", "0.0.0.0"]

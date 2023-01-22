@@ -31,7 +31,7 @@ def scraping():
         'crawl_args': crawl_args_json
     }
 
-    response = requests.get('http://127.0.0.1:9080/crawl.json', params)
+    response = requests.get('http://172.18.0.98:9080/crawl.json', params)
     data = json.loads(response.text)
 
     return {
