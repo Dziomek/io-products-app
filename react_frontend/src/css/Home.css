@@ -1,7 +1,7 @@
 .title-container{
     position: relative;
     display: grid;
-    grid-template-columns: 10fr 2fr;
+    grid-template-columns: 10fr 5fr;
     width: 100%;
     background-color: var(--navbar-background-color);
     padding: 1em 1em 1em 1em;
@@ -85,4 +85,25 @@
     color: black;
     font-family: 'Futura', sans-serif;
     display: inline;
+}
+.logout_btn{
+    background-color: black;
+    border: none;
+    padding: 5px;
+    color: white;
+    border-radius: 8px;
+}
+.logout_btn a:hover{
+    color:black;
+}
+.history_btn{
+    color: black;
+    margin-bottom: 10px;
+    background-color: white;
+    text-decoration: none;
+    text-align: center;
+    padding: 5px;
+}
+.logout_btn:hover{
+    background-color: rgb(51, 51, 51);
 }

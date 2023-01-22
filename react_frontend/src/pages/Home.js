@@ -72,9 +72,9 @@ function Home() {
                 </div>
                 :
                 <div className="login-container">
-                    <h1>{store.username}</h1>
-                    <button onClick={() => actions.logout()}>Log out</button>
-                    <Link to='/history'>History</Link>
+                    <h1>Hi {store.username}!</h1>
+                    <Link className="history_btn" to='/history'>History</Link>
+                    <button className="logout_btn" onClick={() => actions.logout()}>Log out</button>
                 </div>
             }        
         </div>

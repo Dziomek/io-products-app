@@ -21,13 +21,17 @@ def scraping():
     product_list = request.json.get("productList")
     category = request.json.get("category")
     quantity = request.json.get("quantity")
+    allegro = request.json.get('allegro')
+    delivery_price = request.json.get('deliveryPrice')    
     
     #print(type(product_list))
 
     crawl_args = {
         "keyword_list": product_list,
         "category": category,
-        "quantity": quantity
+        "quantity": quantity,
+        "allegro": allegro,
+        "deliveryPrice": delivery_price
     }
 
     crawl_args_json = json.dumps(crawl_args)
@@ -58,7 +62,7 @@ def save():
     if id:
         name = request.json.get('product')
         link = request.json.get('link')
-        price = request.json.get('link')
+        price = request.json.get('price')
         # data = request.json.get("data")
         # print(data)
         #TODO: Process the data
