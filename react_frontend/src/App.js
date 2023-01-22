@@ -7,6 +7,7 @@ import Register from "./unused/Register";
 import ConfirmEmail from "./unused/ConfirmEmail";
 import Products from "./pages/Products";
 import History from "./pages/History";
+import SelectedProducts from "./pages/SelectedProducts";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                 {/* <Route exact path='/confirm' element={<ConfirmEmail/>}/> */}
                 <Route exact path='/products' element={<Products/>}/>
                 <Route exact path='/history' element={<History/>}/>
+                <Route exact path='/summary' element={<SelectedProducts/>}/>
             </Routes>
         </BrowserRouter>
     );

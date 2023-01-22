@@ -5,7 +5,6 @@ import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 
-
 const Products = () => {
 
     const navigate = useNavigate()
@@ -55,7 +54,7 @@ const Products = () => {
                     }
                 }
             }).filter(element => element !== undefined && element !== null && element !== "")
-            console.log(results)
+            navigate('/summary', { state: { productLists: results }})
         }
 
     function submitProductFromList(productName){
