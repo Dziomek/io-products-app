@@ -40,7 +40,7 @@ const History = () => {
             })
             .then(data => {
                 if (data.history) setHistoryData(data.history)
-                console.log(data)
+                console.log(data.history, typeof historyData)
             })
             .catch(error => {
                 console.log(error)
@@ -58,9 +58,21 @@ const History = () => {
             </div>
         </div>
         <div className='history-container'>
-            <div className='history-header'>
-                <h1>Products history of <b>{store.username}</b></h1>
+            <div className='history-header' style={{padding: '2%'}}>
+                <h1>Products history of <b>{store.username}</b></h1>  
             </div>
+            <div className='history-content'>
+                    {historyData && historyData.map((item) => (
+                        <div key={item.timestamp}>
+                            <h2>Timestamp: {item.timestamp}</h2>
+                            <ul>
+                                {item.products.map((product) => (
+                                    <li key={product.name}>{product.name}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+            </div> 
         </div>
         </>
     )
