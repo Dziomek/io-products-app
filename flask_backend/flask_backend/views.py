@@ -42,6 +42,8 @@ def scraping():
     data = json.loads(response.text)
 
     #TODO Sorting
+    print(data)
+
 
     return {
         "message": "Keyword list passed successfully",

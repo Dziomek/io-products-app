@@ -17,7 +17,7 @@ class ceneoScraping(scrapy.Spider):
     # quantity = 1
     category = 'All'
     sort_mode = 'total_price'
-    flag = 'allegro'
+    flag = ''
 
 # na razie tryb sortowania ustawiony ręcznie, jak będą przekazywane z frontu to wtedy z tej funkcji
     def __init__(self, keyword_list, quantity, *args, **kwargs):
@@ -196,15 +196,27 @@ class ceneoScraping(scrapy.Spider):
                         final[z] = self.product[y]
                         z+=1
                 del final[z: self.x]
+
                 yield final
 
             else:
-                yield self.product
 
-            # for r in final:
-            #     for c in r:
-            #         print(c, end=" ")
-            #     print()
+                for i in range(1, len(self.product)):
+                    data = {
+                                    'name': self.product[i][0],
+                                    'price': self.product[i][1],
+                                    'delivery_price': self.product[i][2],
+                                    'image': self.product[i][3],
+                                    'shop': self.product[i][4],
+                                    'link': self.product[i][5],
+                                    'keyword': self.product[i][6]
+                    }
+                    yield data
+
+            for r in self.product:
+                 for c in r:
+                     print(c, end=" ")
+                 print()
             self.product.clear()
             self.url_tab.clear()
             self.x=0
