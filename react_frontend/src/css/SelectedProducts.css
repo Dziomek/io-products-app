@@ -1,0 +1,22 @@
+.single-product-container-picked img{
+    max-height: 160px;
+}
+.single-product-container-picked{
+    padding: 20px;
+    background-color: aliceblue;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+    gap: 16px;
+    height: 100%;
+    background-color: #fff;
+    margin: 0 2% 0 2%;
+}
+.submit-btn{
+    background-color: black;
+    border: none;
+    padding: 5px;
+    color: white;
+    border-radius: 8px;
+    margin-left: 10px;
+}

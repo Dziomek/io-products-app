@@ -130,5 +130,5 @@ def history():
         json_data.append({"timestamp": timestamp, "products": products})
     return {
         "message": "History of requests passed succesfully",
-        "history": json.dumps(json_data)
+        "history": json_data
     }
