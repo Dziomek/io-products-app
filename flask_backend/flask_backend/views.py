@@ -14,9 +14,11 @@ db = DatabaseConnector()
 
 @app.route('/', methods=['GET'])
 def hello_world():
-    response = jsonify({"data": ["data1", "data2", "data3"]})
+    response = jsonify({"Status": "Healthy"})
     
     return response
+
+products_for_shop_sorting = []
 
 @app.route('/scraping', methods=['POST'])
 def scraping():
@@ -29,12 +31,15 @@ def scraping():
         allegro = request.json.get('allegro')
         delivery_price = request.json.get('deliveryPrice')
 
+        shops = False
+
         crawl_args = {
             "keyword_list": product_list,
             "category": category,
             "quantity": quantity,
             "allegro": allegro,
-            "deliveryPrice": delivery_price
+            "deliveryPrice": delivery_price,
+            "shops": shops
         }
 
         crawl_args_json = json.dumps(crawl_args)
@@ -55,28 +60,32 @@ def scraping():
             }
         try:
             products = data['items']
-            for product in products:
-                price = product['price']
-                product['price'] = price.replace(',', '.')
-                if product['deliveryprice'] == '':
-                    products.remove(product)
-            if not delivery_price:
-                products_sorted = sorted(products, key=lambda k: float(k['price']))
+            if shops:
+                global products_for_shop_sorting
+
             else:
-                products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+                for product in products:
+                    price = product['price']
+                    product['price'] = price.replace(',', '.')
+                    if product['deliveryprice'] == '':
+                        products.remove(product)
+                if not delivery_price:
+                    products_sorted = sorted(products, key=lambda k: float(k['price']))
+                else:
+                    products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
 
-            if len(product_list[0].split()) == 1:
-                for product in products_sorted:
-                    pattern = re.search(product_list[0].lower(), product['name'].lower())
-                    if pattern == None:
-                        products_sorted.remove(product)
+                if len(product_list[0].split()) == 1:
+                    for product in products_sorted:
+                        pattern = re.search(product_list[0].lower(), product['name'].lower())
+                        if pattern == None:
+                            products_sorted.remove(product)
 
-            data['items'] = products_sorted[:10]
-            return {
-                "message": "Keyword list passed successfully",
-                "product_list": data,
-                "crawl_args_json": crawl_args_json
-            }
+                data['items'] = products_sorted[:10]
+                return {
+                    "message": "Keyword list passed successfully",
+                    "product_list": data,
+                    "crawl_args_json": crawl_args_json
+                }
         except Exception as e:
             return {
                 "error": True,
@@ -132,3 +141,21 @@ def history():
         "message": "History of requests passed succesfully",
         "history": json_data
     }
+
+def products_sorting(products, delivery_price):
+    for product in products:
+        price = product['price']
+        product['price'] = price.replace(',', '.')
+        if product['deliveryprice'] == '':
+            products.remove(product)
+    if not delivery_price:
+        products_sorted = sorted(products, key=lambda k: float(k['price']))
+    else:
+        products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+
+    if len(product_list[0].split()) == 1:
+        for product in products_sorted:
+            pattern = re.search(product_list[0].lower(), product['name'].lower())
+            if pattern == None:
+                products_sorted.remove(product)
+    return products_sorted
