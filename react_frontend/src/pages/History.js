@@ -54,6 +54,8 @@ const History = () => {
                 <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
             </Link>
             <div className="login-container">
+                <h1></h1>
+                <h1></h1>
                 <h1>Hi {store.username}!</h1>
             </div>
         </div>

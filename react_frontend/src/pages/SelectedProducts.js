@@ -98,7 +98,11 @@ const SelectedProducts = () => {
                     <img src={product.image} alt='Product'></img>
                     <div className='product-top-name'>
                         <h5>{product.name}</h5>
+                        {isNaN(parseFloat(product.deliveryprice)) ?
+                        <h6> Cena dostawy nieznana</h6>
+                        :
                         <h6>Delivery price: {String(product.deliveryprice.toFixed(2)).replace(/\./g,",")}zł</h6>
+                        }
                         <a href={product.link}>Link to the shop</a>
                     </div>
                     <div className='price-add-container'>    
