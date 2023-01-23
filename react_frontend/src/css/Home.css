@@ -18,7 +18,9 @@
     font-weight: bold;
 }
 .login-container{
+    justify-content: center;
     display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     padding: 0;
     position: relative;
     justify-content: right;
@@ -92,18 +94,26 @@
     padding: 5px;
     color: white;
     border-radius: 8px;
+    display:inline;
+    width: 150px;
 }
 .logout_btn a:hover{
     color:black;
 }
 .history_btn{
+    margin-right: 10px;
     color: black;
-    margin-bottom: 10px;
+    width: 150;
     background-color: white;
     text-decoration: none;
     text-align: center;
     padding: 5px;
+    display:inline;
+
 }
 .logout_btn:hover{
     background-color: rgb(51, 51, 51);
+}
+.user-nickname{
+    display:inline;
 }

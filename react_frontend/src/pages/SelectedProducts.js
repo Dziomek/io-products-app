@@ -10,17 +10,35 @@ const SelectedProducts = () => {
     const {store, actions} = useContext(Context)
     const location = useLocation()
     const navigate = useNavigate()
-    const [selectedValue, setSelectedValue] = useState('1');
-    const [productPrice, setProductPrice] = useState(null)
+    const [selectedValues, setSelectedValues] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [value, setValue] = useState(1)
+
+
+    const calculateTotalPrice = () => {
+        if(value===1){ const total = productLists.reduce((acc, product, index) => {
+            return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice))
+        }, 0)
+        setTotalPrice(total);}
+        else{const total = productLists.reduce((acc, product, index) => {
+            return acc + (parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice))
+        }, 0)
+        setTotalPrice(total);}
+    }
+    useEffect(() => {
+        calculateTotalPrice();
+    }, [selectedValues])
 
     const handleChange = (event, index) => {
-        setSelectedValue(event.target.value);
-        setProductPrice(productLists[index].price)
-      }
-
+        setValue(2);
+        let newSelectedValues = [...selectedValues];
+        newSelectedValues[index] = event.target.value;
+        setSelectedValues(newSelectedValues);
+    }
     const [productLists, setProductLists] = useState(location.state && location.state.productLists.map(element => {
         return element.productList
     }).flat())
+    
     
     console.log('SelectedProducts rendered. ProductLists: ', productLists)
 
@@ -32,6 +50,9 @@ const SelectedProducts = () => {
     }, [])
 
     const handleSubmit = () => {
+        let modifiedProductLists = productLists.map((product, index) => {
+            return {...product, totalPrice: parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice)}
+        })
         const options = {
             method: 'POST',
             headers: {
@@ -39,7 +60,7 @@ const SelectedProducts = () => {
             },
             body: JSON.stringify({
                 id: store.id, 
-                productLists: productLists
+                productLists: modifiedProductLists
             })
         }
         console.log(options)
@@ -53,7 +74,7 @@ const SelectedProducts = () => {
     }
     return (
         <>
-        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}> 
+        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>
             {productLists.map((product, index) => {
                 return <div key={index}>
                 <div className='single-product-container-picked' style={{ marginBottom: '2%' }}>
@@ -65,7 +86,7 @@ const SelectedProducts = () => {
                     </div>
                     <div className='price-add-container'>    
                         <h3>{product.price}zł</h3>
-                        <Form.Select className='select' onChange={handleChange}>
+                        <Form.Select className='select' defaultValue={1} onChange={(event)=>{handleChange(event, index)}}>
                                                         <option value="1">1</option>
                                                         <option value="2">2</option>
                                                         <option value="3">3</option>
@@ -73,16 +94,27 @@ const SelectedProducts = () => {
                                                         <option value="10">10</option>
                                                         <option value="20">20</option>
                                                 </Form.Select>
-
-                        <p >With ship {String((parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValue)+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                    {value===1 ? 
+                        <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                    :
+                    <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                    }
                     </div>
                 </div>
             </div>
+        
             })}
             { !store.token ?
+            <div>
             <h5>Your product list</h5>
+            <p>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
+            </div>
+
             :
+            <div>
+            <p>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
             <button className='submit-btn' onClick={handleSubmit}>ZATWIERDŹ</button>
+            </div>
 
             }
             </body>
