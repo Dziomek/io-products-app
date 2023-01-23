@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+import re
 
 import requests
 from flask import jsonify, request, url_for, session
@@ -23,8 +24,6 @@ def scraping():
     quantity = request.json.get("quantity")
     allegro = request.json.get('allegro')
     delivery_price = request.json.get('deliveryPrice')    
-    
-    #print(type(product_list))
 
     crawl_args = {
         "keyword_list": product_list,
@@ -41,11 +40,47 @@ def scraping():
         'start_requests': True,
         'crawl_args': crawl_args_json
     }
+    try:
+        response = requests.get('http://127.0.0.1:9080/crawl.json', params)
+        data = json.loads(response.text)
+    except Exception as e:
+        return {
+            "error": True,
+            "message": "Scraping request failed. Error occured",
+            "errorMessage": str(e)
+        }
 
-    response = requests.get('http://127.0.0.1:9080/crawl.json', params)
-    data = json.loads(response.text)
+    products = data['items']
+    for product in products:
+        price = product['price']
+        product['price'] = price.replace(',', '.')
 
-    #TODO Sorting
+    if not delivery_price:
+        products_sorted = sorted(products, key=lambda k: float(k['price']))
+    else:
+        for product in products:
+            if product['deliveryprice'] == '':
+                products.remove(product)
+        products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+
+    print(len(products_sorted))
+
+    if len(product_list[0].split()) == 1:
+        keyword = product_list[0].lower()
+        print(len(products_sorted))
+        i = 1
+        for product in products_sorted:
+            dupa = product['name'].lower()
+            print(str(i) + " : "+ dupa)
+            pattern = re.search(keyword, dupa)
+            print(pattern)
+            i += 1
+            if pattern == None:
+                products_sorted.remove(product)
+
+
+    print(len(products_sorted))
+    data['items'] = products_sorted[:10]
 
     return {
         "message": "Keyword list passed successfully",
@@ -57,15 +92,15 @@ def scraping():
 @app.route('/save', methods=['POST'])
 def save():
     id = request.json.get('id')
-    if id:
-        name = request.json.get('product')
-        link = request.json.get('link')
-        price = request.json.get('price')
-        # data = request.json.get("data")
-        # print(data)
-        #TODO: Process the data
+    if id != None:
+        products = request.json.get('productLists')
         now = datetime.now()
-        #db.insert_into_products_history(user_id=id, name='', link='', price=0.00, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
+        for product in products:
+            name = product['name']
+            link = product['link']
+            price = product['price'].replace(',', '.')
+            photo = product['image']
+            db.insert_into_products_history(user_id=int(id), name=name, link=link, price=float(price), photo=photo, timestamp=now.strftime("%Y-%m-%d %H:%M:%S"))
         return {
             "message": "Successfully inserted products into database"
         }
@@ -82,10 +117,18 @@ def history():
     for i in range(len(history)):
         product = [history[i][2], history[i][3], history[i][4], history[i][5]]
         if str(history[i][6]) not in data.keys():
-            data[str(history[i][6])] = [[product]]
+             data[str(history[i][6])] = [product]
         else:
             data[str(history[i][6])].append(product)
+
+    json_data = []
+    for timestamp in data.keys():
+        products = []
+        for element in data[timestamp]:
+            product = {'name': element[0], 'link': element[1], 'price': element[2], 'image': element[3]}
+            products.append(product)
+        json_data.append({"timestamp": timestamp, "products": products})
     return {
         "message": "History of requests passed succesfully",
-        "history": json.dumps(data)
+        "history": json_data
     }
