@@ -14,6 +14,8 @@ const Products = () => {
     const productLists = location.state && location.state.productLists
     const [errorMessage, setErrorMessage] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
+
+    
     
     console.log('Products page rendered. Searched items:', productLists, 'selected:', selectedItems)
 
@@ -171,7 +173,11 @@ const Products = () => {
                                                 <img src={product.image} alt='Product'></img>
                                                 <div className='product-name'>{product.name }</div>
                                                 <div className='product-price'>Cena: {product.price}zł</div>
+                                                {isNaN(parseFloat(product.deliveryprice)) ?
+                                                <div className='product-price'> Cena dostawy nieznana</div>
+                                                :
                                                 <div className='product-price'>Z dostawą: {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</div>
+                                                }
                                                 <button onClick={()=>{submitProductFromList(product.name)}}>Check product</button>
                                                 <input 
                                                 type='radio'

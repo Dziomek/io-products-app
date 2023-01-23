@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Context } from '../store/appContext'
 import Form from 'react-bootstrap/Form'
 import '../css/SelectedProducts.css'
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
 
 
 const SelectedProducts = () => {
@@ -14,8 +17,14 @@ const SelectedProducts = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const [value, setValue] = useState(1)
 
+    const [show, setShow] = useState(false);    
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+
 
     const calculateTotalPrice = () => {
+     
         if(value===1){ const total = productLists.reduce((acc, product, index) => {
             return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice))
         }, 0)
@@ -71,6 +80,8 @@ const SelectedProducts = () => {
             .then(data => {
                 console.log(data)
             })
+            setShow(false)
+            navigate('/')
     }
     return (
         <>
@@ -93,12 +104,12 @@ const SelectedProducts = () => {
                                                         <option value="5">5</option>
                                                         <option value="10">10</option>
                                                         <option value="20">20</option>
-                                                </Form.Select>
-                    {value===1 ? 
-                        <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
-                    :
-                    <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
-                    }
+                                                </Form.Select>                                                 
+                        {value===1 ? 
+                            <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                        :
+                        <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                        }
                     </div>
                 </div>
             </div>
@@ -113,7 +124,24 @@ const SelectedProducts = () => {
             :
             <div>
             <p>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
-            <button className='submit-btn' onClick={handleSubmit}>ZATWIERDŹ</button>
+            <Button style={{backgroundColor:'orange', border:'none'}} onClick={handleShow}>
+                Zatwierdź
+            </Button>
+
+            <Modal show={show} onHide={handleClose} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Podsumowanie</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Czy na pewno chcesz zatwierdzić listę?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Zamknij
+                    </Button>
+                    <Button style={{backgroundColor:'orange'}}  onClick={handleSubmit}>
+                        Zatwierdź
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             </div>
 
             }
