@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import re
+import time
 
 import requests
 from flask import jsonify, request, url_for, session
@@ -19,73 +20,72 @@ def hello_world():
 
 @app.route('/scraping', methods=['POST'])
 def scraping():
-    product_list = request.json.get("productList")
-    category = request.json.get("category")
-    quantity = request.json.get("quantity")
-    allegro = request.json.get('allegro')
-    delivery_price = request.json.get('deliveryPrice')    
+    start = time.time()
+    timeout_seconds = 30
+    while (time.time() - start < timeout_seconds):
+        product_list = request.json.get("productList")
+        category = request.json.get("category")
+        quantity = request.json.get("quantity")
+        allegro = request.json.get('allegro')
+        delivery_price = request.json.get('deliveryPrice')
 
-    crawl_args = {
-        "keyword_list": product_list,
-        "category": category,
-        "quantity": quantity,
-        "allegro": allegro,
-        "deliveryPrice": delivery_price
-    }
-
-    crawl_args_json = json.dumps(crawl_args)
-
-    params = {
-        'spider_name': "ceneo_search",
-        'start_requests': True,
-        'crawl_args': crawl_args_json
-    }
-    try:
-        response = requests.get('http://127.0.0.1:9080/crawl.json', params)
-        data = json.loads(response.text)
-    except Exception as e:
-        return {
-            "error": True,
-            "message": "Scraping request failed. Error occured",
-            "errorMessage": str(e)
+        crawl_args = {
+            "keyword_list": product_list,
+            "category": category,
+            "quantity": quantity,
+            "allegro": allegro,
+            "deliveryPrice": delivery_price
         }
 
-    products = data['items']
-    for product in products:
-        price = product['price']
-        product['price'] = price.replace(',', '.')
+        crawl_args_json = json.dumps(crawl_args)
 
-    if not delivery_price:
-        products_sorted = sorted(products, key=lambda k: float(k['price']))
-    else:
-        for product in products:
-            if product['deliveryprice'] == '':
-                products.remove(product)
-        products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+        params = {
+            'spider_name': "ceneo_search",
+            'start_requests': True,
+            'crawl_args': crawl_args_json
+        }
+        try:
+            response = requests.get('http://127.0.0.1:9080/crawl.json', params)
+            data = json.loads(response.text)
+        except Exception as e:
+            return {
+                "error": True,
+                "message": "Scraping request failed. Error occured",
+                "errorMessage": str(e)
+            }
+        try:
+            products = data['items']
+            for product in products:
+                price = product['price']
+                product['price'] = price.replace(',', '.')
+                if product['deliveryprice'] == '':
+                    products.remove(product)
+            if not delivery_price:
+                products_sorted = sorted(products, key=lambda k: float(k['price']))
+            else:
+                products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
 
-    print(len(products_sorted))
+            if len(product_list[0].split()) == 1:
+                for product in products_sorted:
+                    pattern = re.search(product_list[0].lower(), product['name'].lower())
+                    if pattern == None:
+                        products_sorted.remove(product)
 
-    if len(product_list[0].split()) == 1:
-        keyword = product_list[0].lower()
-        print(len(products_sorted))
-        i = 1
-        for product in products_sorted:
-            dupa = product['name'].lower()
-            print(str(i) + " : "+ dupa)
-            pattern = re.search(keyword, dupa)
-            print(pattern)
-            i += 1
-            if pattern == None:
-                products_sorted.remove(product)
-
-
-    print(len(products_sorted))
-    data['items'] = products_sorted[:10]
-
+            data['items'] = products_sorted[:10]
+            return {
+                "message": "Keyword list passed successfully",
+                "product_list": data,
+                "crawl_args_json": crawl_args_json
+            }
+        except Exception as e:
+            return {
+                "error": True,
+                "message": "Error occured when sorting output",
+                "errorMessage": str(e)
+            }
     return {
         "message": "Keyword list passed successfully",
-        "product_list": data,
-        "crawl_args_json": crawl_args_json
+        "timeout": True,
     }
 
 
