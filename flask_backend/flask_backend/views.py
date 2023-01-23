@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import re
+import time
 
 import requests
 from flask import jsonify, request, url_for, session
@@ -41,8 +42,12 @@ def scraping():
         'crawl_args': crawl_args_json
     }
     try:
-        response = requests.get('http://127.0.0.1:9080/crawl.json', params)
+        response = requests.get('http://127.0.0.1:9080/crawl.json', params, timeout=180)
         data = json.loads(response.text)
+    except requests.exceptions.Timeout:
+        return {
+            "timeout": True,
+        }
     except Exception as e:
         return {
             "error": True,
