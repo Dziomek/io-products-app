@@ -31,7 +31,7 @@ const Products = () => {
         })
         console.log('Valid length: ', validLength)
         
-        return selectedItems.filter(element => element !== undefined && element !== null && element !== "").length === validLength
+        return selectedItems.filter(element => element !== undefined && element !== null && element !== "").length === validLength && validLength !== 0 
     }
     const handleSubmit = () => {
             // fetch("http://127.0.0.1:5000/list", {
