@@ -14,6 +14,8 @@ const Products = () => {
     const productLists = location.state && location.state.productLists
     const [errorMessage, setErrorMessage] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
+
+    
     
     console.log('Products page rendered. Searched items:', productLists, 'selected:', selectedItems)
 
@@ -29,7 +31,7 @@ const Products = () => {
         })
         console.log('Valid length: ', validLength)
         
-        return selectedItems.filter(element => element !== undefined && element !== null && element !== "").length === validLength
+        return selectedItems.filter(element => element !== undefined && element !== null && element !== "").length === validLength && validLength !== 0 
     }
     const handleSubmit = () => {
             // fetch("http://127.0.0.1:5000/list", {
@@ -171,8 +173,12 @@ const Products = () => {
                                                 <img src={product.image} alt='Product'></img>
                                                 <div className='product-name'>{product.name }</div>
                                                 <div className='product-price'>Cena: {product.price}zł</div>
+                                                {isNaN(parseFloat(product.deliveryprice)) ?
+                                                <div className='product-price'> Cena dostawy nieznana</div>
+                                                :
                                                 <div className='product-price'>Z dostawą: {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</div>
-                                                <button onClick={()=>{submitProductFromList(product.name)}}>Check product</button>
+                                                }
+                                                <button onClick={()=>{submitProductFromList(product.name)}}>Sprawdź</button>
                                                 <input 
                                                 type='radio'
                                                 name={`product-${index}-${secondIndex}`}
@@ -196,12 +202,16 @@ const Products = () => {
                                                 <img src={product.image} alt='Product'></img>
                                                 <div className='product-top-name'>
                                                     <h5>{product.name}</h5>
+                                                    {isNaN(parseFloat(product.deliveryprice)) ?
+                                                    <div className='product-price'> Cena dostawy nieznana</div>
+                                                    :
                                                     <h6>Delivery price: {String(product.deliveryprice.toFixed(2)).replace(/\./g,",")}zł</h6>
-                                                    <a href={product.link}>Link to the shop</a>
+                                                    }   
+                                                    <a href={product.link}>Link do sklepu</a>
                                                 </div>
                                                 <div className='price-add-container'>    
                                                     <h3>{product.price}zł</h3>
-                                                    <button onClick={()=>handleChange(index ,product.name)}>Add to list</button>
+                                                    <button onClick={()=>handleChange(index ,product.name)}>Dodaj</button>
                                                     <p>With ship {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
                                                 </div>
                                             </div>

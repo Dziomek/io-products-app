@@ -42,12 +42,25 @@ def scraping():
             "shops": shops
         }
 
-        crawl_args_json = json.dumps(crawl_args)
+    crawl_args_json = json.dumps(crawl_args)
 
-        params = {
-            'spider_name': "ceneo_search",
-            'start_requests': True,
-            'crawl_args': crawl_args_json
+    params = {
+        'spider_name': "ceneo_search",
+        'start_requests': True,
+        'crawl_args': crawl_args_json
+    }
+    try:
+        response = requests.get('http://127.0.0.1:9080/crawl.json', params, timeout=180)
+        data = json.loads(response.text)
+    except requests.exceptions.Timeout:
+        return {
+            "timeout": True,
+        }
+    except Exception as e:
+        return {
+            "error": True,
+            "message": "Scraping request failed. Error occured",
+            "errorMessage": str(e)
         }
         try:
             response = requests.get('http://127.0.0.1:9080/crawl.json', params)
@@ -94,7 +107,8 @@ def scraping():
             }
     return {
         "message": "Keyword list passed successfully",
-        "timeout": True,
+        "product_list": data,
+        "crawl_args_json": crawl_args_json
     }
 
 

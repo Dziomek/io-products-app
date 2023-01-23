@@ -171,18 +171,10 @@ const ProductListModal = () => {
                     deliveryPrice: deliveryPrice
                 })
             }
-            const fetchPromise = fetch("http://127.0.0.1:5000/scraping", options)
-            fetchPromise.abort = (product) => {
-                console.log('Request timed out', product)
-            }
-            const timeoutId = setTimeout(() => {
-                fetchPromise.abort(product)
-            }, 1000)
             console.log(options)
             setSearching(true)
-            fetchPromise
+            fetch("http://127.0.0.1:5000/scraping", options)
                 .then(response => {
-                    clearTimeout(timeoutId)
                     console.log('Response status:', response.status)
                     if (response.status !== 200) {
                         setErrorMessage("An error occured")
@@ -190,14 +182,22 @@ const ProductListModal = () => {
                     return response.json()
                 })
                 .then(data => {
-                    receivedProductLists.push({
-                        searchedProduct: product,
-                        category: category,
-                        productList: data.product_list.items
-                    })
                     console.log(data)
                     currentIteration += 1
                     setProgress(Math.round(currentIteration / iterations * 100))
+                    if (data.timeout) receivedProductLists.push({
+                        searchedProduct: product,
+                        category: category,
+                        productList: [],
+                        timeout: data.timeout
+                    }) 
+                    else receivedProductLists.push({
+                        searchedProduct: product,
+                        category: category,
+                        productList: data.product_list.items,
+                        timeout: false 
+                    })
+                    console.log(receivedProductLists)
                     if (currentIteration === iterations) {
                         handleClose()
                         navigate('/products', {state: { 

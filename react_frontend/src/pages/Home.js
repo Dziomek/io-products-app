@@ -68,11 +68,13 @@ function Home() {
             <h1>PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
             { !store.token ?
                 <div className="login-container">
+                    <h1></h1>
+                    <h1></h1>
                     <LoginRegisterModal/>
                 </div>
                 :
                 <div className="login-container">
-                    <h1>Hi {store.username}!</h1>
+                    <h1 className="user-nickname">Hi {store.username}!</h1>
                     <Link className="history_btn" to='/history'>History</Link>
                     <button className="logout_btn" onClick={() => actions.logout()}>Log out</button>
                 </div>
