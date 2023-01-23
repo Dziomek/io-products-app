@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import '../css/SelectedProducts.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { NavItem } from 'react-bootstrap'
 
 
 
@@ -13,18 +14,25 @@ const SelectedProducts = () => {
     const {store, actions} = useContext(Context)
     const location = useLocation()
     const navigate = useNavigate()
-    const [selectedValues, setSelectedValues] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [value, setValue] = useState(1)
 
     const [show, setShow] = useState(false);    
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [productLists, setProductLists] = useState(location.state && location.state.productLists.map(element => {
+        return element.productList
+    }).flat())
+    const [selectedValues, setSelectedValues] = useState(productLists.map(item =>{
+        return 1;
+    }));
+
+    
   
 
 
     const calculateTotalPrice = () => {
-     
+    
         if(value===1){ const total = productLists.reduce((acc, product, index) => {
             return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice))
         }, 0)
@@ -44,10 +52,7 @@ const SelectedProducts = () => {
         newSelectedValues[index] = event.target.value;
         setSelectedValues(newSelectedValues);
     }
-    const [productLists, setProductLists] = useState(location.state && location.state.productLists.map(element => {
-        return element.productList
-    }).flat())
-    
+
     
     console.log('SelectedProducts rendered. ProductLists: ', productLists)
 
@@ -83,6 +88,7 @@ const SelectedProducts = () => {
             setShow(false)
             navigate('/')
     }
+    console.log(selectedValues)
     return (
         <>
         <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>
