@@ -10,7 +10,7 @@ class ceneoScraping(scrapy.Spider):
     b=0
     x = 0
     product=[]
-    shops = True
+    shops = False
 
     # keyword_list = ['sudocrem']
     #
