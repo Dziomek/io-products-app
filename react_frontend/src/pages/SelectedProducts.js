@@ -34,11 +34,11 @@ const SelectedProducts = () => {
     const calculateTotalPrice = () => {
     
         if(value===1){ const total = productLists.reduce((acc, product, index) => {
-            return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice))
+            return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0))
         }, 0)
         setTotalPrice(total);}
         else{const total = productLists.reduce((acc, product, index) => {
-            return acc + (parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice))
+            return acc + (parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0))
         }, 0)
         setTotalPrice(total);}
     }
@@ -116,9 +116,11 @@ const SelectedProducts = () => {
                                                         <option value="20">20</option>
                                                 </Form.Select>                                                 
                         {value===1 ? 
-                            <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                        <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.')) + 
+                        parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0)).toFixed(2)).replace(/\./g,",")} zł</p>
                         :
-                        <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                        <p >With ship  {String((parseFloat(product.price.replace(/,/g, '.')) * 
+                        parseFloat(selectedValues[index])+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0)).toFixed(2)).replace(/\./g,",")} zł</p>
                         }
                     </div>
                 </div>
