@@ -1,3 +1,4 @@
+
 .single-product-container-picked img{
     max-height: 160px;
 }
@@ -19,4 +20,7 @@
     color: white;
     border-radius: 8px;
     margin-left: 10px;
+}
+body{
+    background-color:#f2f5f7!important;
 }

@@ -91,10 +91,10 @@ const SelectedProducts = () => {
     console.log(selectedValues)
     return (
         <>
-        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>
+        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none'}}>
             {productLists.map((product, index) => {
-                return <div key={index}>
-                <div className='single-product-container-picked' style={{ marginBottom: '2%' }}>
+                return <div style={{backgroundColor: '#f2f5f7'}}key={index}>
+                <div className='single-product-container-picked' style={{ marginBottom: '2%', }}>
                     <img src={product.image} alt='Product'></img>
                     <div className='product-top-name'>
                         <h5>{product.name}</h5>
@@ -128,13 +128,13 @@ const SelectedProducts = () => {
         
             })}
             { !store.token ?
-            <div>
+            <div style={{backgroundColor: '#f2f5f7'}}>
             <h5>Your product list</h5>
             <p>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
             </div>
 
             :
-            <div>
+            <div style={{backgroundColor: '#f2f5f7'}}>
             <p>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
             <Button style={{backgroundColor:'orange', border:'none'}} onClick={handleShow}>
                 Zatwierdź

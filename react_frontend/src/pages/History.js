@@ -49,6 +49,7 @@ const History = () => {
     
     return (
         <>
+        <body style={{backgroundColor:'#f2f5f7', backgroundImage:'none'}}>
         <div className="title-container">
             <Link style={{textDecoration: 'none'}} to='/'>
                 <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
@@ -61,21 +62,23 @@ const History = () => {
         </div>
         <div className='history-container'>
             <div className='history-header' style={{padding: '2%'}}>
-                <h1>Products history of <b>{store.username}</b></h1>  
+                <h1>Twoja historia produktów</h1>  
             </div>
             <div className='history-content'>
                     {historyData && historyData.map((item) => (
-                        <div key={item.timestamp}>
+                        <div className='single-card' key={item.timestamp}>
                             <h2>Timestamp: {item.timestamp}</h2>
-                            <ul>
-                                {item.products.map((product) => (
-                                    <li key={product.name}>{product.name}</li>
-                                ))}
-                            </ul>
+                            {item.products.map((product) => (
+                            <div key={product.name} className='grid-help'>                              
+                                    <img src={product.image}></img>
+                                    <h5>{product.name}</h5> 
+                            </div>
+                            ))}
                         </div>
                     ))}
             </div> 
         </div>
+        </body>
         </>
     )
 }

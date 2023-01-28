@@ -1,4 +1,37 @@
+
 .history-header {
     display: flex;
     justify-content: center;
+}
+.history-content{
+    display: grid;
+    justify-content: center;
+    background-color: #f2f5f7;
+
+}
+.single-card{
+    width: 900px;
+    display:grid;
+    grid-template-columns: 1fr;
+    margin-bottom: 20px;
+    background-color: #f2f5f7;
+}
+.single-card h2{
+    justify-self: center;
+}
+.single-card li{
+    list-style: none;
+}
+.single-card img{
+    justify-self: center;
+    max-width: 150px;
+    max-height: 150px;
+}
+.grid-help{
+    background-color: white;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
 }
