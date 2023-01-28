@@ -1,7 +1,7 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import {Context} from "../store/appContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
+import {faMagnifyingGlass, faList} from '@fortawesome/free-solid-svg-icons'
 import ProductListModal from "../components/ProductListModal";
 import LoginRegisterModal from "../components/LoginRegisterModal";
 import '../css/Home.css'
@@ -91,7 +91,13 @@ function Home() {
         </div>
         {errorMessage}
         <a className="log-in-a">Log in</a><p className="log-in-paragraph"> to save your lists.</p>
+        <footer>
+            <p>Authors: Team A1</p>
+            <p><a>products-contact@gmail.com</a></p>
+        </footer>
         </>
+        
+        
     )
 }
 

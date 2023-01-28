@@ -1,5 +1,5 @@
 .title-container{
-    position: relative;
+        position: relative;
     display: grid;
     grid-template-columns: 10fr 5fr;
     width: 100%;

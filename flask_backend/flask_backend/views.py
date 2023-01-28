@@ -117,6 +117,7 @@ def save():
         "message": "Skipping database insert as user is not logged in"
     }
 
+
 @app.route('/history', methods=['POST'])
 def history():
     user_id = request.json.get('id')

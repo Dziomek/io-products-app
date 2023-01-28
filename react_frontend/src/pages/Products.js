@@ -193,7 +193,7 @@ const Products = () => {
                                         </div>
                                     
                                 </>}
-                                
+
                                 {object.productList.length === 1 && <>
                                     <h3 className='search-result'>Wyniki wyszukiwania dla: {object.searchedProduct}</h3>
                                     <div>
