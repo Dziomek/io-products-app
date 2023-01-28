@@ -10,7 +10,7 @@ class ceneoScraping(scrapy.Spider):
     b=0
     x = 0
     product=[]
-    shops = False
+
 
     # keyword_list = ['sudocrem']
     #
@@ -19,7 +19,7 @@ class ceneoScraping(scrapy.Spider):
     # deliveryPrice=True
     # quantity=1
 
-    def __init__(self, keyword_list, category, quantity, allegro, deliveryPrice, *args, **kwargs):
+    def __init__(self, keyword_list, category, quantity, allegro, deliveryPrice, shops, *args, **kwargs):
         super(ceneoScraping, self).__init__(*args, **kwargs)
         if keyword_list is None:
             keyword_list = []
@@ -36,6 +36,9 @@ class ceneoScraping(scrapy.Spider):
         if deliveryPrice is None:
             deliveryPrice = True
         self.deliveryPrice = deliveryPrice
+        if shops is None:
+            shops = False
+        self.shops = shops
 
     def start_requests(self):
         #print('start request uruchamia sie')

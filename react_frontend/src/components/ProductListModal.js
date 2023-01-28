@@ -168,7 +168,8 @@ const ProductListModal = () => {
                     category: category,
                     quantity: mappedProductList.length,
                     allegro: allegro,
-                    deliveryPrice: deliveryPrice
+                    deliveryPrice: deliveryPrice,
+                    count: iterations
                 })
             }
             console.log(options)

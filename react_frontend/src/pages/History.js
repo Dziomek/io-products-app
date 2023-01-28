@@ -67,11 +67,15 @@ const History = () => {
             <div className='history-content'>
                     {historyData && historyData.map((item) => (
                         <div className='single-card' key={item.timestamp}>
-                            <h2>Timestamp: {item.timestamp}</h2>
+                            <h2>Request made on: {item.timestamp}</h2>
                             {item.products.map((product) => (
                             <div key={product.name} className='grid-help'>                              
                                     <img src={product.image}></img>
-                                    <h5>{product.name}</h5> 
+                                    <h5>{product.name}</h5>
+                                    <h5></h5>
+                                    <h5>{product.price} zł</h5>
+                                    <a></a>
+                                    <a href={product.link}>View in shop</a>
                             </div>
                             ))}
                         </div>

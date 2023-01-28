@@ -7,10 +7,12 @@ import requests
 from flask import jsonify, request, url_for, session
 from . import app
 from .database_connector import DatabaseConnector
+from .products_organizer import ProductsOrganizer
 # from scraping.scraping.spiders.ceneoScraping import ceneoScraping, zdrowieScraping, urodaScraping
 from scrapy.crawler import CrawlerProcess
 
 db = DatabaseConnector()
+po = ProductsOrganizer()
 
 @app.route('/', methods=['GET'])
 def hello_world():
@@ -19,28 +21,27 @@ def hello_world():
     return response
 
 products_for_shop_sorting = []
+counter = 0
 
 @app.route('/scraping', methods=['POST'])
 def scraping():
-    start = time.time()
-    timeout_seconds = 30
-    while (time.time() - start < timeout_seconds):
-        product_list = request.json.get("productList")
-        category = request.json.get("category")
-        quantity = request.json.get("quantity")
-        allegro = request.json.get('allegro')
-        delivery_price = request.json.get('deliveryPrice')
+    product_list = request.json.get("productList")
+    category = request.json.get("category")
+    quantity = request.json.get("quantity")
+    allegro = request.json.get('allegro')
+    delivery_price = request.json.get('deliveryPrice')
+    iterations = request.json.get('count')
 
-        shops = False
+    shops = False
 
-        crawl_args = {
-            "keyword_list": product_list,
-            "category": category,
-            "quantity": quantity,
-            "allegro": allegro,
-            "deliveryPrice": delivery_price,
-            "shops": shops
-        }
+    crawl_args = {
+        "keyword_list": product_list,
+        "category": category,
+        "quantity": quantity,
+        "allegro": allegro,
+        "deliveryPrice": delivery_price,
+        "shops": shops
+    }
 
     crawl_args_json = json.dumps(crawl_args)
 
@@ -62,53 +63,37 @@ def scraping():
             "message": "Scraping request failed. Error occured",
             "errorMessage": str(e)
         }
-        try:
-            response = requests.get('http://127.0.0.1:9080/crawl.json', params)
-            data = json.loads(response.text)
-        except Exception as e:
+    products = data['items']
+    if shops:
+        global products_for_shop_sorting
+        global counter
+        if counter == 0:
+            products_for_shop_sorting = []
+        counter += 1
+        products_for_shop_sorting = products_for_shop_sorting + products
+        print(len(products_for_shop_sorting))
+        print(counter)
+        if counter == iterations:
+            dupa = sort_products_by_shop(products_for_shop_sorting)
+            print(dupa)
+            counter = 0
             return {
-                "error": True,
-                "message": "Scraping request failed. Error occured",
-                "errorMessage": str(e)
+                "message": "Keyword list passed successfully",
+                "product_list": dupa,
+                "crawl_args_json": crawl_args_json
             }
-        try:
-            products = data['items']
-            if shops:
-                global products_for_shop_sorting
 
-            else:
-                for product in products:
-                    price = product['price']
-                    product['price'] = price.replace(',', '.')
-                    if product['deliveryprice'] == '':
-                        products.remove(product)
-                if not delivery_price:
-                    products_sorted = sorted(products, key=lambda k: float(k['price']))
-                else:
-                    products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
-
-                if len(product_list[0].split()) == 1:
-                    for product in products_sorted:
-                        pattern = re.search(product_list[0].lower(), product['name'].lower())
-                        if pattern == None:
-                            products_sorted.remove(product)
-
-                data['items'] = products_sorted[:10]
-                return {
-                    "message": "Keyword list passed successfully",
-                    "product_list": data,
-                    "crawl_args_json": crawl_args_json
-                }
-        except Exception as e:
-            return {
-                "error": True,
-                "message": "Error occured when sorting output",
-                "errorMessage": str(e)
-            }
+    else:
+        products_sorted = po.products_sorting(products, delivery_price, product_list[0])
+        data['items'] = products_sorted[:10]
+        return {
+            "message": "Keyword list passed successfully",
+            "product_list": data,
+            "crawl_args_json": crawl_args_json
+        }
     return {
-        "message": "Keyword list passed successfully",
-        "product_list": data,
-        "crawl_args_json": crawl_args_json
+        "message": "Skipping for shop sorting",
+        "product_list": [],
     }
 
 
@@ -156,7 +141,7 @@ def history():
         "history": json_data
     }
 
-def products_sorting(products, delivery_price):
+def products_sorting(products, delivery_price, keyword):
     for product in products:
         price = product['price']
         product['price'] = price.replace(',', '.')
@@ -167,9 +152,53 @@ def products_sorting(products, delivery_price):
     else:
         products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
 
-    if len(product_list[0].split()) == 1:
+    if len(keyword.split()) == 1:
         for product in products_sorted:
-            pattern = re.search(product_list[0].lower(), product['name'].lower())
+            pattern = re.search(keyword.lower(), product['name'].lower())
             if pattern == None:
                 products_sorted.remove(product)
     return products_sorted
+
+
+def sort_products_by_shop(products_list):
+    # Create a dictionary to store the products for each keyword
+    products_by_keyword = {}
+
+    # Iterate through the products in the list
+    for product in products_list:
+        keyword = product["keyword"]
+        if keyword not in products_by_keyword:
+            products_by_keyword[keyword] = []
+
+        products_by_keyword[keyword].append(product)
+
+    # Create a list to store the final products
+    final_products = []
+
+    # Iterate through the products for each keyword
+    for keyword, keyword_products in products_by_keyword.items():
+        # Create a dictionary to store the shop names and the products for each shop
+        shop_products = {}
+
+        # Iterate through the products for the current keyword
+        for product in keyword_products:
+            shop_name = product["shop name"]
+            if shop_name == '':
+                continue
+            if shop_name not in shop_products:
+                shop_products[shop_name] = []
+
+            shop_products[shop_name].append(product)
+
+        # Get the shop with the most products for the current keyword
+        max_shop_name = max(shop_products, key=lambda x: len(shop_products[x]))
+
+        # Get the first product from the shop with the most products
+        final_product = shop_products[max_shop_name][0]
+
+        # Add the final product to the final list
+        final_products.append(final_product)
+
+    return final_products
+
+
