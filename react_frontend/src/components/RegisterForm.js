@@ -53,7 +53,7 @@ const RegisterForm = () => {
             })
             .catch(error => {
                 console.error("An error occured")
-                setErrorMessage('siemanko')
+                setErrorMessage('An error occured. Please try again later')
             })
     }
     return (
