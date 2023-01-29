@@ -1,3 +1,5 @@
+import time
+
 import scrapy
 import string
 from scrapy.crawler import CrawlerProcess
@@ -10,9 +12,10 @@ class ceneoScraping(scrapy.Spider):
     b=0
     x = 0
     product=[]
-    shops = False
+    shops = True
 
-    # keyword_list = ['sudocrem']
+
+    # keyword_list = ['adidas']
     #
     # category = 'ALl'
     # allegro = False
@@ -64,6 +67,7 @@ class ceneoScraping(scrapy.Spider):
         result = [x.strip() for x in url1.split(',')]
         keyword = result[0].lower()
         for products in response.css('div.cat-prod-row__body'):
+
             try:
                 if self.deliveryPrice == False:
                     link = 'https://www.ceneo.pl' + \
@@ -82,7 +86,7 @@ class ceneoScraping(scrapy.Spider):
                         'href'] + ';0284-0.htm'
             self.product.append(keyword)
             #print('wywolanie details dla:', link)
-            yield scrapy.Request(url=link, callback=self.parse_details)
+            yield scrapy.Request(url=link, callback=self.parse_details, dont_filter=True)
 
 
         try:
@@ -170,7 +174,6 @@ class ceneoScraping(scrapy.Spider):
             self.b=0
 
         if self.allegro == False and self.shops==False:
-            #print('brak flagi allegro')
             for products in response.css(
                     'div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[0:1]:
                 product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
@@ -200,10 +203,7 @@ class ceneoScraping(scrapy.Spider):
                     data[key3].append(image)
             for supplier in response.css('div.product-offer__store')[0:1]:
                 shopName = supplier.css('img').attrib['alt']
-                if key4 not in data:
-                    data[key4] = shopName
-                else:
-                    data[key4].append(shopName)
+                data[key4] = shopName
             for products_link in response.css(
                     'div.product-offer__actions.js_product-offer__actions.js_actions.specific-variant-content')[0:1]:
                 try:
@@ -212,11 +212,8 @@ class ceneoScraping(scrapy.Spider):
                     self.product[self.x][5] = link
                 except:
                     pass
+                data[key5]=link
 
-                if key5 not in data:
-                    data[key5] = link
-                else:
-                    data[key5].append(link)
             data[key7] = self.product[self.b]
             self.b+=1
             yield data
@@ -241,7 +238,14 @@ class ceneoScraping(scrapy.Spider):
                         delivery_price = round(float(d4) - float(p1), 2)
                     except:
                         delivery_price = ''
-                shopName = products.css('img').attrib['alt']
+
+                # shopName = products.css('img').attrib['alt']
+                # if shopName=='':
+                s = products.css('a.link.js_product-offer-link::text').get()
+                sh = s.lstrip().replace(' ',',')
+                result = [x.strip() for x in sh.split(',')]
+                shopName = result[4].lower()
+
                 try:
                     link = 'https://www.ceneo.pl/' + \
                            products.css('a.button.button--primary.button--flex.go-to-shop').attrib['href']
@@ -261,10 +265,15 @@ class ceneoScraping(scrapy.Spider):
                 yield data
 
             self.b += 1
+            #print('b = ', self.b)
+            #print('self.product zew długosc: ', len(self.product))
             if self.b == len(self.product):
-                #print('czyszcenie danych')
+                print('czyszcenie danych')
                 self.b = 0
                 self.product.clear()
+                print('self.product: ', self.product)
+
+
 
 # process = CrawlerProcess(settings={
 #     'FEED_URI': 'scraping.csv',
