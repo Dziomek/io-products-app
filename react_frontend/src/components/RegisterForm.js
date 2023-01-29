@@ -39,7 +39,7 @@ const RegisterForm = () => {
                 confirmPassword: confirmPassword
             })
         }
-        fetch("http://127.0.0.1:5000/register_user", options)
+        fetch("http://10.160.73.81:5000/register_user", options)
             .then(response => {
                 if(response.status === 200) return response.json()
             })
