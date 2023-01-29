@@ -32,7 +32,7 @@ def scraping():
     delivery_price = request.json.get('deliveryPrice')
     iterations = request.json.get('count')
 
-    shops = False
+    shops = True
 
     crawl_args = {
         "keyword_list": product_list,
@@ -51,7 +51,7 @@ def scraping():
         'crawl_args': crawl_args_json
     }
     try:
-        response = requests.get('http://172.18.0.98:9080/crawl.json', params, timeout=180)
+        response = requests.get('http://127.0.0.1:9080/crawl.json', params, timeout=180)
         data = json.loads(response.text)
     except requests.exceptions.Timeout:
         return {
@@ -70,12 +70,17 @@ def scraping():
         if counter == 0:
             products_for_shop_sorting = []
         counter += 1
+        for i in range(len(products)):
+            products[i]['keyword'] = counter
         products_for_shop_sorting = products_for_shop_sorting + products
-        print(len(products_for_shop_sorting))
-        print(counter)
         if counter == iterations:
-            dupa = sort_products_by_shop(products_for_shop_sorting)
-            print(dupa)
+            #dupa = sort_products_by_shop(products_for_shop_sorting)
+            #dupa = group_products(products_for_shop_sorting)
+            #dupa = select_products(products_for_shop_sorting)
+            dupa = group_by_shop(products_for_shop_sorting)
+            (products, needed_keywords) = get_best_shop(dupa, counter)
+            zajebibi = get_rest_of_products(dupa, needed_keywords, products)
+            print(zajebibi)
             counter = 0
             return {
                 "message": "Keyword list passed successfully",
@@ -161,45 +166,109 @@ def products_sorting(products, delivery_price, keyword):
     return products_sorted
 
 
-def sort_products_by_shop(products_list):
-    # Create a dictionary to store the products for each keyword
-    products_by_keyword = {}
+def group_by_shop(products):
+    groups = {}
+    for product in products:
+        shop_name = product['shop name']
+        if shop_name not in groups:
+            groups[shop_name] = []
+        groups[shop_name].append(product)
+    return groups
 
-    # Iterate through the products in the list
-    for product in products_list:
-        keyword = product["keyword"]
-        if keyword not in products_by_keyword:
-            products_by_keyword[keyword] = []
+def get_best_shop(grouped_products, counter):
+    max_count = 0
+    best_shop = ""
+    dictio = {}
+    expected_keywords = set(range(1, counter))
+    keywords = []
+    for shop, products in grouped_products.items():
+        count = len(set(product["keyword"] for product in products))
+        if count > max_count:
+            max_count = count
+            best_shop = shop
+            best_products = []
+            products_sorted = sorted(products, key=lambda k: float(k['price']))
+            keywords = []
+            for product in products_sorted:
+                keyword = product['keyword']
+                present = False
+                for bproduct in best_products:
+                    if keyword in bproduct.values():
+                        present = True
+                if present:
+                    continue
+                best_products.append(product)
+                keywords.append(keyword)
 
-        products_by_keyword[keyword].append(product)
+    needed_keywords = []
+    for keyword in expected_keywords:
+        if keyword not in keywords:
+            needed_keywords.append(keyword)
 
-    # Create a list to store the final products
-    final_products = []
+    dictio[best_shop] = best_products
 
-    # Iterate through the products for each keyword
-    for keyword, keyword_products in products_by_keyword.items():
-        # Create a dictionary to store the shop names and the products for each shop
-        shop_products = {}
+    return dictio, needed_keywords
 
-        # Iterate through the products for the current keyword
-        for product in keyword_products:
-            shop_name = product["shop name"]
-            if shop_name == '':
-                continue
-            if shop_name not in shop_products:
-                shop_products[shop_name] = []
+def get_rest_of_products(grouped_products, needed_keywords, best_shop):
+    dictio = {}
+    final = {}
+    final.update(best_shop)
+    process = True
+    for shop, products in grouped_products.items():
+        keywords = set()
+        for product in products:
+            keyword = product['keyword']
+            if keyword in needed_keywords:
+                keywords.add(keyword)
+        products_sorted = sorted(products, key=lambda k: float(k['price']))
+        if list(keywords) == needed_keywords and process:
+            dictio[shop] = []
+            for product in products_sorted:
+                if dictio[shop] == [] and product['keyword'] in needed_keywords:
+                    dictio[shop].append(product)
+                    needed_keywords.remove(product['keyword'])
+                else:
+                    for bproduct in dictio[shop]:
+                        if product['keyword'] not in bproduct.values() and product['keyword'] in needed_keywords:
+                            dictio[shop].append(product)
+                            process = False
+                            needed_keywords.remove(product['keyword'])
+        elif needed_keywords != []:
+            for keyword in list(keywords):
+                if keyword in needed_keywords:
+                    dictio[shop] = []
+                    for product in products_sorted:
+                        if dictio[shop] == [] and product['keyword'] in needed_keywords:
+                            dictio[shop].append(product)
+                            needed_keywords.remove(keyword)
+                        else:
+                            for bproduct in dictio[shop]:
+                                if product['keyword'] not in bproduct.values() and product['keyword'] in needed_keywords:
+                                    dictio[shop].append(product)
+                                    needed_keywords.remove(keyword)
 
-            shop_products[shop_name].append(product)
-
-        # Get the shop with the most products for the current keyword
-        max_shop_name = max(shop_products, key=lambda x: len(shop_products[x]))
-
-        # Get the first product from the shop with the most products
-        final_product = shop_products[max_shop_name][0]
-
-        # Add the final product to the final list
-        final_products.append(final_product)
-
-    return final_products
+    for shop in dictio.keys():
+        if dictio[shop] != []:
+            final[shop] = dictio[shop]
+    return final
 
 
+    #
+    #     products_sorted = sorted(products, key=lambda k: float(k['price']))
+    #     keywords = []
+    #     _products = []
+    #     for product in products_sorted:
+    #         keyword = product['keyword']
+    #         keywords.append(keyword)
+    #
+    #     if needed_keywords in keywords:
+    #         for product in products_sorted:
+    #             present = False
+    #             for bproduct in _products:
+    #                 if keyword in bproduct.values() or keyword not in needed_keywords:
+    #                     present = True
+    #             if present:
+    #                 continue
+    #             _products.append(product)
+    #         dictio[shop] = _products
+    #     break

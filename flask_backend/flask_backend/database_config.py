@@ -1,4 +1,4 @@
-HOST = "172.18.0.36"
+HOST = "127.0.0.1"
 USER = "root"
 PASSWORD = "root"
 DATABASE = "products_app"

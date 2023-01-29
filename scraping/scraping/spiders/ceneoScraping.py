@@ -56,7 +56,8 @@ class ceneoScraping(scrapy.Spider):
                 urls.append(f"https://www.ceneo.pl/Uroda;szukaj-{new}")
                 urls.append(f"https://www.ceneo.pl/Zdrowie;szukaj-{new}")
         for ceneo_search_url in urls:
-            print('wywolanie parse dla: ', ceneo_search_url)
+            #print('wywolanie parse dla: ', ceneo_search_url)
+            print(scrapy.Request(url=ceneo_search_url, callback=self.parse, meta={'keyword': new}))
             yield scrapy.Request(url=ceneo_search_url, callback=self.parse, meta={'keyword': new})
         self.urls = urls
         #print(self.urls)
@@ -87,6 +88,7 @@ class ceneoScraping(scrapy.Spider):
                         'href'] + ';0284-0.htm'
             self.product.append(keyword)
             #print('wywolanie details dla:', link)
+            #print(scrapy.Request(url=link, callback=self.parse_details, dont_filter=True))
             yield scrapy.Request(url=link, callback=self.parse_details, dont_filter=True)
 
 
@@ -99,7 +101,6 @@ class ceneoScraping(scrapy.Spider):
             pass
 
     def parse_details(self, response):
-        data = {}
         productName = response.css(
             'h1.product-top__product-info__name.js_product-h1-link.js_product-force-scroll.js_searchInGoogleTooltip.default-cursor::text').get()
         image = 'https:' + response.css('img.js_gallery-media.gallery-carousel__media').attrib['src']
@@ -115,6 +116,7 @@ class ceneoScraping(scrapy.Spider):
             z = 0
             #print('flaga allegro')
             for supplier in response.css('div.product-offer__store'):
+                data = {}
                 shopName = supplier.css('img').attrib['alt']
                 z += 1
                 if shopName == 'allegro.pl':
@@ -179,6 +181,7 @@ class ceneoScraping(scrapy.Spider):
                     'div.product-offer__product.js_product-offer__product.js_productName.specific-variant-content')[0:1]:
                 product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
                 p1 = product_price.replace(",", ".").replace(' ', '')
+                data = {}
                 if products.css('div.free-delivery-label::text').get():
                     delivery_price = 0
                 else:
@@ -225,6 +228,7 @@ class ceneoScraping(scrapy.Spider):
         if self.shops == True:
             #print('brak flagi allegro')
             for products in response.css('div.product-offer.js_full-product-offer'):
+                data={}
                 product_price = products.css('span.value::text').get() + products.css('span.penny::text').get()
                 p1 = product_price.replace(",", ".").replace(' ', '')
                 if products.css('div.free-delivery-label::text').get():
