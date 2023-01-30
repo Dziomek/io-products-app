@@ -128,9 +128,9 @@ const SelectedProducts = () => {
         
             })}
             { !store.token ?
-            <div style={{backgroundColor: '#f2f5f7'}}>
-            <h5>Your product list</h5>
-            <p>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
+            
+            <div style={{backgroundColor: '#f2f5f7', display: 'flex', justifyContent: 'center'}}>
+            <p>Total price: <b>{String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</b></p>   
             </div>
 
             :

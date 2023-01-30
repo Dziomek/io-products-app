@@ -5,6 +5,7 @@ import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 import { DropdownButton, Dropdown } from 'react-bootstrap';
+import Footer from '../components/Footer';
 
 const Products = () => {
 

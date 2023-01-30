@@ -31,8 +31,7 @@ def scraping():
     allegro = request.json.get('allegro')
     delivery_price = request.json.get('deliveryPrice')
     iterations = request.json.get('count')
-
-    shops = True
+    shops = request.json.get('sortByShops')
 
     crawl_args = {
         "keyword_list": product_list,
