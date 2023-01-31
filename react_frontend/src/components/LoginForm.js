@@ -30,7 +30,7 @@ const LoginForm = () => {
             })
         }
         console.log(emailInput.current.value, passwordInput.current.value)
-        fetch("http://127.0.0.1:5000/token", options)
+        fetch("http://10.160.73.81:5000/token", options)
             .then(response => {
                 console.log('Response status:', response.status)
                 if (response.status !== 200) {

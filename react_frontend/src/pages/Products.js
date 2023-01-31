@@ -90,7 +90,7 @@ const Products = () => {
                 category: 'All',
             })
         }
-        fetch("http://127.0.0.1:5000/scraping", options)
+        fetch("http://10.160.73.81:5000/scraping", options)
             .then(response => {
                 console.log('Response status:', response.status)
                 if (response.status !== 200) {
@@ -137,7 +137,7 @@ const Products = () => {
             })
         }
 
-        fetch("http://127.0.0.1:5000/scraping", options)
+        fetch("http://10.160.73.81:5000/scraping", options)
             .then(response => {
                 console.log('Response status:', response.status)
                 if (response.status !== 200) {

@@ -49,7 +49,7 @@ def scraping():
         'crawl_args': crawl_args_json
     }
     try:
-        response = requests.get('http://127.0.0.1:9080/crawl.json', params, timeout=180)
+        response = requests.get('http://172.18.0.98:9080/crawl.json', params, timeout=180)
         data = json.loads(response.text)
     except requests.exceptions.Timeout:
         return {
@@ -72,12 +72,9 @@ def scraping():
             products[i]['keyword'] = counter
         products_for_shop_sorting = products_for_shop_sorting + products
         if counter == iterations:
-            # dupa = sort_products_by_shop(products_for_shop_sorting)
-            # dupa = group_products(products_for_shop_sorting)
-            # dupa = select_products(products_for_shop_sorting)
-            dupa = po.group_by_shop(products_for_shop_sorting)
-            (products, needed_keywords) = po.get_best_shop(dupa, counter)
-            products_list = po.get_rest_of_products(dupa, needed_keywords, products)
+            grouped_shops = po.group_by_shop(products_for_shop_sorting)
+            (products, needed_keywords) = po.get_best_shop(grouped_shops, counter)
+            products_list = po.get_rest_of_products(grouped_shops, needed_keywords, products)
             products_list_final = po.extract_products(products_list)
             # products_list_final.append("shops")
             print(products_list_final)
