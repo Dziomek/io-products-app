@@ -10,8 +10,9 @@ EMAIL_PASSWORD = app.config["EMAIL_PASSWORD"]
 # This class build as Singleton is responsible for sending email verifications
 class MailService:
 
-    smtpObj = smtplib.SMTP("smtp.gmail.com", 587)
-    smtpObj.ehlo()
+    smtpObj = smtplib.SMTP("smtp.gmail.com")
+    #smtpObj.ehlo()
+    smtpObj.connect("smtp.gmail.com", "587")
     smtpObj.starttls()
     smtpObj.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
