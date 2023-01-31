@@ -7,15 +7,16 @@ class ProductsOrganizer:
     # This method sorts the products by price or summarized depending on delivery_price flag
     @staticmethod
     def products_sorting(products, delivery_price, keyword):
+        proper_products = []
         for product in products:
             price = product['price']
             product['price'] = price.replace(',', '.')
-            if product['deliveryprice'] == '':
-                products.remove(product)
+            if product['deliveryprice'] != '':
+                proper_products.append(product)
         if not delivery_price:
             products_sorted = sorted(products, key=lambda k: float(k['price']))
         else:
-            products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+            products_sorted = sorted(proper_products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
 
         if len(keyword.split()) == 1:
             for product in products_sorted:
