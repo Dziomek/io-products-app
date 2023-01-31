@@ -5,8 +5,7 @@ const Footer = () => {
     return (
         <footer>
             <div className='footer-content'>
-                <p>authors: <b>Team A1</b></p>
-                <p>products-contact@gmail.com</p>
+                <p style={{margin: '0'}}>authors: <b>Team A1</b> <span>&#183;</span> products-contact@gmail.com</p>
             </div>
         </footer>
     )

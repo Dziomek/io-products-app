@@ -1,4 +1,4 @@
-import { React, useRef, useState } from 'react'
+import { React, useRef, useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import '../css/Products.css'
 import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
@@ -16,7 +16,22 @@ const Products = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [selectedItems, setSelectedItems] = useState([]);
 
-    
+    // useEffect(() => {
+    //     if (productLists) {
+    //         productLists.forEach(result => {
+    //             if (result.productList && result.productList !== undefined) {
+    //                 if (result.productList.length !== 0) {
+    //                     console.log('WYKONUJE EFFECT')
+    //                     if (result.productList[result.productList.length - 1] === 'shops') {
+    //                         navigate('/summary', { state: { productLists: productLists }})
+    //                         return
+    //                     }
+    //                 }
+    //             }
+    //         })
+    //     }
+        
+    // }, [productLists]);
     
     console.log('Products page rendered. Searched items:', productLists, 'selected:', selectedItems)
 
@@ -213,7 +228,11 @@ const Products = () => {
                                                 <div className='price-add-container'>    
                                                     <h3>{product.price}zł</h3>
                                                     <button onClick={()=>handleChange(index ,product.name)}>Dodaj</button>
-                                                    <p>With ship {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                                                    {!isNaN(parseFloat(product.deliveryprice)) ?
+                                                    <p>Z dostawą {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</p>
+                                                    :
+                                                    null
+                                                    }
                                                 </div>
                                             </div>
                                         })}
