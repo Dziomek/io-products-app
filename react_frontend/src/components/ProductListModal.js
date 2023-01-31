@@ -295,10 +295,15 @@ const ProductListModal = () => {
                         type="switch"
                         id="custom-switch"
                         label="Allegro only"
+                        checked={allegro}
                         onChange={() => {
-                            if (!allegro) setAllegro(true)
+                            if (!allegro) {
+                                setAllegro(true)  
+                                setSortByShops(false)
+                            } 
                             else setAllegro(false)
                         }}
+                        disabled={sortByShops}
                     />
                     <Form.Check 
                         type="switch"
@@ -313,10 +318,15 @@ const ProductListModal = () => {
                         type="switch"
                         id="custom-switch"
                         label="Sort by shops"
+                        checked={sortByShops}
                         onChange={() => {
                             if (sortByShops) setSortByShops(false)
-                            else setSortByShops (true)
+                            else {
+                               setSortByShops(true) 
+                               setAllegro(false)
+                            } 
                         }}
+                        disabled={allegro}
                     />
                 </Form>
             </Modal.Footer>
