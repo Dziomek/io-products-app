@@ -6,6 +6,7 @@ import ProductListModal from "../components/ProductListModal";
 import LoginRegisterModal from "../components/LoginRegisterModal";
 import '../css/Home.css'
 import { Link, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 function Home() {
 
@@ -89,12 +90,13 @@ function Home() {
             <button className="search-btn" onClick={submitProduct}>Search</button>
             <ProductListModal/>
         </div>
-        {errorMessage}
+        {/* {errorMessage} */}
         <a className="log-in-a">Log in</a><p className="log-in-paragraph"> to save your lists.</p>
-        <footer>
+        {/* <footer>
             <p>Authors: Team A1</p>
             <p><a>products-contact@gmail.com</a></p>
-        </footer>
+        </footer> */}
+        <Footer/>
         </>
         
         

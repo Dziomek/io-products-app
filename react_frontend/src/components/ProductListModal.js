@@ -26,6 +26,7 @@ const ProductListModal = () => {
     const [allegro, setAllegro] = useState(false)
     const [deliveryPrice, setDeliveryPrice] = useState(true)
     const [fileErrorMessage, setFileErrorMessage] = useState(null)
+    const [sortByShops, setSortByShops] = useState(false)
 
     const [progress, setProgress] = useState(0)
 
@@ -91,11 +92,11 @@ const ProductListModal = () => {
 
     const addProduct = () => {
         const product = nameInput.current.value
-        const quantity = quantityInput.current.value
+        // const quantity = quantityInput.current.value
         if (product && !productList.some(item => item.product === product)) {
             setProductList([...productList, {
                 product: product, 
-                quantity: quantity
+                quantity: 1
             }])
             setErrorMessage(null)
             console.log(productList)
@@ -169,6 +170,7 @@ const ProductListModal = () => {
                     quantity: mappedProductList.length,
                     allegro: allegro,
                     deliveryPrice: deliveryPrice,
+                    sortByShops: sortByShops,
                     count: iterations
                 })
             }
@@ -183,7 +185,9 @@ const ProductListModal = () => {
                     return response.json()
                 })
                 .then(data => {
-                    console.log(data)
+                    console.log('TO OTRZYMALEM NAJPIERW Z BACKENDU', data)
+                    const shops = data.shops
+                    console.log('INFO O FLADZE SHOPS', shops, shops ? 'jest flaga' : 'nie ma flagi')
                     currentIteration += 1
                     setProgress(Math.round(currentIteration / iterations * 100))
                     if (data.timeout) receivedProductLists.push({
@@ -201,6 +205,13 @@ const ProductListModal = () => {
                     console.log(receivedProductLists)
                     if (currentIteration === iterations) {
                         handleClose()
+                        console.log('TO SOBIE OGARNALEM', receivedProductLists)
+                        if (shops) {
+                            navigate('/summary', {state: { 
+                                productLists: [receivedProductLists[receivedProductLists.length - 1]]
+                            }}) 
+                            return
+                        }
                         navigate('/products', {state: { 
                                 productLists: receivedProductLists
                             }})
@@ -232,8 +243,8 @@ const ProductListModal = () => {
                                 <div style={{display: "flex", padding: "0.5%", whiteSpace: 'nowrap'}}>
                                     <p style={{textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: '300', marginRight: '5%', marginBottom: '0'}}>name:</p>
                                     <p style={{textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: '500', marginRight: '10%', marginBottom: '0'}}>{item.product}</p>
-                                    <p style={{textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: '300', marginRight: '5%', marginBottom: '0'}}>quantity:</p>
-                                    <p style={{textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: '400', marginRight: '10%', marginBottom: '0'}}>{item.quantity}</p>
+                                    {/* <p style={{textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: '300', marginRight: '5%', marginBottom: '0'}}>quantity:</p>
+                                    <p style={{textAlign: 'center', color: 'black', fontSize: '25px', fontWeight: '400', marginRight: '10%', marginBottom: '0'}}>{item.quantity}</p> */}
                                 </div>
                                 <div style={{display: "flex", width: "100%", justifyContent: "end", alignItems: "center"}}>
                                     <button onClick={() => deleteProduct(item.product)}
@@ -249,13 +260,13 @@ const ProductListModal = () => {
                 <div className='product-list-form'>
                     <div className='product-section'>
                         <input type='text' placeholder='Name of the product...' id='product-name-input' ref={nameInput}></input>
-                        <button type='button' onClick={increaseQuantity}>
+                        {/* <button type='button' onClick={increaseQuantity}>
                             <FontAwesomeIcon icon={faPlus} className='button-icon' style={{margin: '0', color: 'darkgreen'}}/>
                         </button>
                         <input type='text' value={quantity} readOnly={true} id='product-quantity-input' ref={quantityInput}></input>
                         <button type='button' onClick={decreaseQuantity}>
                             <FontAwesomeIcon icon={faMinus} className='button-icon' style={{margin: '0', color: 'darkred'}}/>
-                        </button>
+                        </button> */}
                         <button type='text' id='add-button' onClick={addProduct}>Add</button>
                     </div>
                     <div className='file-section'>
@@ -293,10 +304,15 @@ const ProductListModal = () => {
                         type="switch"
                         id="custom-switch"
                         label="Allegro only"
+                        checked={allegro}
                         onChange={() => {
-                            if (!allegro) setAllegro(true)
+                            if (!allegro) {
+                                setAllegro(true)  
+                                setSortByShops(false)
+                            } 
                             else setAllegro(false)
                         }}
+                        disabled={sortByShops}
                     />
                     <Form.Check 
                         type="switch"
@@ -306,6 +322,20 @@ const ProductListModal = () => {
                             if (deliveryPrice) setDeliveryPrice(false)
                             else setDeliveryPrice (true)
                         }}
+                    />
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Sort by shops"
+                        checked={sortByShops}
+                        onChange={() => {
+                            if (sortByShops) setSortByShops(false)
+                            else {
+                               setSortByShops(true) 
+                               setAllegro(false)
+                            } 
+                        }}
+                        disabled={allegro}
                     />
                 </Form>
             </Modal.Footer>
