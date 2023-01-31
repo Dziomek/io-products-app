@@ -91,14 +91,13 @@ const SelectedProducts = () => {
     }
     console.log(selectedValues)
     return (
-        <>
-        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none'}}>
+        <div style={{backgroundColor: '#f2f5f7', backgroundImage:'none'}}>
         <div className='title-container-products' style={{marginBottom: '30px'}}>
-                <Link style={{textDecoration: 'none'}} to='/'>
-                    <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
-                </Link>
-                {/* <input type="text" placeholder="Type in product name" ref={productInput} />
-                <button className="search-btn-products" onClick={submitProduct}>Search</button> */}
+            <Link style={{textDecoration: 'none'}} to='/'>
+                <h1 >PRODUCTS <h1 className="title-2nd-part">APP</h1></h1>
+            </Link>
+            {/* <input type="text" placeholder="Type in product name" ref={productInput} />
+            <button className="search-btn-products" onClick={submitProduct}>Search</button> */}
         </div>
             {productLists.map((product, index) => {
                 return <div style={{backgroundColor: '#f2f5f7'}}key={index}>
@@ -169,8 +168,7 @@ const SelectedProducts = () => {
                 </Modal>
             </>
             }
-            </body>
-        </>
+        </div>
     )
 }
 
