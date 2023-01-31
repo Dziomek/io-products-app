@@ -7,7 +7,7 @@ import os
 EMAIL_ADDRESS = app.config["EMAIL_ADDRESS"]
 EMAIL_PASSWORD = app.config["EMAIL_PASSWORD"]
 
-
+# This class build as Singleton is responsible for sending email verifications
 class MailService:
 
     smtpObj = smtplib.SMTP("smtp.gmail.com", 587)
@@ -15,6 +15,7 @@ class MailService:
     smtpObj.starttls()
     smtpObj.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
 
+    # This method sends the verification link for a new user
     @staticmethod
     def sendVerificationLink(link, emailUser, username):
         msg = EmailMessage()

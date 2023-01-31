@@ -1,8 +1,10 @@
 import re
 import unittest
 
+# This class build as Singleton has all the methods responsible for different sorting types
 class ProductsOrganizer:
 
+    # This method sorts the products by price or summarized depending on delivery_price flag
     @staticmethod
     def products_sorting(products, delivery_price, keyword):
         for product in products:
