@@ -194,7 +194,7 @@ const Products = () => {
                                                 :
                                                 <div className='product-price'>Z dostawą: {String((parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice)).toFixed(2)).replace(/\./g,",")} zł</div>
                                                 }
-                                                <button onClick={()=>{submitProductFromList(product.name)}}>Sprawdź</button>
+                                                {/* <button onClick={()=>{submitProductFromList(product.name)}}>Sprawdź</button> */}
                                                 <input 
                                                 type='radio'
                                                 name={`product-${index}-${secondIndex}`}

@@ -185,7 +185,9 @@ const ProductListModal = () => {
                     return response.json()
                 })
                 .then(data => {
-                    console.log(data)
+                    console.log('TO OTRZYMALEM NAJPIERW Z BACKENDU', data)
+                    const shops = data.shops
+                    console.log('INFO O FLADZE SHOPS', shops, shops ? 'jest flaga' : 'nie ma flagi')
                     currentIteration += 1
                     setProgress(Math.round(currentIteration / iterations * 100))
                     if (data.timeout) receivedProductLists.push({
@@ -203,6 +205,13 @@ const ProductListModal = () => {
                     console.log(receivedProductLists)
                     if (currentIteration === iterations) {
                         handleClose()
+                        console.log('TO SOBIE OGARNALEM', receivedProductLists)
+                        if (shops) {
+                            navigate('/summary', {state: { 
+                                productLists: [receivedProductLists[receivedProductLists.length - 1]]
+                            }}) 
+                            return
+                        }
                         navigate('/products', {state: { 
                                 productLists: receivedProductLists
                             }})

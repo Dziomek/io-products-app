@@ -80,13 +80,14 @@ def scraping():
             (products, needed_keywords) = po.get_best_shop(dupa, counter)
             products_list = po.get_rest_of_products(dupa, needed_keywords, products)
             products_list_final = po.extract_products(products_list)
-            products_list_final.append("shops")
+            # products_list_final.append("shops")
             print(products_list_final)
             counter = 0
             return {
                 "message": "Keyword list passed successfully",
                 "product_list": {"items": products_list_final},
-                "crawl_args_json": crawl_args_json
+                "crawl_args_json": crawl_args_json,
+                "shops": True
             }
     elif allegro:
         allegro_products = []
