@@ -78,39 +78,39 @@ const Products = () => {
     // function submitProductFromList(productName){
     //     const receivedProductLists = []
         
-    //     setErrorMessage(null)
-    //     const options = {
-    //         method: 'POST',
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify({
-    //             productList: [productName],
-    //             category: 'All',
-    //         })
-    //     }
-    //     fetch("http://127.0.0.1:5000/scraping", options)
-    //         .then(response => {
-    //             console.log('Response status:', response.status)
-    //             if (response.status !== 200) {
-    //                 setErrorMessage("An error occured")
-    //             }
-    //             return response.json()
-    //         })
-    //         .then(data => {
-    //             receivedProductLists.push({
-    //                 searchedProduct: productName,
-    //                 category: 'All',
-    //                 productList: data.product_list.items
-    //             })
-    //             console.log(data)
-    //             navigate('/products', {state: { 
-    //                     productLists: receivedProductLists
-    //                 }})
-    //             })
-    //         .catch(error => {
-    //             setErrorMessage("Server error")
-    //         }) 
+        setErrorMessage(null)
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                productList: [productName],
+                category: 'All',
+            })
+        }
+        fetch("http://10.160.73.81:5000/scraping", options)
+            .then(response => {
+                console.log('Response status:', response.status)
+                if (response.status !== 200) {
+                    setErrorMessage("An error occured")
+                }
+                return response.json()
+            })
+            .then(data => {
+                receivedProductLists.push({
+                    searchedProduct: productName,
+                    category: 'All',
+                    productList: data.product_list.items
+                })
+                console.log(data)
+                navigate('/products', {state: { 
+                        productLists: receivedProductLists
+                    }})
+                })
+            .catch(error => {
+                setErrorMessage("Server error")
+            }) 
     
     // }
     
@@ -135,7 +135,7 @@ const Products = () => {
             })
         }
 
-        fetch("http://127.0.0.1:5000/scraping", options)
+        fetch("http://10.160.73.81:5000/scraping", options)
             .then(response => {
                 console.log('Response status:', response.status)
                 if (response.status !== 200) {

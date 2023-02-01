@@ -1,20 +1,22 @@
 import re
 import unittest
 
-
+# This class build as Singleton has all the methods responsible for different sorting types
 class ProductsOrganizer:
 
+    # This method sorts the products by price or summarized depending on delivery_price flag
     @staticmethod
     def products_sorting(products, delivery_price, keyword):
+        proper_products = []
         for product in products:
             price = product['price']
             product['price'] = price.replace(',', '.')
-            if product['deliveryprice'] == '':
-                products.remove(product)
+            if product['deliveryprice'] != '':
+                proper_products.append(product)
         if not delivery_price:
             products_sorted = sorted(products, key=lambda k: float(k['price']))
         else:
-            products_sorted = sorted(products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
+            products_sorted = sorted(proper_products, key=lambda k: float(k['price']) + float(k['deliveryprice']))
 
         if len(keyword.split()) == 1:
             for product in products_sorted:
@@ -23,12 +25,14 @@ class ProductsOrganizer:
                     products_sorted.remove(product)
         return products_sorted
 
+    # This method executes proper formatting of data
     @staticmethod
     def extract_products(data):
         nested_lists = list(data.values())
         flat_list = [item for sub_list in nested_lists for item in sub_list]
         return flat_list
 
+    # This method groups all products by same shops
     @staticmethod
     def group_by_shop(products):
         groups = {}
@@ -39,6 +43,7 @@ class ProductsOrganizer:
             groups[shop_name].append(product)
         return groups
 
+    # This method takes products grouped by shops and finds the shop with the most products for different keywords
     @staticmethod
     def get_best_shop(grouped_products, counter):
         max_count = 0
@@ -71,6 +76,7 @@ class ProductsOrganizer:
         dictio[best_shop] = best_products
         return dictio, needed_keywords
 
+    # This method takes products grouped by shops and finds the shops with products for remaining keywords
     @staticmethod
     def get_rest_of_products(grouped_products, needed_keywords, best_shop):
         dictio = {}

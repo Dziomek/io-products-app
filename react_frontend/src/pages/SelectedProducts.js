@@ -85,7 +85,7 @@ const SelectedProducts = () => {
             })
         }
         console.log(options)
-        fetch("http://127.0.0.1:5000/save", options)
+        fetch("http://10.160.73.81:5000/save", options)
             .then(res => {
                 if (res.status === 200) return res.json()
             })
