@@ -75,8 +75,8 @@ const Products = () => {
             navigate('/summary', { state: { productLists: results }})
         }
 
-    // function submitProductFromList(productName){
-    //     const receivedProductLists = []
+    function submitProductFromList(productName) {
+        const receivedProductLists = []
         
         setErrorMessage(null)
         const options = {
@@ -112,7 +112,7 @@ const Products = () => {
                 setErrorMessage("Server error")
             }) 
     
-    // }
+    }
     
     const submitProduct = () => {
         const receivedProductLists = []
