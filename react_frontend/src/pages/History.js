@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { Context } from '../store/appContext'
 import { Link } from 'react-router-dom'
-import LoginRegisterModal from '../components/LoginRegisterModal'
 
 const History = () => {
     

@@ -132,9 +132,9 @@
     border:1px solid orange;
     background-color:orange;
     position: sticky;
-    left:-20px;
+    /* left:-20px; */
     bottom: 10px;
-    margin-left: 96vw;
+    margin-left: 94vw;
     transition: cubic-bezier(0.075, 0.82, 0.165, 1);
     transition-duration: 1s;
 }
