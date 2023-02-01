@@ -1,11 +1,10 @@
-import { React, useRef, useState, useEffect } from 'react'
+import { React, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import '../css/Products.css'
-import { faMagnifyingGlass, faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
-import { DropdownButton, Dropdown } from 'react-bootstrap';
-import Footer from '../components/Footer';
+
 
 const Products = () => {
 
@@ -76,46 +75,45 @@ const Products = () => {
             navigate('/summary', { state: { productLists: results }})
         }
 
-    function submitProductFromList(productName){
-        const receivedProductLists = []
+    // function submitProductFromList(productName){
+    //     const receivedProductLists = []
         
-        setErrorMessage(null)
-        const options = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                productList: [productName],
-                category: 'All',
-            })
-        }
-        fetch("http://127.0.0.1:5000/scraping", options)
-            .then(response => {
-                console.log('Response status:', response.status)
-                if (response.status !== 200) {
-                    setErrorMessage("An error occured")
-                }
-                return response.json()
-            })
-            .then(data => {
-                receivedProductLists.push({
-                    searchedProduct: productName,
-                    category: 'All',
-                    productList: data.product_list.items
-                })
-                console.log(data)
-                navigate('/products', {state: { 
-                        productLists: receivedProductLists
-                    }})
-                })
-            .catch(error => {
-                setErrorMessage("Server error")
-            }) 
+    //     setErrorMessage(null)
+    //     const options = {
+    //         method: 'POST',
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify({
+    //             productList: [productName],
+    //             category: 'All',
+    //         })
+    //     }
+    //     fetch("http://127.0.0.1:5000/scraping", options)
+    //         .then(response => {
+    //             console.log('Response status:', response.status)
+    //             if (response.status !== 200) {
+    //                 setErrorMessage("An error occured")
+    //             }
+    //             return response.json()
+    //         })
+    //         .then(data => {
+    //             receivedProductLists.push({
+    //                 searchedProduct: productName,
+    //                 category: 'All',
+    //                 productList: data.product_list.items
+    //             })
+    //             console.log(data)
+    //             navigate('/products', {state: { 
+    //                     productLists: receivedProductLists
+    //                 }})
+    //             })
+    //         .catch(error => {
+    //             setErrorMessage("Server error")
+    //         }) 
     
-    }
+    // }
     
-
     const submitProduct = () => {
         const receivedProductLists = []
         const productName = productInput.current.value
@@ -166,8 +164,7 @@ const Products = () => {
     // console.log('Products rendered. ProductsList: ', productLists)
     // console.log('selected items', selectedItems)
 
-    return (
-        <body style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>  
+    return (  
         <div style={{backgroundColor: '#f2f5f7',backgroundImage:'none',backgroundSize:'cover'}}>
             <div className='title-container-products'>
                 <Link style={{textDecoration: 'none'}} to='/'>
@@ -187,7 +184,7 @@ const Products = () => {
                                         {object.productList.map((product, secondIndex) => {
                                             return <div className='product_container' key={secondIndex} style={{ marginBottom: '2%' }}>
                                                 <img src={product.image} alt='Product'></img>
-                                                <div className='product-name'>{product.name }</div>
+                                                <div className='product-name'>{product.name}</div>
                                                 <div className='product-price'>Cena: {product.price}zł</div>
                                                 {isNaN(parseFloat(product.deliveryprice)) ?
                                                 <div className='product-price'> Cena dostawy nieznana</div>
@@ -241,10 +238,7 @@ const Products = () => {
                                 {object.productList.length === 0 && 
                                 <>
                                     <h3 className='search-result'>Nie udało się znaleźć produktów dla: {object.searchedProduct}</h3>
-                                </>
-
-                                }
-
+                                </>}
                             </div>
                         })
                     }
@@ -256,7 +250,7 @@ const Products = () => {
             }
         <button disabled={!allChecked()} onClick={handleSubmit}className='finish-btn'><FontAwesomeIcon className='cart-icon' icon={faShoppingCart}></FontAwesomeIcon></button>
         </div>
-        </body>
+        
     )
 }
 

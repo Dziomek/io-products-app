@@ -2,13 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Context } from '../store/appContext'
 import Form from 'react-bootstrap/Form'
-import '../css/SelectedProducts.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { NavItem } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-
-
+import '../css/SelectedProducts.css'
 
 const SelectedProducts = () => {
     
@@ -16,8 +13,8 @@ const SelectedProducts = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [totalPrice, setTotalPrice] = useState(0);
+    const [price, setPrice] = useState(0)
     const [value, setValue] = useState(1)
-
     const [show, setShow] = useState(false);    
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -28,23 +25,33 @@ const SelectedProducts = () => {
         return 1;
     }));
 
-    
-  
-
-
     const calculateTotalPrice = () => {
-    
-        if(value===1){ const total = productLists.reduce((acc, product, index) => {
-            return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0))
-        }, 0)
-        setTotalPrice(total);}
-        else{const total = productLists.reduce((acc, product, index) => {
-            return acc + (parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0))
-        }, 0)
-        setTotalPrice(total);}
+        if(value===1) {
+            const total = productLists.reduce((acc, product, index) => {
+                return acc + (parseFloat(product.price.replace(/,/g, '.'))+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0))
+            }, 0)
+            setTotalPrice(total);
+        }
+        else {
+            const total = productLists.reduce((acc, product, index) => {
+                return acc + (parseFloat(product.price.replace(/,/g, '.'))*parseFloat(selectedValues[index])+parseFloat(product.deliveryprice !== "" ? product.deliveryprice : 0))
+            }, 0)
+        setTotalPrice(total);
+        }
     }
+
+    const calculatePrice = () => {
+        if (productLists && productLists !== undefined && productLists.length !== 0) {
+            let totalPrice = productLists.reduce((acc, product) => {
+                return acc + parseFloat(product.price.replace(/,/g, '.'))
+            }, 0)
+            setPrice(totalPrice)
+        }
+    }
+    
     useEffect(() => {
         calculateTotalPrice();
+        calculatePrice();
     }, [selectedValues])
 
     const handleChange = (event, index) => {
@@ -54,7 +61,6 @@ const SelectedProducts = () => {
         setSelectedValues(newSelectedValues);
     }
 
-    
     console.log('SelectedProducts rendered. ProductLists: ', productLists)
 
     useEffect(() => {
@@ -135,23 +141,19 @@ const SelectedProducts = () => {
             </div>
         
             })}
-            { !store.token ?
-            
             <div style={{backgroundColor: '#f2f5f7', display: 'flex', justifyContent: 'center'}}>
-            <p style={{fontSize: '30px'}}>Total price: <b>{String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</b></p>   
+                <p style={{fontSize: '30px'}}>Total price: <b>{String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</b></p>   
             </div>
-            
-            :<>
             <div style={{backgroundColor: '#f2f5f7', display: 'flex', justifyContent: 'center'}}>
-            <p style={{fontSize: '30px'}}>Total price: {String(totalPrice.toFixed(2)).replace(/\./g,",")} zł</p>   
-            
+                <p style={{fontSize: '20px'}}>Without ship: <b>{price}</b></p>   
             </div>
-            <div style={{display: 'flex', justifyContent: 'center'}}>
-                <Button style={{backgroundColor:'orange', border:'none'}} onClick={handleShow}>
-                    Zatwierdź
-                </Button>
-            </div>
-
+            { store.token &&
+            <>
+                <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <Button style={{backgroundColor:'orange', border:'none'}} onClick={handleShow}>
+                        Zatwierdź
+                    </Button>
+                </div>
                 <Modal show={show} onHide={handleClose} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title>Podsumowanie</Modal.Title>

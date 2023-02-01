@@ -1,7 +1,7 @@
-import {useContext, useEffect, useRef, useState} from "react";
+import {useContext, useRef, useState} from "react";
 import {Context} from "../store/appContext";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass, faList} from '@fortawesome/free-solid-svg-icons'
+import {faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons'
 import ProductListModal from "../components/ProductListModal";
 import LoginRegisterModal from "../components/LoginRegisterModal";
 import '../css/Home.css'
@@ -98,8 +98,6 @@ function Home() {
         </footer> */}
         <Footer/>
         </>
-        
-        
     )
 }
 
