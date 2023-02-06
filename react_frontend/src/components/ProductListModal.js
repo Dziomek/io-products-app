@@ -110,40 +110,6 @@ const ProductListModal = () => {
         setErrorMessage(null)
     }
 
-    // const uploadFile = (event) => {
-    //     const inputFile = event.target.files[0];
-    //     // todo: validate file extension
-    //     setFile(inputFile);
-    //     console.log(inputFile)
-
-    //     Papa.parse(inputFile, {
-    //         header: true,
-    //         skipEmptyLines: true,
-    //         complete: function (results) {
-    //             const rowsArray = [];
-    //             const valuesArray = [];
-    //             results.data.map((d) => {
-    //                 rowsArray.push(Object.keys(d));
-    //                 valuesArray.push(Object.values(d));
-    //             })
-    //             setParsedData(results.data);
-    //             setTableRows(rowsArray[0]);
-    //             setValues(valuesArray);
-    //             console.log(parsedData)
-    //             console.log(values)
-
-    //         },
-    //     })
-    //     // const reader = new FileReader();
-    //     // reader.onload = async ({ target }) => {
-    //     // const csv = Papa.parse(target.result, { header: true });
-    //     // const parsedData = csv?.data;
-    //     // const columns = Object.keys(parsedData[0]);
-    //     // setData(columns);
-    //     // }
-    //     // reader.readAsText(file)
-    // }
-
     const submitListOfProducts = () => {
         const receivedProductLists = []
 
