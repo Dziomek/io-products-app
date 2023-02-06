@@ -142,7 +142,6 @@ const ProductListModal = () => {
     //     // setData(columns);
     //     // }
     //     // reader.readAsText(file)
-    //     // console.log('Dupa');
     // }
 
     const submitListOfProducts = () => {
